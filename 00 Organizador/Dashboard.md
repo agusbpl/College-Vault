@@ -3,7 +3,7 @@
 ## 📋 Tareas Pendientes
 ```dataview
 TASK
-WHERE !completed AND file.folder != "30 Plantillas" AND trim(text) != ""
+WHERE !completed AND file.folder != "30 Plantillas" AND text != "" AND text != " "
 ```
 
 ## 📝 Próximos Exámenes y Entregas
