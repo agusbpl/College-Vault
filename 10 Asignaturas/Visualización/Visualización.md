@@ -1,5 +1,10 @@
 # 📂 Visualización
 
+## 👨‍🏫 Cátedra y Contacto
+- **Profesor**: Esp. César Estrebou
+- **Email**: cesarest@lidi.info.unlp.edu.ar
+- **Plataforma**: Moodle
+
 ## 📚 Recursos
 *   [[10 Asignaturas/Visualización/Recursos|Carpeta de Recursos de la Materia]]
 

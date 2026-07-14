@@ -1,5 +1,10 @@
 # 📂 Bases de Datos
 
+## 👨‍🏫 Cátedra y Contacto
+- **Profesor**: Esp. Luciano Marrero
+- **Email**: lmarrero@lidi.info.unlp.edu.ar
+- **Plataforma**: IDEAS
+
 ## 📚 Recursos
 *   [[10 Asignaturas/Bases de Datos/Recursos|Carpeta de Recursos de la Materia]]
 

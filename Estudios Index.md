@@ -27,6 +27,10 @@ Este es tu panel central de estudio. Desde aquí puedes acceder a las notas y re
 *   **Recursos**: [[10 Asignaturas/Visualización/Recursos|Libros y Filminas]]
 *   *Notas de clase y resúmenes de estudio.*
 
+### 📂 [[10 Asignaturas/PPS/PPS|PPS (Práctica Profesional Supervisada)]]
+*   **Recursos**: [[10 Asignaturas/PPS/Recursos|Libros y Filminas]]
+*   *Documentación y seguimiento de la práctica.*
+
 ---
 
 ## ⚙️ Utilidades
