@@ -1,0 +1,15 @@
+# --- Obsidian UI State & Workspace ---
+# Obsidian updates these files constantly to track open tabs and windows.
+# Ignoring them prevents constant merge conflicts.
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/app.json
+
+# --- System & Editor Files ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Temporary & Trash Files ---
+.trash/
