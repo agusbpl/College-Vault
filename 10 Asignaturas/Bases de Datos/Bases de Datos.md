@@ -1,0 +1,14 @@
+# 📂 Bases de Datos
+
+## 📚 Recursos
+*   [[10 Asignaturas/Bases de Datos/Recursos|Carpeta de Recursos de la Materia]]
+
+## 📝 Apuntes y Notas de Clase
+*(Crea tus apuntes usando la [[30 Plantillas/Plantilla de Clase|Plantilla de Clase]] y línkalos aquí)*
+*   
+
+## 🎯 Tareas y Entregas
+- [ ] 
+
+---
+[[Estudios Index|Volver al Índice General]]
