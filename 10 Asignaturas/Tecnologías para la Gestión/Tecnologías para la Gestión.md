@@ -5,7 +5,19 @@
 - **Plataforma**: Aula virtual
 
 ## 📚 Recursos
-*   [[10 Asignaturas/Tecnologías para la Gestión/Recursos|Carpeta de Recursos de la Materia]]
+```dataviewjs
+const folderPath = dv.current().file.folder + "/Recursos";
+const pdfFiles = app.vault.getFiles().filter(file => 
+    file.extension === 'pdf' && 
+    file.path.startsWith(folderPath)
+);
+
+if (pdfFiles.length > 0) {
+    dv.list(pdfFiles.map(file => dv.fileLink(file.path)));
+} else {
+    dv.paragraph("*No hay libros ni filminas cargados en la carpeta de Recursos.*");
+}
+```
 
 ## 📝 Apuntes y Notas de Clase
 ```dataview
