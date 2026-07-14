@@ -16,7 +16,7 @@ SORT file.name ASC
 ```
 
 ## 🎯 Tareas y Entregas
-- [ ] 
+*No hay tareas pendientes*
 
 ---
 [[Estudios Index|Volver al Índice General]]
