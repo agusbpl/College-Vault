@@ -7,9 +7,17 @@ WHERE !completed AND file.folder != "30 Plantillas" AND text != "" AND text != "
 ```
 
 ## 📝 Próximos Exámenes y Entregas
-| Asignatura | Fecha | Tipo (Examen/Proyecto) | Estado |
-| ---------- | ----- | ---------------------- | ------ |
-|            |       |                        |        |
+| Asignatura         | Fecha  | Tipo (Examen/Proyecto)             | Estado    |
+| ------------------ | ------ | ---------------------------------- | --------- |
+| **Bases de Datos** | 01-oct | Definición de Trabajo Experimental | Pendiente |
+| **Bases de Datos** | 22-oct | Entrega de Trabajo Experimental    | Pendiente |
+| **Bases de Datos** | 05-nov | Defensa de Trabajo Experimental    | Pendiente |
+| **Minería y ML**   | 04-nov | 1ra. Fecha de Examen Escrito       | Pendiente |
+| **Visualización**  | 04-nov | 1ra. Fecha de Examen Escrito       | Pendiente |
+| **Minería y ML**   | 18-nov | 2da. Fecha de Examen Escrito       | Pendiente |
+| **Visualización**  | 18-nov | 2da. Fecha de Examen Escrito       | Pendiente |
+| **Minería y ML**   | 02-dic | 3ra. Fecha de Examen Escrito       | Pendiente |
+| **Visualización**  | 02-dic | 3ra. Fecha de Examen Escrito       | Pendiente |
 
 ## 🏫 Horario de Clases
 | Hora | Lunes | Martes | Miércoles | Jueves | Viernes |

@@ -29,5 +29,14 @@ SORT file.name ASC
 - [ ] Definir tema/proyecto de PPS
 - [ ] Contactar con el tutor/coordinador
 
+## 📝 Reglamento y Requisitos Clave
+- **Carga Horaria**: Mínimo de 100 horas acreditadas.
+- **Duración Máxima**: 6 meses continuos desde el inicio.
+- **Actores**: Estudiante, Profesor Coordinador (PC) y Tutor de la Entidad (TE).
+- **Entregables Obligatorios**:
+  1. **Formulario de Propuesta**: Para asentar la solicitud con el Plan de Trabajo.
+  2. **Informe Técnico Final**: 5 a 10 páginas describiendo tareas, metodologías, resultados y reflexión final.
+  3. **Informe del Tutor de la Entidad**: Cuestionario final evaluando desempeño.
+
 ---
 [[Estudios Index|Volver al Índice General]]
