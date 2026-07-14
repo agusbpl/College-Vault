@@ -9,8 +9,12 @@
 *   [[10 Asignaturas/Visualización/Recursos|Carpeta de Recursos de la Materia]]
 
 ## 📝 Apuntes y Notas de Clase
-*(Crea tus apuntes usando la [[30 Plantillas/Plantilla de Clase|Plantilla de Clase]] y línkalos aquí)*
-*   
+```dataview
+TABLE fecha as Fecha, estado as Estado
+FROM "10 Asignaturas/Visualización"
+WHERE file.name != "Visualización" AND !contains(file.path, "Recursos")
+SORT file.name ASC
+```
 
 ## 🎯 Tareas y Entregas
 - [ ] 

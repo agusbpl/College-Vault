@@ -9,8 +9,12 @@
 *   [[10 Asignaturas/Minería y ML/Recursos|Carpeta de Recursos de la Materia]]
 
 ## 📝 Apuntes y Notas de Clase
-*(Crea tus apuntes usando la [[30 Plantillas/Plantilla de Clase|Plantilla de Clase]] y línkalos aquí)*
-*   
+```dataview
+TABLE fecha as Fecha, estado as Estado
+FROM "10 Asignaturas/Minería y ML"
+WHERE file.name != "Minería y ML" AND !contains(file.path, "Recursos")
+SORT file.name ASC
+```
 
 ## 🎯 Tareas y Entregas
 - [ ] 
