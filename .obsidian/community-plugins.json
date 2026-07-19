@@ -5,5 +5,8 @@
   "obsidian-excalidraw-plugin",
   "calendar",
   "obsidian-git",
-  "obsidian-annotator"
+  "local-gpt",
+  "ai-providers",
+  "obsidian-custom-frames",
+  "pdf-plus"
 ]

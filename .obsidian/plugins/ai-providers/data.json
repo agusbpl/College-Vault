@@ -1,0 +1,19 @@
+{
+  "_version": 1,
+  "debugLogging": false,
+  "debugChunkLogging": false,
+  "useNativeFetch": false,
+  "providers": [
+    {
+      "id": "id-1784344556855",
+      "name": "Ollama",
+      "apiKey": "",
+      "url": "http://localhost:11434",
+      "type": "ollama",
+      "model": "phi3.5:latest",
+      "availableModels": [
+        "phi3.5:latest"
+      ]
+    }
+  ]
+}
