@@ -1,0 +1,74 @@
+[
+  {
+    "speaker": "Elena",
+    "text": "¡Hola, Agustín! Qué bueno tenerte acá. Hoy preparamos una sesión especial en dos bloques: primero, la devolución precisa de tu evaluación de KNN y Árboles para despejar esas dudas puntuales que dejaste anotadas; y segundo, el resumen completo de la clase 4 sobre Métricas de Evaluación y Ensambles a la que no pudiste ir."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "¡Hola a todos! Tal cual. En la evaluación anduviste muy firme: en la primera pregunta clavaste la opción A al toque, reconociendo que si no normalizás, la variable de mayor escala se come viva a las demás. Pero nos dejaste una duda re interesante en el casillero: querías saber qué es la distancia de Hamming y qué significa una transformación monotónica."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Vamos por partes. La distancia de Hamming no tiene nada que ver con distancias geométricas numéricas como la euclídea o Manhattan. Se inventó para telecomunicaciones y se usa en variables categóricas o vectores binarios. Lo que hace es contar en cuántas posiciones difieren dos vectores. Por ejemplo, si comparás una palabra de cuatro letras o dos strings de bits, y difieren en dos posiciones, la distancia de Hamming es dos. En KNN numérico tradicional con variables continuas como la edad o el precio del boleto, Hamming no tiene sentido ni se aplica jamás automáticamente."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Exacto. Y respecto a lo de transformación monotónica: una función monótona es simplemente una transformación que preserva el orden relativo de los elementos. Por ejemplo, sumarle una constante, multiplicarlo por un número positivo o aplicar logaritmo. ¿Por qué la opción D decía que KNN era invariante y era falsa? Porque KNN depende estrictamente de las distancias métricas en el espacio multidimensional. Si a una variable la multiplicás por diez, estirás ese eje diez veces en el espacio, y los vecinos más cercanos cambian drásticamente. Por eso KNN exige sí o sí escalar los datos con StandardScaler o MinMaxScaler."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Impecable. Ahora pasemos al ejercicio dos, donde marcaste la opción de no sé sobre el cálculo analítico de Gini y Entropía en un nodo con diez observaciones: cinco positivas y cinco negativas. Suena intimidante al ver los logaritmos, pero con números redondos es una pavada total."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Totalmente. Pensalo así: tenés diez datos, cinco de un lado y cinco del otro. O sea, cincuenta por ciento de probabilidad para cada clase. En Gini, la fórmula es uno menos la suma de las probabilidades al cuadrado. Cero coma cinco al cuadrado es cero coma veinticinco. Como son dos clases iguales, sumás cero veinticinco más cero veinticinco y te da cero coma cinco. Uno menos cero coma cinco te da exactamente cero coma cinco. Esa es la impureza de Gini máxima que puede existir en un problema binario."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Y la Entropía mide la incertidumbre de Shannon en bits. Como el logaritmo en base dos de cero coma cinco es menos uno, al multiplicar cada mitad por menos uno y aplicar el signo negativo de la fórmula, te da exactamente uno coma cero. Es decir, un bit completo de incertidumbre. La regla de oro para el examen es: si el nodo está dividido mitad y mitad, la impureza es máxima: Gini da cero coma cinco y la Entropía da uno. En cambio, si el nodo fuera cien por ciento puro, con todas las muestras de la misma clase, la impureza en ambos casos es cero."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Y en la tercera pregunta estuviste impecable: si no le ponés límites a un árbol con max depth o min samples split, el árbol va a seguir dividiendo hasta memorizar el ruido del set de entrenamiento. El error en train te va a dar cero, pero revienta por el aire la varianza y te vas al pasto con el sobreajuste."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Tal cual. Y ahora metémonos de lleno en lo que te perdiste de la clase cuatro: Métricas de Evaluación y Ensambles. El primer concepto que remarcó la cátedra es: ¡jamás te fíes de la exactitud o el accuracy cuando las clases están desbalanceadas!"
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Es el clásico error de principiante. Imaginate que estás prediciendo transacciones fraudulentas o detección de una enfermedad grave donde solo el uno por ciento de los casos es positivo. Si tu modelo es un vago y predice siempre que todo es negativo, tiene noventa y nueve por ciento de exactitud. Parece un éxito descomunal, pero en realidad no detectó ni un solo fraude. Es totalmente inútil."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Por eso usamos la Matriz de Confusión y distinguimos entre Precisión y Recall. Precisión se pregunta: de todos los casos que el modelo predijo como positivos, ¿cuántos eran positivos de verdad? Es crítica cuando un falso positivo cuesta carísimo, como cuando mandás un mail legítimo a la carpeta de spam o acusás judicialmente a alguien inocente."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "En cambio, el Recall o Sensibilidad se pregunta lo contrario: de todos los positivos que realmente existían en el mundo, ¿cuántos logró cazar el modelo? En medicina o ciberseguridad, un falso negativo significa dejar escapar a un paciente con cáncer o no bloquear a un atacante en la red. En esos casos, el Recall manda por sobre todo. Y si querés un equilibrio justo entre ambas, mirás el F1-Score, que es su media armónica."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Y para evaluar el clasificador sin atarte a un umbral fijo de probabilidad, usamos las curvas ROC, graficando el True Positive Rate contra el False Positive Rate. El área bajo esa curva, el famoso AUC, te dice qué tan bueno es el modelo discriminando clases. Si da cero coma cinco, es como tirar una moneda; si da uno, es la perfección absoluta."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Y el segundo plato fuerte de la clase cuatro fueron los Ensambles de modelos. La idea es brillante: juntar un grupo de modelos simples para construir un clasificador mucho más robusto. Hay dos filosofías rivales que tenés que saber diferenciar para el parcial: Bagging y Boosting."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Bagging entrena muchos modelos en paralelo sobre subconjuntos de datos generados con reemplazo, técnica conocida como bootstrap. El objetivo supremo de Bagging es reducir la varianza, es decir, evitar el sobreajuste. Y el rey indiscutido de esta categoría es Random Forest, que le agrega a los árboles una selección aleatoria de atributos en cada corte para que no se copien entre sí."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Boosting, en cambio, entrena los modelos en fila india, de forma estrictamente secuencial. Cada nuevo modelo se enfoca obsesivamente en corregir los errores y los residuos que cometió el modelo anterior. ¿Su objetivo principal? Reducir el sesgo y mejorar la capacidad de aprendizaje. Ahí reinan gigantes como AdaBoost y Gradient Boosting."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Y por último está Stacking, que toma modelos heterogéneos, como un KNN, una regresión logística y un árbol, y usa sus predicciones como variables de entrada para un metamodelo que aprende la mejor combinación. Todo esto lo tenés integrado en la nueva lección interactiva en HTML, con ejercicios prácticos para que afiances cada concepto antes del parcial."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Totalmente. Con este mapa conceptual ya estás al día con la clase cuatro y tenés las respuestas del cuestionario anterior completamente dominadas. ¡A meterle con todo a la práctica!"
+  }
+]

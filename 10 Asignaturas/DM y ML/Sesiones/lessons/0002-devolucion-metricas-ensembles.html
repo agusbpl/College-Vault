@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devolución & Lección 04: Métricas de Evaluación & Ensambles — UNLP</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        .section-header {
+            margin-top: 2.5rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-bottom: 1px solid var(--border-default);
+            padding-bottom: 0.5rem;
+        }
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-title);
+        }
+        .section-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .tag-blue { background: #e0f2fe; color: #0369a1; }
+        .tag-green { background: #dcfce7; color: #15803d; }
+        .tag-amber { background: #fef3c7; color: #b45309; }
+        .tag-purple { background: #f3e8ff; color: #7e22ce; }
+
+        .callout {
+            background: #fdfbf7;
+            border-left: 3px solid var(--accent-ochre);
+            padding: 1.2rem 1.4rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.2rem 0;
+            font-size: 1rem;
+        }
+        .callout strong {
+            color: var(--text-title);
+        }
+
+        .formula-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid var(--border-default);
+            padding: 0.75rem 1rem;
+            text-align: center;
+        }
+        .matrix-table th {
+            background: #f3f4f6;
+            color: var(--text-title);
+            font-weight: 600;
+        }
+        .matrix-table td.tp { background: #ecfdf5; font-weight: 600; color: #065f46; }
+        .matrix-table td.tn { background: #f0fdf4; font-weight: 600; color: #166534; }
+        .matrix-table td.fp { background: #fef2f2; font-weight: 600; color: #991b1b; }
+        .matrix-table td.fn { background: #fff1f2; font-weight: 600; color: #be123c; }
+
+        /* Simulador Interactivo de Matriz */
+        .sim-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.2rem 0;
+        }
+        .sim-input-group {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .sim-input-group label {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+        }
+        .sim-input-group input {
+            width: 90px;
+            padding: 0.4rem;
+            font-size: 1.1rem;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            border: 1px solid var(--border-strong);
+            border-radius: 4px;
+        }
+        .sim-results {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+        .res-pill {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 0.8rem 0.5rem;
+            text-align: center;
+        }
+        .res-pill .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        .res-pill .val {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-top: 0.2rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid var(--border-default);
+            padding: 0.8rem 1rem;
+            text-align: left;
+        }
+        .comparison-table th {
+            background: #f8fafc;
+            color: var(--text-title);
+            font-weight: 600;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin: 1.2rem 0;
+        }
+        .quiz-option {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            padding: 0.9rem 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.15s ease;
+        }
+        .quiz-option:hover {
+            border-color: var(--accent-ochre);
+            background: #fcfbf7;
+        }
+        .quiz-option.selected {
+            border-color: var(--accent-ink);
+            background: #f3f1e9;
+            font-weight: 500;
+        }
+
+        .action-bar {
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-default);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            background: var(--accent-ink);
+            color: #ffffff;
+            transition: background 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn:hover {
+            background: #374151;
+        }
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+        .answer-reveal {
+            display: none;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1.2rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            color: #166534;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .nose-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .duda-input {
+            width: 100%;
+            height: 60px;
+            margin-top: 0.5rem;
+            padding: 0.6rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-default);
+            border-radius: 4px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <span class="badge">UNLP Informática — Minería de Datos & Aprendizaje Automático</span>
+    <h1>Devolución Analítica & Masterclass: Métricas y Ensambles</h1>
+    <p>Resolución formal de dudas del test anterior (KNN, Gini/Entropía, Overfitting) + Síntesis operativa y simulador de la Clase 4.</p>
+</header>
+
+<div id="audio-container-placeholder"></div>
+
+<!-- ============================================================ -->
+<!-- BLOQUE 1: DEVOLUCIÓN DETALLADA DEL TEST DE EVALUACIÓN       -->
+<!-- ============================================================ -->
+<div class="section-header">
+    <span class="section-tag tag-amber">Devolución Evaluativa</span>
+    <h2>1. Corrección Analítica de tus Dudas</h2>
+</div>
+
+<!-- ITEM 1: KNN Y DISTANCIAS -->
+<div class="card">
+    <div class="card-top">
+        <span class="card-badge tag-green">Ejercicio 1 Resuelto (Opción A)</span>
+        <span style="font-family:'Fira Code'; font-size:0.8rem; color:var(--text-muted);">M1 — KNN & Preprocesamiento</span>
+    </div>
+    <h2>¿Por qué el escalamiento es mandatorio y qué es la Distancia de Hamming?</h2>
+    
+    <p>En el ejercicio marcaste correctamente que la variable de mayor escala (<code>Fare</code>) domina la distancia euclídea. Pero anotaste dudas cruciales:</p>
+
+    <div class="callout">
+        <strong>1. ¿Qué es la Distancia de Hamming?</strong><br>
+        Es una métrica diseñada para <strong>variables categóricas discretas o cadenas de caracteres/bits</strong>. Mide la cantidad de posiciones en que dos secuencias de igual longitud tienen símbolos distintos:
+        $$\mathbf{u} = [1, 0, 1, 1], \quad \mathbf{v} = [1, 1, 0, 1] \implies \text{Difieren en pos 2 y 3} \implies d_H(\mathbf{u}, \mathbf{v}) = 2$$
+        <em>En variables continuas (como edad, sueldo o tarifa de pasaje), la distancia de Hamming no tiene significado físico ni geométrico, por lo que KNN tradicional jamás salta a Hamming de forma automática.</em>
+    </div>
+
+    <div class="callout">
+        <strong>2. ¿Qué es una Transformación Monotónica y por qué KNN NO es invariante a ella?</strong><br>
+        Una función $f(x)$ es monotónica si preserva el orden relativo de los elementos ($x_1 < x_2 \implies f(x_1) < f(x_2)$). Ejemplos: multiplicar por una constante positiva, aplicar logaritmo o raíz cuadrada.<br><br>
+        Los árboles de decisión <strong>sí son invariantes</strong> a transformaciones monotónicas porque solo evalúan cortes de orden ($x \ge \theta$). Sin embargo, <strong>KNN NO es invariante</strong>: si multiplicás una variable por 10, estirás ese eje en el espacio $n$-dimensional. La distancia euclídea entre puntos cambia por completo, haciendo que vecinos que antes estaban cerca ahora queden muy distantes. Por esto, StandardScaler o MinMaxScaler es un paso ineludible.
+    </div>
+</div>
+
+<!-- ITEM 2: GINI VS ENTROPÍA -->
+<div class="card">
+    <div class="card-top">
+        <span class="card-badge tag-amber">Concepto a Fijar</span>
+        <span style="font-family:'Fira Code'; font-size:0.8rem; color:var(--text-muted);">M2 — Cálculo Formal CART / C4.5</span>
+    </div>
+    <h2>Cálculo Paso a Paso: Impureza de Gini y Entropía</h2>
+    
+    <p>Tenías un nodo con $N = 10$ observaciones: 5 de clase positiva ($+$) y 5 de clase negativa ($-$).</p>
+    
+    <p>Las proporciones de clase en el nodo son:</p>
+    $$p_1 = \frac{5}{10} = 0.5, \qquad p_2 = \frac{5}{10} = 0.5$$
+
+    <div class="formula-card">
+        <strong>A. Impureza de Gini (Fórmula CART):</strong><br>
+        $$\text{Gini}(t) = 1 - \sum_{i=1}^C p_i^2 = 1 - \left( (0.5)^2 + (0.5)^2 \right) = 1 - (0.25 + 0.25) = 1 - 0.5 = \mathbf{0.5}$$
+        <em>Regla: Para un problema binario, <strong>0.5 es la impureza de Gini máxima posible</strong> (incertidumbre total, 50% y 50%). Si todas las muestras fueran de una misma clase, $\text{Gini} = 1 - (1^2 + 0^2) = \mathbf{0.0}$ (nodo completamente puro).</em>
+    </div>
+
+    <div class="formula-card">
+        <strong>B. Entropía (Fórmula de Shannon / ID3 / C4.5):</strong><br>
+        $$\text{Entropía}(t) = -\sum_{i=1}^C p_i \log_2(p_i) = -\left( 0.5 \log_2(0.5) + 0.5 \log_2(0.5) \right)$$
+        Dado que $\log_2(0.5) = \log_2(2^{-1}) = -1$:<br>
+        $$\text{Entropía}(t) = -\left( 0.5 \times (-1) + 0.5 \times (-1) \right) = -(-0.5 - 0.5) = -(-1.0) = \mathbf{1.0 \text{ bit}}$$
+        <em>Regla: En clasificación binaria, <strong>1.0 es la Entropía máxima</strong>. La respuesta correcta a la pregunta M2 era la <strong>A (Gini = 0.5, Entropía = 1.0)</strong>.</em>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BLOQUE 2: SÍNTESIS OPERATIVA CLASE 4 (MÉTRICAS & ENSAMBLES)  -->
+<!-- ============================================================ -->
+<div class="section-header">
+    <span class="section-tag tag-blue">Clase 4</span>
+    <h2>2. Métricas de Evaluación más allá del Accuracy</h2>
+</div>
+
+<div class="card">
+    <h2>La trampa de la Exactitud (Accuracy)</h2>
+    <p>Si evaluamos un clasificador para detección de transacciones fraudulentas o diagnóstico oncológico donde solo el 1% de los casos es positivo, un modelo trivial que prediga siempre la clase negativa obtendrá un <strong>99% de Accuracy</strong> sin haber detectado un solo caso crítico. Por eso es vital descomponer la <strong>Matriz de Confusión</strong>:</p>
+
+    <table class="matrix-table">
+        <tr>
+            <th colspan="2" rowspan="2"></th>
+            <th colspan="2">Clase Predicha por el Modelo</th>
+        </tr>
+        <tr>
+            <th>Positivo (Pred)</th>
+            <th>Negativo (Pred)</th>
+        </tr>
+        <tr>
+            <th rowspan="2">Clase Real</th>
+            <th>Positivo (Real)</th>
+            <td class="tp"><strong>TP (Verdadero Positivo)</strong><br><small>Acierto en caso de interés</small></td>
+            <td class="fn"><strong>FN (Falso Negativo)</strong><br><small>Error Tipo II: No detectado</small></td>
+        </tr>
+        <tr>
+            <th>Negativo (Real)</th>
+            <td class="fp"><strong>FP (Falso Positivo)</strong><br><small>Error Tipo I: Falsa alarma</small></td>
+            <td class="tn"><strong>TN (Verdadero Negativo)</strong><br><small>Acierto en descarte</small></td>
+        </tr>
+    </table>
+
+    <div class="callout">
+        <strong>Precisión vs Recall: ¿Cuál priorizar según el negocio?</strong>
+        <ul>
+            <li><strong>Precisión ($\frac{TP}{TP + FP}$):</strong> Mide qué porcentaje de los casos diagnosticados como positivos eran verdaderos. Se prioriza cuando un <strong>Falso Positivo es muy costoso o destructivo</strong> (ej: bloquear cuentas bancarias legítimas, filtro anti-spam, acusación judicial).</li>
+            <li><strong>Exhaustividad / Recall ($\frac{TP}{TP + FN}$):</strong> Mide qué porcentaje de los casos positivos reales logró cazar el modelo. Se prioriza cuando un <strong>Falso Negativo es inaceptable o letal</strong> (ej: detección de tumores cancerígenos, fallas en reactores, detección de fraude).</li>
+            <li><strong>F1-Score ($2 \times \frac{P \times R}{P + R}$):</strong> Es la media armónica entre Precisión y Recall. Castiga fuertemente si alguna de las dos métricas es muy baja.</li>
+            <li><strong>Curvas ROC y AUC:</strong> Grafica el $TPR$ ($\text{Recall}$) en el eje vertical contra el $FPR$ ($\frac{FP}{FP + TN}$) en el eje horizontal según varía el umbral de corte de probabilidad. Un clasificador aleatorio tiene un $AUC = 0.5$, mientras que un clasificador óptimo alcanza $AUC = 1.0$.</li>
+        </ul>
+    </div>
+
+    <!-- SIMULADOR INTERACTIVO -->
+    <h3 style="margin-top:1.8rem; margin-bottom:0.6rem; font-size:1.15rem;">Simulador en Vivo de Métricas:</h3>
+    <p style="font-size:0.95rem; color:var(--text-muted); margin-bottom:0.8rem;">Modifica los valores de la matriz para observar en tiempo real cómo impacta en las métricas de rendimiento:</p>
+    
+    <div class="sim-grid">
+        <div class="sim-input-group">
+            <label style="color:#065f46;">Verdaderos Positivos (TP)</label>
+            <input type="number" id="sim-tp" value="85" min="0" oninput="recalcSim()">
+        </div>
+        <div class="sim-input-group">
+            <label style="color:#be123c;">Falsos Negativos (FN)</label>
+            <input type="number" id="sim-fn" value="15" min="0" oninput="recalcSim()">
+        </div>
+        <div class="sim-input-group">
+            <label style="color:#991b1b;">Falsos Positivos (FP)</label>
+            <input type="number" id="sim-fp" value="25" min="0" oninput="recalcSim()">
+        </div>
+        <div class="sim-input-group">
+            <label style="color:#166534;">Verdaderos Negativos (TN)</label>
+            <input type="number" id="sim-tn" value="875" min="0" oninput="recalcSim()">
+        </div>
+    </div>
+
+    <div class="sim-results">
+        <div class="res-pill">
+            <div class="label">Accuracy</div>
+            <div class="val" id="res-acc">96.0%</div>
+        </div>
+        <div class="res-pill">
+            <div class="label">Precisión</div>
+            <div class="val" id="res-prec" style="color:#0369a1;">77.3%</div>
+        </div>
+        <div class="res-pill">
+            <div class="label">Recall</div>
+            <div class="val" id="res-rec" style="color:#15803d;">85.0%</div>
+        </div>
+        <div class="res-pill">
+            <div class="label">F1-Score</div>
+            <div class="val" id="res-f1" style="color:#7e22ce;">0.81</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BLOQUE 3: MÉTODOS DE ENSAMBLE                               -->
+<!-- ============================================================ -->
+<div class="section-header">
+    <span class="section-tag tag-purple">Clase 4</span>
+    <h2>3. Técnicas de Ensamble (Combinación de Modelos)</h2>
+</div>
+
+<div class="card">
+    <p>El principio de los métodos de ensamble es combinar múltiples estimadores base ("weak learners") para producir un modelo final con mejor capacidad de generalización que cualquier estimador individual.</p>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Técnica</th>
+                <th>Filosofía y Arquitectura</th>
+                <th>Efecto en el Error</th>
+                <th>Algoritmo Insignia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Bagging</strong><br><small>(Bootstrap Aggregating)</small></td>
+                <td>Entrena múltiples modelos base idénticos de manera <strong>independiente y en paralelo</strong> sobre subconjuntos bootstrap (con reemplazo). La decisión final se obtiene por votación mayoritaria (clasificación) o promedio (regresión).</td>
+                <td><strong>Reduce la Varianza</strong> (evita el sobreajuste y estabiliza el modelo frente a ruido).</td>
+                <td><strong>Random Forest</strong> (añade aleatoriedad en el subespacio de variables por split para descorrelacionar los árboles).</td>
+            </tr>
+            <tr>
+                <td><strong>Boosting</strong></td>
+                <td>Entrena los modelos de manera <strong>secuencial</strong>. Cada nuevo modelo se entrena otorgando mayor ponderación o ajustando los residuos de los errores cometidos por los modelos anteriores.</td>
+                <td><strong>Reduce el Sesgo</strong> (incrementa progresivamente la capacidad predictiva y el aprendizaje).</td>
+                <td><strong>AdaBoost</strong>, <strong>Gradient Boosting</strong>, XGBoost, LightGBM.</td>
+            </tr>
+            <tr>
+                <td><strong>Stacking</strong></td>
+                <td>Combina modelos de <strong>familias heterogéneas</strong> (ej. KNN, Árbol y Regresión Logística). Sus salidas se usan como variables predictoras de un metamodelo (blender).</td>
+                <td>Maximiza poder discriminativo fusionando arquitecturas dispares.</td>
+                <td>StackingClassifier / StackingRegressor.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ============================================================ -->
+<!-- BLOQUE 4: EVALUADOR INTERACTIVO CLASE 4                     -->
+<!-- ============================================================ -->
+<div class="section-header">
+    <span class="section-tag tag-green">Entrenamiento</span>
+    <h2>4. Loop de Evaluación: Métricas & Ensambles</h2>
+</div>
+
+
+<!-- ========================================== -->
+<!-- 🎧 REPRODUCTOR DE AUDIO ESTUDIO (NOTEBOOKLM / LECTOR) -->
+<!-- ========================================== -->
+<div id="audio-studio-player" class="asp-card">
+  <div class="asp-header">
+    <div class="asp-info">
+      <span class="asp-badge">
+        <svg class="asp-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        ESTUDIO DE AUDIO
+      </span>
+      <h4 class="asp-title">Podcast Deep Dive: Devolución Test & Clase 4 (Métricas y Ensambles)</h4>
+    </div>
+    
+    <div class="asp-mode-switcher">
+      <button id='asp-btn-podcast' class='asp-tab active' onclick='aspSwitchTrack("podcast")'><svg class="asp-svg-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2H3v2a9 9 0 0 0 8 8.94V23h2v-2.06A9 9 0 0 0 21 12v-2h-2z"/></svg> Deep Dive (Dúo)</button>
+      
+    </div>
+  </div>
+
+  <audio id="asp-audio-core" preload="metadata" src="../../Audio/clase_04_metricas_ensembles_podcast.mp3"></audio>
+
+  <div class="asp-timeline-wrapper">
+    <span id="asp-current-time" class="asp-time">0:00</span>
+    <input type="range" id="asp-seek-bar" class="asp-slider" min="0" max="100" value="0">
+    <span id="asp-duration" class="asp-time">--:--</span>
+  </div>
+
+  <div class="asp-controls-row">
+    <div class="asp-speed-group">
+      <button class="asp-pill" onclick="aspSetSpeed(1.0)">1x</button>
+      <button class="asp-pill" onclick="aspSetSpeed(1.25)">1.25x</button>
+      <button class="asp-pill" onclick="aspSetSpeed(1.5)">1.5x</button>
+    </div>
+
+    <div class="asp-main-actions">
+      <button class="asp-circle-btn" onclick="aspSkip(-15)" title="Retroceder 15s">
+        <svg class="asp-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><text x="12" y="15" font-size="7" font-weight="bold" fill="currentColor" text-anchor="middle" stroke="none">15</text></svg>
+      </button>
+
+      <button id="asp-play-btn" class="asp-play-main" onclick="aspTogglePlay()" title="Reproducir / Pausa">
+        <svg id="asp-play-icon" class="asp-svg-lg" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg id="asp-pause-icon" class="asp-svg-lg" style="display:none;" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>
+
+      <button class="asp-circle-btn" onclick="aspSkip(15)" title="Adelantar 15s">
+        <svg class="asp-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><text x="12" y="15" font-size="7" font-weight="bold" fill="currentColor" text-anchor="middle" stroke="none">15</text></svg>
+      </button>
+    </div>
+
+    <div class="asp-volume-group">
+      <a id="asp-download-link" href="../../Audio/clase_04_metricas_ensembles_podcast.mp3" download class="asp-pill" title="Descargar archivo MP3">
+        <svg class="asp-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> MP3
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+.asp-card {
+  margin: 28px 0;
+  padding: 20px 24px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #e2e8f0;
+}
+.asp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.asp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 3px 9px;
+  border-radius: 9999px;
+  margin-bottom: 4px;
+}
+.asp-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+.asp-mode-switcher {
+  display: flex;
+  background: #1e293b;
+  padding: 3px;
+  border-radius: 8px;
+  gap: 4px;
+}
+.asp-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.asp-tab.active {
+  background: #334155;
+  color: #f8fafc;
+}
+.asp-timeline-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 18px 0;
+}
+.asp-time {
+  font-size: 12px;
+  font-family: monospace;
+  color: #94a3b8;
+  min-width: 40px;
+}
+.asp-slider {
+  flex: 1;
+  height: 6px;
+  background: #334155;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  accent-color: #38bdf8;
+}
+.asp-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.asp-speed-group, .asp-volume-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.asp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.asp-pill:hover {
+  background: #334155;
+  color: #ffffff;
+}
+.asp-main-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.asp-circle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.15s;
+}
+.asp-circle-btn:hover {
+  background: #334155;
+  transform: scale(1.05);
+}
+.asp-play-main {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: none;
+  color: #0f172a;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s;
+}
+.asp-play-main:hover {
+  background: #7dd3fc;
+  transform: scale(1.06);
+}
+.asp-svg { width: 18px; height: 18px; }
+.asp-svg-sm { width: 14px; height: 14px; }
+.asp-svg-lg { width: 22px; height: 22px; }
+</style>
+
+<script>
+(function() {
+  const audio = document.getElementById('asp-audio-core');
+  const playBtn = document.getElementById('asp-play-btn');
+  const playIcon = document.getElementById('asp-play-icon');
+  const pauseIcon = document.getElementById('asp-pause-icon');
+  const seekBar = document.getElementById('asp-seek-bar');
+  const currentTimeEl = document.getElementById('asp-current-time');
+  const durationEl = document.getElementById('asp-duration');
+  const downloadLink = document.getElementById('asp-download-link');
+
+  const tracks = {
+    podcast: "../../Audio/clase_04_metricas_ensembles_podcast.mp3",
+    reader: ""
+  };
+
+  function formatTime(s) {
+    if (isNaN(s)) return "0:00";
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+  }
+
+  window.aspTogglePlay = function() {
+    if (!audio.src) return;
+    if (audio.paused) {
+      audio.play();
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+    } else {
+      audio.pause();
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+    }
+  };
+
+  window.aspSkip = function(delta) {
+    audio.currentTime = Math.min(Math.max(audio.currentTime + delta, 0), audio.duration || 0);
+  };
+
+  window.aspSetSpeed = function(spd) {
+    audio.playbackRate = spd;
+  };
+
+  window.aspSwitchTrack = function(mode) {
+    const targetSrc = tracks[mode];
+    if (!targetSrc) return;
+    const wasPlaying = !audio.paused;
+    audio.src = targetSrc;
+    if (downloadLink) downloadLink.href = targetSrc;
+    
+    document.querySelectorAll('.asp-tab').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('asp-btn-' + mode);
+    if (btn) btn.classList.add('active');
+
+    audio.load();
+    if (wasPlaying) {
+      audio.play();
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+    } else {
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+    }
+  };
+
+  audio.addEventListener('timeupdate', () => {
+    if (!isNaN(audio.duration) && audio.duration > 0) {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      seekBar.value = pct;
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      durationEl.textContent = formatTime(audio.duration);
+    }
+  });
+
+  seekBar.addEventListener('input', () => {
+    if (!isNaN(audio.duration)) {
+      audio.currentTime = (seekBar.value / 100) * audio.duration;
+    }
+  });
+
+  audio.addEventListener('ended', () => {
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+  });
+})();
+</script>
+
+<main id="quiz-container">
+    <!-- P1 -->
+    <div class="card" data-qid="c4_1" data-tema="Métricas en Desbalance">
+        <span class="badge tag-amber">Pregunta de Parcial</span>
+        <h2>1. Selección de Métrica Crítica</h2>
+        <p>En un sistema de detección temprana de sepsis en terapia intensiva, no detectar a un paciente enfermo (Falso Negativo) tiene un desenlace fatal, mientras que dar una falsa alarma (Falso Positivo) solo implica realizar un análisis de sangre preventivo. ¿Qué métrica de evaluación se debe optimizar como prioridad absoluta?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'c4_1', 'A')">A. Precisión (Precision), para evitar saturar al laboratorio con análisis preventivos.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'c4_1', 'B')">B. Sensibilidad / Exhaustividad (Recall), para minimizar a cero los Falsos Negativos.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'c4_1', 'C')">C. Exactitud (Accuracy), ya que siempre representa el desempeño global óptimo.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'c4_1', 'D')">D. Especificidad únicamente.</div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="toggleAnswer('ans_c4_1')">Ver justificación</button>
+        <div id="ans_c4_1" class="answer-reveal">
+            <strong>Respuesta Correcta: B.</strong> En medicina o detección de incidentes letales, el costo de un Falso Negativo (paciente con sepsis no tratado que fallece) es astronómicamente mayor que el de un Falso Positivo. Se debe maximizar el Recall ($\frac{TP}{TP + FN}$).
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-c4_1" class="nose-checkbox" onchange="toggleDuda('duda-c4_1')">
+            <label for="nose-c4_1">Marcar si tenés dudas con el balance Precision vs Recall</label>
+        </div>
+        <textarea class="duda-input" id="duda-c4_1" placeholder="Escribe tu duda conceptual aquí..."></textarea>
+    </div>
+
+    <!-- P2 -->
+    <div class="card" data-qid="c4_2" data-tema="Ensambles: Bagging vs Boosting">
+        <span class="badge tag-amber">Pregunta de Parcial</span>
+        <h2>2. Descorrelación en Random Forest</h2>
+        <p>¿Cuál es la innovación clave que introduce <strong>Random Forest</strong> por encima de un simple Bagging de árboles de decisión para lograr reducir aún más la varianza?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'c4_2', 'A')">A. Obliga a que todos los árboles se entrenen de forma estrictamente secuencial sobre los residuos del árbol previo.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'c4_2', 'B')">B. Selecciona un subconjunto aleatorio de atributos (features) en cada corte, evitando que una variable dominante haga que todos los árboles sean idénticos.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'c4_2', 'C')">C. Reemplaza la impureza de Gini por el cálculo de la distancia de Manhattan en cada hoja.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'c4_2', 'D')">D. Elimina el sobreajuste podando todos los árboles a una profundidad fija de 1 nivel (Stumps).</div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="toggleAnswer('ans_c4_2')">Ver justificación</button>
+        <div id="ans_c4_2" class="answer-reveal">
+            <strong>Respuesta Correcta: B.</strong> En Bagging tradicional, si existe un atributo extremadamente fuerte, casi todos los árboles lo seleccionarán en la raíz, resultando en árboles correlacionados. Random Forest subsamplea variables en cada división ($\approx \sqrt{p}$ en clasificación), forzando a explorar otras variables y descorrelacionando el ensamble.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-c4_2" class="nose-checkbox" onchange="toggleDuda('duda-c4_2')">
+            <label for="nose-c4_2">Marcar si tenés dudas con la arquitectura de Random Forest</label>
+        </div>
+        <textarea class="duda-input" id="duda-c4_2" placeholder="Escribe tu duda sobre ensembles aquí..."></textarea>
+    </div>
+
+    <!-- P3 -->
+    <div class="card" data-qid="c4_3" data-tema="Curvas ROC y AUC">
+        <span class="badge tag-amber">Pregunta de Parcial</span>
+        <h2>3. Interpretación de la Curva ROC</h2>
+        <p>Al graficar la curva ROC de un clasificador binario, se observa que la trayectoria coincide exactamente con la diagonal de 45 grados (que une el punto $(0,0)$ con el $(1,1)$). El área bajo la curva ($AUC$) resultante es $0.50$. ¿Qué nos indica este resultado?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'c4_3', 'A')">A. El modelo clasifica de manera óptima y libre de error en el set de prueba.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'c4_3', 'B')">B. El modelo no posee capacidad discriminativa y su rendimiento equivale a adivinar al azar (lanzar una moneda).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'c4_3', 'C')">C. El modelo tiene un sesgo alto y varianza cero, indicando una regularización L2 perfecta.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'c4_3', 'D')">D. Hay una fuga de datos (Data Leakage) que infla artificialmente el rendimiento.</div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="toggleAnswer('ans_c4_3')">Ver justificación</button>
+        <div id="ans_c4_3" class="answer-reveal">
+            <strong>Respuesta Correcta: B.</strong> La diagonal de 45° representa una tasa de verdaderos positivos idéntica a la tasa de falsos positivos en todos los umbrales. Su $AUC = 0.5$, lo cual equivale a clasificar por azar puro.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-c4_3" class="nose-checkbox" onchange="toggleDuda('duda-c4_3')">
+            <label for="nose-c4_3">Marcar si tenés dudas con curvas ROC / AUC</label>
+        </div>
+        <textarea class="duda-input" id="duda-c4_3" placeholder="Escribe tu duda sobre ROC aquí..."></textarea>
+    </div>
+</main>
+
+<div class="action-bar">
+    <p style="margin:0; font-size:0.95rem; color:var(--text-muted);">Exporta los resultados para la devolución ejecutiva del tutor:</p>
+    <button class="btn" onclick="exportarResultados()">
+        <svg style="width:16px; height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar para Eval. IA
+    </button>
+</div>
+
+<script>
+const userAnswers = {};
+
+function selectOption(element, qid, choice) {
+    const parent = element.parentElement;
+    parent.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    userAnswers[qid] = choice;
+}
+
+function toggleAnswer(id) {
+    const el = document.getElementById(id);
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+}
+
+function toggleDuda(id) {
+    const el = document.getElementById(id);
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+}
+
+function recalcSim() {
+    const tp = parseFloat(document.getElementById('sim-tp').value) || 0;
+    const fn = parseFloat(document.getElementById('sim-fn').value) || 0;
+    const fp = parseFloat(document.getElementById('sim-fp').value) || 0;
+    const tn = parseFloat(document.getElementById('sim-tn').value) || 0;
+    
+    const total = tp + fn + fp + tn;
+    if (total === 0) return;
+
+    const acc = ((tp + tn) / total) * 100;
+    const prec = (tp + fp) > 0 ? (tp / (tp + fp)) * 100 : 0;
+    const rec = (tp + fn) > 0 ? (tp / (tp + fn)) * 100 : 0;
+    const f1 = (prec + rec) > 0 ? (2 * (prec * rec) / (prec + rec)) / 100 : 0;
+
+    document.getElementById('res-acc').textContent = acc.toFixed(1) + '%';
+    document.getElementById('res-prec').textContent = prec.toFixed(1) + '%';
+    document.getElementById('res-rec').textContent = rec.toFixed(1) + '%';
+    document.getElementById('res-f1').textContent = f1.toFixed(2);
+}
+
+function exportarResultados() {
+    const payload = {
+        materia: "Minería de Datos y Machine Learning",
+        leccion: "0002-devolucion-metricas-ensembles",
+        fecha: new Date().toISOString(),
+        ejercicios: []
+    };
+
+    document.querySelectorAll('#quiz-container .card').forEach(card => {
+        const qid = card.getAttribute('data-qid');
+        const tema = card.getAttribute('data-tema');
+        const choice = userAnswers[qid] || null;
+        const noseChecked = card.querySelector('.nose-checkbox')?.checked || false;
+        const dudaText = card.querySelector('.duda-input')?.value || "";
+
+        payload.ejercicios.push({
+            qid: qid,
+            tema: tema,
+            respuesta_usuario: choice,
+            nose_no_se: noseChecked,
+            duda_especifica: dudaText.trim()
+        });
+    });
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eval-mineria-clase4-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
