@@ -59,9 +59,9 @@ Para optimizar el uso de tokens, contexto y mantener la pulcritud del vault:
    </script>
    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
    ```
-3. **Apertura automática**: Apenas se genera el archivo HTML, ejecuta automáticamente el comando `xdg-open` para que se abra de inmediato en el navegador del usuario:
+3. **Apertura automática**: Apenas se genera el archivo HTML, ejecuta automáticamente el navegador en background con las flags nativas de Wayland y verifica que la ventana esté mapeada:
    ```bash
-   xdg-open "<ruta_absoluta_al_archivo_html>"
+   /usr/bin/thorium-browser-avx2 --ozone-platform=wayland "<ruta_absoluta_al_archivo_html>" &
    ```
 4. Al recibir el JSON exportado por el alumno tras completar el examen, califícalo, clasifica los errores y genera la devolución detallada en HTML.
 
