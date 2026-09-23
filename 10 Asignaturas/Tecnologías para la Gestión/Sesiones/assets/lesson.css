@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+    --bg-page: #fbfbf9;
+    --bg-card: #ffffff;
+    --bg-input: #f7f6f2;
+    --border-default: #e6e4dc;
+    --border-strong: #d2cfc4;
+    --border-light: #eceae3;
+    --text-title: #1a1917;
+    --text-body: #3c3a36;
+    --text-muted: #7d7a72;
+    --accent-ochre: #b58900;
+    --accent-ink: #1f2328;
+    --tag-bg: #efece4;
+    --danger: #b91c1c;
+    --warning: #b45309;
+    --success: #15803d;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-body);
+    font-family: 'Newsreader', Georgia, serif;
+    line-height: 1.68;
+    padding: 3.5rem 1.8rem 6rem;
+    max-width: 840px;
+    margin: 0 auto;
+}
+
+header {
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border-default);
+}
+
+.badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-ochre);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    display: inline-block;
+}
+
+h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--text-title);
+    line-height: 1.25;
+    margin-bottom: 0.6rem;
+}
+
+p {
+    margin-bottom: 1.2rem;
+    font-size: 1.08rem;
+    color: var(--text-body);
+}
+
+header p {
+    font-size: 1.12rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+h2 {
+    font-size: 1.42rem;
+    font-weight: 600;
+    color: var(--text-title);
+    margin-bottom: 0.9rem;
+    line-height: 1.35;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    padding: 2.2rem;
+    margin-bottom: 2.2rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    margin-bottom: 1rem;
+}
+
+.card-badge {
+    background: var(--tag-bg);
+    color: var(--text-title);
+    padding: 0.2rem 0.55rem;
+    border-radius: 3px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+}
+
+.tag-red { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
+.tag-amber { background: #fef3c7; color: var(--warning); border: 1px solid #fde68a; }
+.tag-green { background: #dcfce7; color: var(--success); border: 1px solid #bbf7d0; }
+
+.quiz-option {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-page);
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    padding: 0.95rem 1.2rem;
+    margin-bottom: 0.7rem;
+    font-size: 0.95rem;
+    color: var(--text-body);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+}
+
+.quiz-option:hover {
+    background: #f3f1ea;
+    border-color: var(--border-strong);
+}
+
+.quiz-option.selected {
+    background: #fbf7ee;
+    border-color: var(--accent-ochre);
+    color: var(--text-title);
+    font-weight: 500;
+}
+
+.opt-letter {
+    font-weight: 600;
+    color: var(--text-muted);
+    width: 20px;
+    flex-shrink: 0;
+}
+
+.quiz-option.selected .opt-letter {
+    color: var(--accent-ochre);
+}
+
+.code-block {
+    background: #1e1e24;
+    color: #f8f8f2;
+    padding: 1rem;
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    margin: 0.9rem 0 1.2rem;
+    overflow-x: auto;
+}
+
+.duda-input {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-body);
+    margin-top: 0.9rem;
+    resize: vertical;
+}
+
+.duda-input:focus {
+    outline: none;
+    border-color: var(--border-strong);
+    background: #ffffff;
+}
+
+.nose-box {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.2rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.nose-box input[type="checkbox"] {
+    accent-color: var(--accent-ochre);
+    width: 16px;
+    height: 16px;
+}
+
+.btn {
+    font-family: 'Inter', sans-serif;
+    background: var(--accent-ink);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.15s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:hover {
+    background: #33383f;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    text-decoration: underline;
+    font-size: 0.82rem;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+}
+
+.btn-secondary:hover {
+    color: var(--text-title);
+}
+
+.answer-reveal {
+    display: none;
+    background: #fbf7ee;
+    border-left: 3px solid var(--accent-ochre);
+    padding: 1.1rem 1.3rem;
+    margin-top: 1.2rem;
+    font-size: 0.95rem;
+    color: #4a3e14;
+    font-family: 'Inter', sans-serif;
+    border-radius: 0 4px 4px 0;
+}
+
+.action-bar {
+    position: sticky;
+    bottom: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    padding: 1.1rem 1.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+    font-family: 'Inter', sans-serif;
+    margin-top: 2rem;
+}
+
+.action-bar p {
+    margin-bottom: 0;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+@media print {
+    @page { margin: 0; }
+    body { padding: 2.5cm 2cm; background: #fff; }
+    .action-bar, .duda-input, .nose-box, .btn { display: none; }
+}

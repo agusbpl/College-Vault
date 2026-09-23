@@ -13,3 +13,9 @@ Thumbs.db
 
 # --- Temporary & Trash Files ---
 .trash/
+
+# --- LLM Study Cache & Temporary files ---
+**/.markdown_cache/
+.cache/
+deploy-temp/
+10 Asignaturas/Tecnologías para la Gestión/TP-integrador-avances

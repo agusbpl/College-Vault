@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica 1: Fundamentos de Visualización de Datos</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <style>
+        .nose-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .action-bar {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .answer-reveal {
+            display: none;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #166534;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <span class="badge">Visualización de Datos — UNLP</span>
+    <h1>Práctica 1: Fundamentos, Percepción y Codificación Visual</h1>
+    <p>Simulacro interactivo basado en la Práctica 1 de la cátedra César Estrebou y Tamara Munzner. Exporta el JSON para la devolución diagnóstica.</p>
+</header>
+
+<main id="quiz-container">
+
+    <div class="card" data-qid="v1" data-tema="Propósito de la Visualización">
+        <span class="badge tag-red">Crítica</span>
+        <h2>1. Objetivos: Exploración, Análisis y Comunicación</h2>
+        <p>Según Tamara Munzner y la cátedra, ¿cuál es la distinción fundamental entre la visualización para <em>exploración</em> y la visualización para <em>comunicación (presentación)</em>?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'v1', 'A')">A. La exploración se enfoca en comunicar una historia cerrada; la comunicación busca hipótesis desconocidas.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'v1', 'B')">B. La exploración apoya al analista en descubrir patrones sin hipótesis previas; la comunicación transmite un hallazgo concreto a una audiencia.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'v1', 'C')">C. La exploración utiliza exclusivamente tablas sin gráficos; la comunicación usa dashboards interactivos complejos.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'v1', 'D')">D. No existe diferencia metodológica; ambas persiguen exactamente los mismos canales perceptuales.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans_v1')">Ver respuesta modelo</button>
+        <div id="ans_v1" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> B. Explorar es búsqueda abierta para generar hipótesis y entender datos desconocidos. Comunicar o presentar es síntesis dirigida a una audiencia con un mensaje clave.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-v1" class="nose-checkbox">
+            <label for="nose-v1">Necesito repasar los 3 propósitos de Munzner</label>
+        </div>
+        <textarea class="duda-input" id="duda-v1" placeholder="Dudas sobre objetivos de visualización..."></textarea>
+    </div>
+
+    <div class="card" data-qid="v2" data-tema="Marcas y Canales">
+        <span class="badge tag-red">Crítica</span>
+        <h2>2. Canales Visuales y Efectividad según Bertin y Cleveland/McGill</h2>
+        <p>Al codificar una variable <strong>cuantitativa (numérica continua)</strong>, ¿cuál es el canal visual más preciso y con menor tasa de error perceptual humano?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'v2', 'A')">A. Posición sobre una escala común alineada.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'v2', 'B')">B. Área y tamaño relativo de una superficie circular (burbujas).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'v2', 'C')">C. Tono de color (hue / matiz cromático).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'v2', 'D')">D. Ángulo o pendiente en un gráfico de torta.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans_v2')">Ver respuesta modelo</button>
+        <div id="ans_v2" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> A. La posición sobre una escala común alineada (ej: scatter plot, bar chart) es el canal perceptual cuantitativo de mayor precisión según la jerarquía de Cleveland & McGill.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-v2" class="nose-checkbox">
+            <label for="nose-v2">Dudas con la jerarquía de canales perceptuales</label>
+        </div>
+        <textarea class="duda-input" id="duda-v2" placeholder="Dudas sobre efectividad de canales..."></textarea>
+    </div>
+
+    <div class="card" data-qid="v3" data-tema="Procesamiento Preatencional">
+        <span class="badge tag-amber">Alta</span>
+        <h2>3. Procesamiento Preatencional y Leyes de la Gestalt</h2>
+        <p>Un atributo gráfico procesado de forma preatencional permite:</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'v3', 'A')">A. Que el cerebro humano detecte una anomalía visual en menos de 200-250 ms sin escaneo secuencial consciente.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'v3', 'B')">B. Que la persona requiera leer atentamente cada etiqueta de texto para interpretar la métrica.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'v3', 'C')">C. Reducir la resolución de los datos tabulares a través de una función de hash perceptual.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'v3', 'D')">D. Eliminar totalmente la necesidad de escalas o leyendas en mapas de calor.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans_v3')">Ver respuesta modelo</button>
+        <div id="ans_v3" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> A. Las propiedades preatencionales (color, orientación, tamaño) son captadas por la corteza visual de forma paralela e instantánea antes del esfuerzo cognitivo consciente.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-v3" class="nose-checkbox">
+            <label for="nose-v3">Necesito repasar atributos preatencionales y Gestalt</label>
+        </div>
+        <textarea class="duda-input" id="duda-v3" placeholder="Dudas sobre procesamiento preatencional..."></textarea>
+    </div>
+
+</main>
+
+<div class="action-bar">
+    <p style="margin:0; font-size:0.95rem; color:var(--text-secondary);">Exporta tus respuestas para calificación cualitativa:</p>
+    <button class="btn" onclick="exportarResultados()">📥 Exportar para Eval. IA</button>
+</div>
+
+<script>
+const userAnswers = {};
+
+function selectOption(element, qid, choice) {
+    const parent = element.parentElement;
+    parent.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    userAnswers[qid] = choice;
+}
+
+function toggleAnswer(id) {
+    const el = document.getElementById(id);
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+}
+
+function exportarResultados() {
+    const cards = document.querySelectorAll('.card');
+    const payload = {
+        materia: "Visualización de Grandes Volúmenes de Datos",
+        fecha: new Date().toISOString(),
+        ejercicios: []
+    };
+
+    cards.forEach(card => {
+        const qid = card.dataset.qid;
+        const tema = card.dataset.tema;
+        const respuesta = userAnswers[qid] || null;
+        const noSabe = card.querySelector('.nose-checkbox')?.checked || false;
+        const duda = card.querySelector('.duda-input')?.value.trim() || "";
+
+        payload.ejercicios.push({
+            qid: qid,
+            tema: tema,
+            respuesta_usuario: respuesta,
+            nose_no_se: noSabe,
+            duda_especifica: duda
+        });
+    });
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eval-vis-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>

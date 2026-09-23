@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Digital Consulting · Diagnóstico y Supuestos El Emporio del Terciado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4338ca;
+            --primary-light: #6366f1;
+            --primary-dark: #312e81;
+            --primary-subtle: #e0e7ff;
+            --accent: #0ea5e9;
+            --accent-subtle: #e0f2fe;
+            --success: #10b981;
+            --success-subtle: #d1fae5;
+            --warning: #f59e0b;
+            --warning-subtle: #fef3c7;
+            --danger: #ef4444;
+            --danger-subtle: #fee2e2;
+            --purple: #8b5cf6;
+            --purple-subtle: #ede9fe;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --border-focus: #cbd5e1;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container { max-width: 1180px; margin: 0 auto; }
+
+        header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            color: white;
+            padding: 3rem 2.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .consulting-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            color: #c7d2fe;
+        }
+
+        .consulting-badge span.pulse {
+            width: 8px;
+            height: 8px;
+            background-color: #38bdf8;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #38bdf8;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .tagline {
+            font-size: 1.15rem;
+            color: #c7d2fe;
+            font-weight: 400;
+            max-width: 850px;
+            margin-bottom: 1.75rem;
+        }
+
+        .header-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.875rem;
+            color: #e0e7ff;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 1rem;
+            z-index: 50;
+            background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.5rem 0.85rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background-color: var(--primary-subtle);
+        }
+
+        .section {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 2.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-primary { background: var(--primary-subtle); color: var(--primary); }
+        .badge-success { background: var(--success-subtle); color: #065f46; }
+        .badge-warning { background: var(--warning-subtle); color: #92400e; }
+        .badge-danger { background: var(--danger-subtle); color: #991b1b; }
+        .badge-accent { background: var(--accent-subtle); color: #0369a1; }
+        .badge-purple { background: var(--purple-subtle); color: #5b21b6; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .card {
+            background: #fafafa;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--border-focus);
+        }
+
+        .card-title {
+            font-size: 0.98rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-body {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        /* Hypotheses Trail Card */
+        .trail-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 5px solid var(--primary);
+        }
+
+        .trail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1.2fr 1fr;
+            gap: 1rem;
+            margin-top: 0.75rem;
+            font-size: 0.86rem;
+        }
+
+        .trail-col {
+            background: #f8fafc;
+            padding: 0.85rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .trail-col-header {
+            font-weight: 800;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .trail-signal { color: #0284c7; background: #f0f9ff; border-color: #bae6fd; }
+        .trail-hypo { color: #b45309; background: #fffbeb; border-color: #fde68a; }
+        .trail-reason { color: #4338ca; background: #eef2ff; border-color: #c7d2fe; }
+        .trail-validate { color: #047857; background: #ecfdf5; border-color: #a7f3d0; }
+
+        .maturity-card {
+            border-left: 4px solid var(--primary-light);
+            background: #ffffff;
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .maturity-card.level-1 { border-left-color: var(--danger); }
+        .maturity-card.level-2 { border-left-color: var(--warning); }
+        .maturity-card.level-3 { border-left-color: var(--accent); }
+
+        .level-meter {
+            display: flex;
+            gap: 4px;
+            margin: 0.5rem 0;
+        }
+
+        .level-dot {
+            height: 6px;
+            flex: 1;
+            background: #e2e8f0;
+            border-radius: 3px;
+        }
+
+        .level-dot.active { background: var(--primary); }
+        .level-dot.active.warning { background: var(--warning); }
+        .level-dot.active.danger { background: var(--danger); }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.88rem;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: var(--text-main);
+            font-weight: 700;
+            text-align: left;
+            padding: 0.85rem 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        th:first-child { border-top-left-radius: 8px; }
+        th:last-child { border-top-right-radius: 8px; }
+
+        td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #f8fafc; }
+
+        .callout {
+            padding: 1.25rem 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.25rem 0;
+            border-left: 4px solid;
+            font-size: 0.925rem;
+        }
+
+        .callout-rule { background-color: #fffbeb; border-color: #f59e0b; color: #92400e; }
+        .callout-insight { background-color: #eef2ff; border-color: #6366f1; color: #3730a3; }
+        .callout-method { background-color: #f5f3ff; border-color: #8b5cf6; color: #5b21b6; }
+
+        .process-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .flow-step {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 0 0 4px var(--primary-subtle);
+        }
+
+        .step-content {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+        }
+
+        .step-pain {
+            margin-top: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--danger-subtle);
+            border-radius: 6px;
+            color: #991b1b;
+            font-size: 0.825rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .swot-box {
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            border: 1px solid;
+        }
+
+        .swot-s { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+        .swot-w { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+        .swot-o { background: #eff6ff; border-color: #bfdbfe; color: #1e40af; }
+        .swot-t { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+
+        .swot-title {
+            font-weight: 800;
+            font-size: 1.05rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .swot-box ul { padding-left: 1.2rem; font-size: 0.875rem; line-height: 1.5; }
+        .swot-box li { margin-bottom: 0.4rem; }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem 0 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .trail-grid { grid-template-columns: 1fr; }
+            .swot-grid { grid-template-columns: 1fr; }
+            .header-meta { flex-direction: column; gap: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="consulting-badge">
+            <span class="pulse"></span>
+            Aura Digital Consulting · Proyecto TPI
+        </div>
+        <h1>El Emporio del Terciado</h1>
+        <p class="tagline">Informe Integral de Diagnóstico Digital, Matriz de Trazabilidad (Señales &rarr; Supuestos) y Mapeo de Procesos (AS-IS).</p>
+        
+        <div class="header-meta">
+            <div><strong>🏛️ Cátedra:</strong> Tecnologías para la Gestión (UNLP)</div>
+            <div><strong>🎓 Carrera:</strong> Lic. en Ciencia de Datos en Organizaciones</div>
+            <div><strong>📅 Entrega:</strong> Entregable 1 (Bloque 1)</div>
+            <div><strong>👥 Consultora:</strong> Aura Digital Consulting</div>
+        </div>
+    </header>
+
+    <nav class="nav-tabs">
+        <a href="#trazabilidad" class="nav-link">🔬 Trazabilidad de Supuestos</a>
+        <a href="#madurez" class="nav-link">📊 Madurez Digital</a>
+        <a href="#resumen" class="nav-link">📌 Modelo de Negocio</a>
+        <a href="#sucursales" class="nav-link">🏢 Sucursales</a>
+        <a href="#foda" class="nav-link">⚖️ Matriz FODA</a>
+        <a href="#procesos" class="nav-link">🔄 Proceso AS-IS</a>
+        <a href="#soluciones" class="nav-link">💡 Solución TO-BE</a>
+    </nav>
+
+    <!-- SECTION: Trazabilidad de Supuestos (NEW & CRITICAL) -->
+    <section id="trazabilidad" class="section">
+        <div class="section-header">
+            <h2 class="section-title">🔬 1. Matriz de Trazabilidad Metodológica (Señales &rarr; Hipótesis &rarr; Justificación)</h2>
+            <span class="badge badge-purple">Metodología Cátedra CDO</span>
+        </div>
+
+        <div class="callout callout-method">
+            <strong>🎓 Fundamentación según el Programa Oficial de la Cátedra:</strong><br>
+            <em>"Un consultor de transformación digital recibe una empresa real con información dispersa e incompleta. El Entregable 1 exige explicitar los <strong>Supuestos y Preguntas Abiertas</strong>: toda deducción operativa debe nacer de una señal observable y estar justificada por la lógica del negocio." (TPI - Guía Cátedra UNLP).</em>
+        </div>
+
+        <!-- Trail 1: Compras, Mermas y Datos -->
+        <div class="trail-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="font-size: 1.05rem; color: var(--primary);">Hipótesis 1: Aprovisionamiento por Intuición y Desconexión de Mermas</strong>
+                <span class="badge badge-danger">Dimensión Datos & Analítica</span>
+            </div>
+            <div class="trail-grid">
+                <div class="trail-col trail-signal">
+                    <div class="trail-col-header">📡 Señal Observable (Dato Real)</div>
+                    • Reseñas de clientes reportando faltantes imprevistos de placas específicas (colores Egger/Faplac).<br>
+                    • No hay cotizador online con stock en vivo.<br>
+                    • El corte corta 1h antes del cierre.
+                </div>
+                <div class="trail-col trail-hypo">
+                    <div class="trail-col-header">💡 Supuesto / Hipótesis Formulada</div>
+                    Las compras a fabricantes se deciden por estimación empírica del encargado o en planillas Excel aisladas. No existe captura automatizada de las mermas generadas en las máquinas de corte.
+                </div>
+                <div class="trail-col trail-reason">
+                    <div class="trail-col-header">🧠 Razón Razonable (Justificación)</div>
+                    En madereras pyme, las placas estándar (2.75m x 1.83m) se cortan a pedido en el taller. Para registrar los retazos sobrantes como stock vendible se requiere un software de optimización de corte conectado bidireccionalmente a un ERP. Al no contar con ERP visible, los retazos se apilan o descartan manualmente.
+                </div>
+                <div class="trail-col trail-validate">
+                    <div class="trail-col-header">❓ Pregunta de Validación (Entrevista)</div>
+                    <em>¿Cómo se calculan las órdenes de compra a Egger/Faplac y qué registro se lleva de los retazos útiles en el taller?</em>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trail 2: Islas Tecnológicas en Taller -->
+        <div class="trail-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="font-size: 1.05rem; color: var(--primary);">Hipótesis 2: Doble Carga Manual y Maquinaria en Silo</strong>
+                <span class="badge badge-warning">Dimensión Tecnología & Procesos</span>
+            </div>
+            <div class="trail-grid">
+                <div class="trail-col trail-signal">
+                    <div class="trail-col-header">📡 Señal Observable (Dato Real)</div>
+                    • Los presupuestos de cortes se toman en mostrador en papel o por fotos de WhatsApp.<br>
+                    • Quejas por demoras en cola de mostrador para armar cotizaciones.
+                </div>
+                <div class="trail-col trail-hypo">
+                    <div class="trail-col-header">💡 Supuesto / Hipótesis Formulada</div>
+                    La maquinaria de corte computarizada opera como una isla: el vendedor toma las medidas y el operario vuelve a ingresarlas a mano en el software optimizador (Lepton Pack/OptiCut).
+                </div>
+                <div class="trail-col trail-reason">
+                    <div class="trail-col-header">🧠 Razón Razonable (Justificación)</div>
+                    Si el sistema de ventas estuviera integrado a la seccionadora, el vendedor emitiría la orden y el mapa de corte viajaría por red directamente a máquina. La restricción horaria (cerrar presupuestos a las 15:30) evidencia que armar el despiece manual insume demasiado tiempo operativo.
+                </div>
+                <div class="trail-col trail-validate">
+                    <div class="trail-col-header">❓ Pregunta de Validación (Entrevista)</div>
+                    <em>¿El sistema donde se factura envía automáticamente el plano de corte a la seccionadora o se reingresa en el taller?</em>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trail 3: Silos Multi-Sucursal -->
+        <div class="trail-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="font-size: 1.05rem; color: var(--primary);">Hipótesis 3: Falta de Visibilidad de Stock Centralizado en las 3 Sucursales</strong>
+                <span class="badge badge-warning">Dimensión Procesos & Infraestructura</span>
+            </div>
+            <div class="trail-grid">
+                <div class="trail-col trail-signal">
+                    <div class="trail-col-header">📡 Señal Observable (Dato Real)</div>
+                    • Tienen 3 locales (Calle 39, Calle 72 y City Bell).<br>
+                    • Opiniones en Google Maps mencionan esperas telefónicas para confirmar si otra sucursal tiene material.
+                </div>
+                <div class="trail-col trail-hypo">
+                    <div class="trail-col-header">💡 Supuesto / Hipótesis Formulada</div>
+                    Cada sucursal gestiona su stock de forma independiente en bases de datos locales o planillas que se consolidan al cierre, sin sincronización en tiempo real.
+                </div>
+                <div class="trail-col trail-reason">
+                    <div class="trail-col-header">🧠 Razón Razonable (Justificación)</div>
+                    Con un ERP multi-depósito moderno, cualquier vendedor consulta el stock consolidado en pantalla al instante y reserva mercadería sin hacer esperar al cliente ni llamar por teléfono.
+                </div>
+                <div class="trail-col trail-validate">
+                    <div class="trail-col-header">❓ Pregunta de Validación (Entrevista)</div>
+                    <em>¿Pueden ver en pantalla el stock exacto de City Bell desde Casa Central o deben comunicarse telefónicamente?</em>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trail 4: Dependencia de Empleados Estrella -->
+        <div class="trail-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="font-size: 1.05rem; color: var(--primary);">Hipótesis 4: Disparidad de Servicio por Falta de Procesos Estandarizados (CRM)</strong>
+                <span class="badge badge-warning">Dimensión Personas & Cultura</span>
+            </div>
+            <div class="trail-grid">
+                <div class="trail-col trail-signal">
+                    <div class="trail-col-header">📡 Señal Observable (Dato Real)</div>
+                    • Calificación promedio 3.9/5 ⭐.<br>
+                    • Reseñas polarizadas: clientes que elogian con nombre propio a ciertos empleados y otros que reclaman desatención.
+                </div>
+                <div class="trail-col trail-hypo">
+                    <div class="trail-col-header">💡 Supuesto / Hipótesis Formulada</div>
+                    No existen protocolos estandarizados de atención ni un sistema CRM que registre el historial del cliente; la calidad del servicio depende 100% del criterio y la voluntad del empleado de turno.
+                </div>
+                <div class="trail-col trail-reason">
+                    <div class="trail-col-header">🧠 Razón Razonable (Justificación)</div>
+                    Cuando el conocimiento del cliente (ej. carpintero habitual que compra $2M al mes) reside en la memoria del vendedor y no en un CRM, si ese vendedor no está, el cliente recibe trato genérico y demorado.
+                </div>
+                <div class="trail-col trail-validate">
+                    <div class="trail-col-header">❓ Pregunta de Validación (Entrevista)</div>
+                    <em>¿Tienen una base de datos con el historial de compras y tarifas preferenciales de cada carpintero o se acuerda de palabra?</em>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: Madurez Digital -->
+    <section id="madurez" class="section">
+        <div class="section-header">
+            <h2 class="section-title">📊 2. Diagnóstico de Madurez Digital (6 Dimensiones)</h2>
+            <span class="badge badge-warning">Nivel Global: 2 (En Desarrollo)</span>
+        </div>
+
+        <div class="grid-2">
+            <div class="maturity-card level-2">
+                <div class="maturity-header">
+                    <strong>1. Estrategia Digital</strong>
+                    <span class="badge badge-warning">Nivel 2</span>
+                </div>
+                <div class="level-meter">
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                </div>
+                <p class="card-body"><strong>Razón:</strong> Redes activas con buen contenido visual, pero concebidas como catálogo publicitario y no como canal transaccional integrado al flujo operativo.</p>
+            </div>
+
+            <div class="maturity-card level-2">
+                <div class="maturity-header">
+                    <strong>2. Tecnología e Infraestructura</strong>
+                    <span class="badge badge-warning">Nivel 2</span>
+                </div>
+                <div class="level-meter">
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                </div>
+                <p class="card-body"><strong>Razón:</strong> Excelente maquinaria de corte y pegado de cantos industrial, pero funcionando como islas aisladas del sistema de gestión comercial.</p>
+            </div>
+
+            <div class="maturity-card level-1">
+                <div class="maturity-header">
+                    <strong>3. Datos y Analítica</strong>
+                    <span class="badge badge-danger">Nivel 1</span>
+                </div>
+                <div class="level-meter">
+                    <div class="level-dot active danger"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                </div>
+                <p class="card-body"><strong>Razón:</strong> Inexistencia de repositorio central de datos. Decisiones operativas y de compra basadas en intuición y planillas desconectadas.</p>
+            </div>
+
+            <div class="maturity-card level-2">
+                <div class="maturity-header">
+                    <strong>4. Procesos de Negocio</strong>
+                    <span class="badge badge-warning">Nivel 2</span>
+                </div>
+                <div class="level-meter">
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                </div>
+                <p class="card-body"><strong>Razón:</strong> Flujos manuales con alta fricción: carga en mostrador &rarr; reingreso a software de corte &rarr; consulta telefónica de stock.</p>
+            </div>
+
+            <div class="maturity-card level-2">
+                <div class="maturity-header">
+                    <strong>5. Personas y Cultura</strong>
+                    <span class="badge badge-warning">Nivel 2</span>
+                </div>
+                <div class="level-meter">
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                </div>
+                <p class="card-body"><strong>Razón:</strong> Fuerte dependencia del conocimiento tácito de empleados clave. Experiencia al cliente heterogénea según quién atienda.</p>
+            </div>
+
+            <div class="maturity-card level-2">
+                <div class="maturity-header">
+                    <strong>6. Cliente y Canales</strong>
+                    <span class="badge badge-warning">Nivel 2</span>
+                </div>
+                <div class="level-meter">
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot active warning"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                    <div class="level-dot"></div>
+                </div>
+                <p class="card-body"><strong>Razón:</strong> WhatsApp utilizado como buzón manual saturado. Sin cotizador de autoservicio 24/7 ni seguimiento en línea de pedidos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: Modelo de Negocio -->
+    <section id="resumen" class="section">
+        <div class="section-header">
+            <h2 class="section-title">📌 3. Ficha y Modelo de Negocio</h2>
+            <span class="badge badge-primary">Contexto del Sector</span>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-title">
+                    <span>🪵 Propuesta de Valor</span>
+                    <span class="badge badge-accent">Placas & Cortes</span>
+                </div>
+                <div class="card-body">
+                    Distribuidor oficial de placas melamínicas líderes (Egger, Faplac), MDF, fenólicos, herrajes y perfiles de construcción en seco (Durlock). Su ventaja competitiva histórica es el servicio de <strong>corte computarizado y pegado de cantos</strong>.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span>👥 Segmentación B2B vs. B2C</span>
+                    <span class="badge badge-success">Doble Cliente</span>
+                </div>
+                <div class="card-body">
+                    • <strong>B2B (Profesionales):</strong> Carpinteros y constructoras (alta recurrencia, sensibilidad extrema a demoras de entrega y precisión de corte).<br>
+                    • <strong>B2C (Hogares):</strong> Particulares que requieren asesoramiento guiado y diseño para reformas.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: Sucursales -->
+    <section id="sucursales" class="section">
+        <div class="section-header">
+            <h2 class="section-title">🏢 4. Red de Puntos de Atención</h2>
+            <span class="badge badge-accent">3 Sucursales</span>
+        </div>
+
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-title">📍 Casa Central (Calle 39)</div>
+                <div class="card-body">
+                    Calle 39 N° 823 (e/ 11 y 12). Sede principal de taller de corte, depósito masivo y mayor afluencia de profesionales.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">📍 Egger Haus (Calle 72)</div>
+                <div class="card-body">
+                    Calle 72 N° 978 (e/ 14 y 15). Showroom de diseño de texturas y asesoramiento a arquitectos.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">📍 City Bell (Camino Centenario)</div>
+                <div class="card-body">
+                    Camino Centenario esq. 461. Punto barrial estratégico para captar demanda de zona norte.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: FODA -->
+    <section id="foda" class="section">
+        <div class="section-header">
+            <h2 class="section-title">⚖️ 5. Matriz FODA</h2>
+            <span class="badge badge-primary">Estratégico</span>
+        </div>
+
+        <div class="swot-grid">
+            <div class="swot-box swot-s">
+                <div class="swot-title">💪 Fortalezas</div>
+                <ul>
+                    <li>Marca líder y referente con décadas de presencia en La Plata.</li>
+                    <li>Excelente maquinaria de corte de precisión.</li>
+                    <li>3 sucursales estratégicamente distribuidas.</li>
+                </ul>
+            </div>
+            <div class="swot-box swot-w">
+                <div class="swot-title">⚠️ Debilidades</div>
+                <ul>
+                    <li>Cierre de cotizaciones 1h antes que el local (cuello de botella).</li>
+                    <li>Doble carga manual en taller &rarr; riesgo de error de medidas.</li>
+                    <li>Silos de stock entre sucursales sin ERP en tiempo real.</li>
+                </ul>
+            </div>
+            <div class="swot-box swot-o">
+                <div class="swot-title">🚀 Oportunidades</div>
+                <ul>
+                    <li>Portal B2B con cotizador de corte y despiece online 24/7.</li>
+                    <li>CRM para fidelizar carpinteros con listas de precio preferenciales.</li>
+                    <li>Bot de WhatsApp con IA para cotizaciones inmediatas.</li>
+                </ul>
+            </div>
+            <div class="swot-box swot-t">
+                <div class="swot-title">🛡️ Amenazas</div>
+                <ul>
+                    <li>Fuga de profesionales a competidores con entrega más rápida y cotización online.</li>
+                    <li>Volatilidad de costos y pérdida de margen por mermas no controladas.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: Proceso AS-IS -->
+    <section id="procesos" class="section">
+        <div class="section-header">
+            <h2 class="section-title">🔄 6. Mapeo del Proceso Crítico Actual (AS-IS)</h2>
+            <span class="badge badge-danger">Circuito de Cortes & Presupuestos</span>
+        </div>
+
+        <div class="process-flow">
+            <div class="flow-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <div class="step-title">Recepción de Medidas (Mostrador / WhatsApp)</div>
+                    <p class="card-body">Cliente entrega plano en papel o WhatsApp. Se corta recepción a las 15:30 hs.</p>
+                    <div class="step-pain">🚨 Pérdida de ventas por límite horario estricto y colas en mostrador.</div>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <div class="step-title">Verificación de Stock Manual</div>
+                    <p class="card-body">Consulta en sistema local o llamado telefónico a otra sucursal para verificar placas.</p>
+                    <div class="step-pain">🚨 Tiempos muertos y falta de visión unificada de inventario.</div>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <div class="step-title">Carga Manual en Optimizador de Cortes</div>
+                    <p class="card-body">Operario tipea pieza por pieza (alto, ancho, veta, cantos) en software de taller.</p>
+                    <div class="step-pain">🚨 Doble carga de datos, demora y riesgo de error de corte.</div>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <div class="step-title">Corte en Seccionadora y Canteado</div>
+                    <p class="card-body">Ejecución del corte. Mermas y sobrantes no se registran en sistema.</p>
+                    <div class="step-pain">🚨 Pérdida económica por retazos útiles no inventariados.</div>
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                    <div class="step-title">Notificación y Retiro / Flete</div>
+                    <p class="card-body">Aviso informal o cliente consultando a ciegas si el pedido está listo.</p>
+                    <div class="step-pain">🚨 Falta de trazabilidad y tracking para el profesional.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: Solución TO-BE -->
+    <section id="soluciones" class="section">
+        <div class="section-header">
+            <h2 class="section-title">💡 7. Solución Integral Propuesta (Roadmap TPI)</h2>
+            <span class="badge badge-success">Transformación Digital TO-BE</span>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bloque</th>
+                        <th>Propuesta Tecnológica</th>
+                        <th>Impacto en el Negocio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Bloque 2: Transaccionales</strong></td>
+                        <td>• <strong>ERP Cloud Multi-Sucursal:</strong> Inventario único en tiempo real.<br>• <strong>CRM Profesional:</strong> Fidelización y cuentas corrientes B2B.<br>• <strong>BI:</strong> Tablero de control de mermas y demanda.</td>
+                        <td>Eliminación de silos y 100% de trazabilidad de stock entre depósitos.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bloque 3: IA & Tendencias</strong></td>
+                        <td>• <strong>Cotizador Online con IA 24/7:</strong> Carga de planos y optimización en web/WhatsApp.<br>• <strong>RPA en Despacho:</strong> Generación automática de etiquetas QR por pieza.</td>
+                        <td>Ahorro del 70% de tiempo en mostrador y eliminación del límite horario de las 15:30 hs.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bloque 4: Business Case</strong></td>
+                        <td>• <strong>Roadmap en 3 Fases</strong> + Plan de Gestión del Cambio.<br>• <strong>ROI:</strong> Recupero en 12 meses por ahorro del 15% en mermas y aumento de capacidad.</td>
+                        <td>Defensa sólida y cuantitativa ante los docentes Diego Erben y Francisco Rubio.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong>Aura Digital Consulting</strong> · Trabajo Práctico Integrador 2026</p>
+        <p>Cátedra: <em>Tecnologías para la Gestión</em> · Lic. en Ciencia de Datos en Organizaciones · UNLP</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

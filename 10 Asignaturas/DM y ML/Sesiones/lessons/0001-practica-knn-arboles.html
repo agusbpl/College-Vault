@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica y Evaluación: Minería de Datos & ML - KNN & Árboles</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <script>
+    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        .nose-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .action-bar {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .answer-reveal {
+            display: none;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #166534;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <span class="badge">Minería y ML — UNLP</span>
+    <h1>Loop de Práctica: KNN, Árboles de Decisión & Métricas</h1>
+    <p>Simulacro interactivo con cálculo formal (Gini, Entropía) y diagnóstico de sobreajuste. Exporta el JSON para la devolución del tutor IA.</p>
+</header>
+
+<main id="quiz-container">
+
+    <div class="card" data-qid="m1" data-tema="K-Nearest Neighbors (KNN)">
+        <span class="badge tag-red">Crítica</span>
+        <h2>1. Algoritmo K-NN y Normalización de Escala</h2>
+        <p>En el dataset Titanic, si aplicamos K-NN utilizando variables continuas con rangos dispares (ej. <code>Age</code> de 0 a 80 y <code>Fare</code> de 0 a 500) sin escalar:</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'm1', 'A')">A. La métrica de distancia euclídea quedará dominada casi en su totalidad por la variable de mayor escala (Fare).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'm1', 'B')">B. El modelo ignora las distancias numéricas y pasa a utilizar distancia de Hamming de forma automática.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'm1', 'C')">C. Mejora automáticamente la capacidad de generalización al preservar las unidades reales del negocio.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'm1', 'D')">D. KNN es invariante a transformaciones lineales monotónicas en los atributos de entrada.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans_m1')">Ver respuesta modelo</button>
+        <div id="ans_m1" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> A. Al computar $d(x, y) = \sqrt{\sum (x_i - y_i)^2}$, una diferencia de 50 en <code>Fare</code> genera un impacto 2500, eclipsando por completo diferencias de 1 o 2 años en <code>Age</code>. Es crítico escalar con StandardScaler o MinMaxScaler.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-m1" class="nose-checkbox">
+            <label for="nose-m1">Dudas sobre preprocesamiento y distancias en KNN</label>
+        </div>
+        <textarea class="duda-input" id="duda-m1" placeholder="Dudas sobre KNN..."></textarea>
+    </div>
+
+    <div class="card" data-qid="m2" data-tema="Árboles de Decisión (Criterios de Split)">
+        <span class="badge tag-red">Crítica</span>
+        <h2>2. Impureza de Gini vs Entropía</h2>
+        <p>Un nodo de un árbol de decisión contiene 10 observaciones: 5 de clase positiva (+) y 5 de clase negativa (-). ¿Cuál es su impureza de Gini y su Entropía?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'm2', 'A')">A. Gini = 0.5, Entropía = 1.0 (máxima impureza binaria).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'm2', 'B')">B. Gini = 0.0, Entropía = 0.0 (nodo completamente puro).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'm2', 'C')">C. Gini = 1.0, Entropía = 0.5.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'm2', 'D')">D. Gini = 0.25, Entropía = 2.0.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans_m2')">Ver respuesta modelo</button>
+        <div id="ans_m2" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> A. Para $p_1 = 0.5$ y $p_2 = 0.5$:<br>
+            $\text{Gini} = 1 - (0.5^2 + 0.5^2) = 1 - 0.5 = 0.5$.<br>
+            $\text{Entropía} = -(0.5 \log_2 0.5 + 0.5 \log_2 0.5) = -(0.5 \times -1 + 0.5 \times -1) = 1.0$.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-m2" class="nose-checkbox">
+            <label for="nose-m2">Necesito ejercitar el cálculo numérico de Gini e Information Gain</label>
+        </div>
+        <textarea class="duda-input" id="duda-m2" placeholder="Dudas sobre fórmulas de árboles..."></textarea>
+    </div>
+
+    <div class="card" data-qid="m3" data-tema="Control de Sobreajuste (Overfitting)">
+        <span class="badge tag-amber">Alta</span>
+        <h2>3. Poda y Complejidad en Árboles (CART)</h2>
+        <p>Si entrenamos un árbol de decisión sin limitar <code>max_depth</code> ni fijar <code>min_samples_split</code>, el modelo tiende a:</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'm3', 'A')">A. Presentar alto sesgo (underfitting) y baja varianza en datos de prueba.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'm3', 'B')">B. Memorizar el ruido del set de entrenamiento (alta varianza / overfitting), reduciendo el error en train a 0 pero perdiendo generalización en test.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'm3', 'C')">C. Convertirse en un clasificador de Bayes ingenuo.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'm3', 'D')">D. Reducir automáticamente la cantidad de ramas mediante regularización L1.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans_m3')">Ver respuesta modelo</button>
+        <div id="ans_m3" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> B. Un árbol no restringido continúa dividiendo hasta aislar cada dato o alcanzar hojas 100% puras, memorizando anomalías del set de entrenamiento y aumentando drásticamente la varianza.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-m3" class="nose-checkbox">
+            <label for="nose-m3">Dudas sobre hiperparámetros de poda (max_depth, ccp_alpha)</label>
+        </div>
+        <textarea class="duda-input" id="duda-m3" placeholder="Dudas sobre sobreajuste y poda..."></textarea>
+    </div>
+
+</main>
+
+<div class="action-bar">
+    <p style="margin:0; font-size:0.95rem; color:var(--text-secondary);">Exporta las respuestas para calcular diagnóstico de errores:</p>
+    <button class="btn" onclick="exportarResultados()">📥 Exportar para Eval. IA</button>
+</div>
+
+<script>
+const userAnswers = {};
+
+function selectOption(element, qid, choice) {
+    const parent = element.parentElement;
+    parent.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    userAnswers[qid] = choice;
+}
+
+function toggleAnswer(id) {
+    const el = document.getElementById(id);
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+}
+
+function exportarResultados() {
+    const cards = document.querySelectorAll('.card');
+    const payload = {
+        materia: "Minería de Datos y Machine Learning",
+        fecha: new Date().toISOString(),
+        ejercicios: []
+    };
+
+    cards.forEach(card => {
+        const qid = card.dataset.qid;
+        const tema = card.dataset.tema;
+        const respuesta = userAnswers[qid] || null;
+        const noSabe = card.querySelector('.nose-checkbox')?.checked || false;
+        const duda = card.querySelector('.duda-input')?.value.trim() || "";
+
+        payload.ejercicios.push({
+            qid: qid,
+            tema: tema,
+            respuesta_usuario: respuesta,
+            nose_no_se: noSabe,
+            duda_especifica: duda
+        });
+    });
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eval-mineria-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>

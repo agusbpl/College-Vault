@@ -1,0 +1,133 @@
+Información
+General
+
+Visualización de Grandes Volúmenes de Datos
+✓ Todo el material de curso se publicará a través del
+Moodle de Asignaturas:
+https://asignaturas.info.unlp.edu.ar/
+
+✓ La comunicación se realizará a través de la
+plataforma Moodle de Asignaturas
+
+Cronograma
+
+Visualización de Grandes Volúmenes de Datos
+Semana
+
+Fecha
+
+Contenidos / Actividades
+
+1
+
+26-ago
+
+2
+
+2-sept
+
+3
+
+9-sept
+
+4
+
+16-sept
+
+5
+
+23-sept
+
+6
+
+30-sept
+
+Visualización de datos temporales. Series de tiempo. Tendencias, estacionalidad y eventos.
+
+7
+
+7-oct
+
+Visualización de datos geoespaciales. Mapas temáticos. Introducción a la visualización de redes y grafos.
+
+8
+
+14-oct
+
+Interacción y análisis visual. Filtrado, selección, navegación, zoom y detalles bajo demanda. Visualizaciones coordinadas.
+
+9
+
+21-oct
+
+Diseño y evaluación de visualizaciones. Storytelling con datos. Dashboards y comunicación efectiva de resultados.
+
+10
+
+28-oct
+
+11
+12
+13
+14
+15
+16
+
+4-nov
+11-nov
+18-nov
+25-nov
+2-dic
+9-dic
+
+Introducción a la Visualización de Datos. Objetivos, aplicaciones y áreas relacionadas. Visualización para exploración,
+análisis y comunicación. Casos de estudio.
+Percepción y cognición visual. Procesamiento preatencional. Principios gestálticos. Variables visuales. Uso efectivo del
+color.
+El proceso de visualización. Pipeline de visualización. Transformación de datos. Relación entre datos, representación e
+interacción.
+Técnicas de visualización para datos tabulares. Comparación, distribución y correlación. Histogramas, boxplots y
+diagramas de dispersión.
+Visualización de datos multidimensionales. Mapas de calor. Coordenadas paralelas. Introducción a reducción de
+dimensionalidad para visualización.
+
+Visualización de grandes volúmenes de datos. Escalabilidad, agregación, muestreo, representación de densidades,
+visualización progresiva y tendencias actuales.
+1ra. Fecha de examen
+Consultas y muestra de exámenes de la 1ra. Fecha
+2da. Fecha de examen
+Consultas y muestra de exámenes de la 2da. Fecha
+3ra. Fecha de examen
+Muestra de exámenes de la 3ra. Fecha
+
+Modalidad de Cursada y Promoción
+✓ Clases teóricas (miércoles 14hs a 16hs)
+✓ Clases prácticas (martes de 15:00hs a 16:30hs)
+✓ No se requiere asistencia
+✓ Rendir/Entregar:
+✓ Trabajo grupal de 3 personas (ni mas ni menos)
+
+✓ Examen individual con 2 recuperatorios
+
+Modalidad de Promoción
+Aprobación con Promoción:
+✓ Aprobar trabajo grupal con nota 6 o mayor
+✓ Aprobar examen individual con nota 6 o
+mayor
+
+✓ La nota final es el promedio de ambas
+Quienes aprueben la promoción y no se encuentren
+inscriptos en el curso bajo esta modalidad, deberán
+inscribirse en una mesa de examen final para que se
+registre oficialmente la calificación obtenida cuando
+cumplan con las condiciones reglamentarias.
+
+Modalidad de Cursada
+✓ Aprobación de cursada:
+✓ Aprobar trabajo grupal con nota 5 o mayor
+✓ Aprobar examen individual con nota 5 o
+mayor
+Quienes aprueben sólo la cursada deberán rendir examen
+final para aprobar la asignatura
+
+

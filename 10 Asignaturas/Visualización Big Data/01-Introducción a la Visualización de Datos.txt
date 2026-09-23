@@ -1,0 +1,723 @@
+Temario
+¿Qué es visualizar
+datos?
+
+✓ Conceptos
+✓ Definiciones
+✓ tipos de visualización
+
+¿Por qué necesitamos
+visualizar?
+
+¿Para qué utilizamos
+una visualización?
+
+¿Cómo llegamos
+hasta aquí?
+
+✓ Datos
+✓ Percepción
+✓ Patrones
+✓ comprensión
+
+✓ Exploración
+✓ Análisis
+✓ Comunicación
+
+✓ Historia
+✓ Aplicaciones
+✓ Ejemplos
+
+¿Qué aprenderemos durante el curso?
+✓ Comprender cómo y por qué utilizamos
+visualizaciones de datos
+✓ Explorar datos para encontrar patrones, relaciones
+y anomalías
+✓ Seleccionar representaciones adecuadas según los
+datos y el objetivo
+✓ Diseñar visualizaciones claras, efectivas y accesibles
+✓ Construir visualizaciones estáticas, interactivas y
+dashboards
+✓ Evaluar críticamente visualizaciones y justificar
+decisiones de diseño
+
+La visualización está en todas partes
+Vivimos rodeados de datos y, constantemente, interactuamos
+con representaciones visuales de esos datos:
+Clima
+
+Mapas
+
+Deportes
+
+Pronósticos y evolución
+
+Ubicación, rutas y tráfico
+
+Resultados y estadísticas
+
+Negocios
+
+Redes sociales
+
+Salud
+
+Indicadores y dashboards
+
+Métricas y tendencias
+
+Monitoreo y evolución
+
+Industria
+
+Inteligencia Artificial
+
+Sensores y procesos
+
+Datos, modelos y resultados
+
+La visualización forma parte de muchas de las actividades y decisiones
+que realizamos cotidianamente
+
+¿Qué entendemos por visualización de datos?
+✓ La visualización de datos utiliza representaciones
+visuales para facilitar la comprensión, exploración y
+comunicación
+
+Representación
+Dat
+os
+Visual
+
+Compr ensión
+
+✓ Una visualización no consiste solamente en mostrar
+datos: busca hacer visibles aspectos de los datos
+que serían difíciles de percibir de otra manera
+
+Distintas Perspectivas de la Visualización
+La visualización es la representación visual estática o interactiva de datos
+abstractos o espaciales para reforzar la cognición humana
+Michelle Borkin
+
+La visualización es el uso de representaciones visuales e interactivas de datos
+abstractos, asistidas por computadora para amplificar la cognición
+
+Stuart Card et al
+
+La visualización proporciona una representación visual de conjuntos de datos
+diseñados para ayudar a las personas a realizar tareas de manera más eficaz
+
+Tamara Munzner
+
+Elementos comunes de la visualización
+En una visualización podemos identificar varios elementos que se relacionan entre sí:
+Datos
+La visualización parte de datos que queremos comprender o
+analizar
+Representación visual
+Los datos se transforman en elementos gráficos que podemos percibir
+Interacción
+Podemos modificar la representación para explorar los datos desde
+distintas perspectivas
+Cognición
+La representación busca aprovechar nuestras capacidades
+perceptuales y cognitivas
+Tareas y propósito
+
+La visualización está orientada a una finalidad: explorar, comparar,
+identificar patrones, comunicar, etc
+Tecnología
+Las herramientas computacionales permiten construir, transformar
+e interactuar con las representaciones
+
+Campo Interdisciplinario
+✓ La visualización de datos está estrechamente
+relacionada con la computación gráfica y se nutre
+de múltiples disciplinas
+✓ Se nutre de disciplinas como la psicología, la
+percepción visual, la estadística, la interacción
+humano-computadora y otras áreas
+Computación Gráfica
+Visualización de Datos
+Psicología
+
+Estadística
+
+Interacción
+
+Diseño
+
+¿Por qué necesitamos visualizar?
+Los datos pueden ser difíciles de interpretar directamente
+Cuando aumenta la cantidad, complejidad o dimensionalidad de los
+datos, resulta difícil encontrar relaciones observándolos como valores
+aislados
+La representación visual permite percibir estructuras
+Una representación adecuada puede hacer visibles patrones,
+tendencias, agrupamientos y anomalías
+La visualización amplía nuestras capacidades de análisis
+Nos permite utilizar nuestra percepción como apoyo para explorar,
+comparar y razonar sobre los datos
+
+Somos Seres Visuales
+► Nuestro sistema visual es especialmente eficaz para identificar
+determinadas estructuras en una representación:
+✓ diferencias
+✓ agrupamientos
+✓ tendencias
+✓ posiciones
+✓ cambios
+✓ patrones
+
+► Una buena visualización aprovecha estas capacidades para
+facilitar la interpretación de los datos
+
+Un Pequeño Experimento
+► Cuál número aparece más veces?
+15 33 57 18 73 71 17 73 65 60 46 10 57 26 88 91 96
+19 11 34 51 22 60 10 18 46 73 92 58 17 99 92 29 12
+60 75 79 92 13 22 68 55 29 22 97 46 83 33 60 57 47
+
+0
+
+20
+
+40
+
+60
+
+80
+
+100
+
+Misma Estadística, Diferentes Historias
+► La caracterización estadística es un enfoque
+poderoso pero tiene limitaciones intrínsecas ya que
+se pierde información a través del resumen de las
+propiedades estadísticas
+► La visualización ayuda en la validación de modelos
+estadísticos para juzgar si el modelo se ajusta a los
+datos
+► Francis John Anscombe desarrolló cuatro conjuntos
+de datos con las mismas propiedades estadísticas
+pero con diferentes estructuras para demostrar que
+muchas veces estas pueden no ser suficientes
+
+Misma Estadística, Diferentes Historias
+
+Cuarteto
+de
+Anscombe
+
+Media
+
+Dataset I
+
+Dataset II
+
+Dataset III
+
+Dataset IV
+
+x
+
+x
+
+x
+
+x
+
+y
+
+Recta de regresión
+
+y
+
+y
+
+10
+
+8,04
+
+10
+
+9,14
+
+10
+
+7,46
+
+8 6,58
+
+8
+
+6,95
+
+8
+
+8,14
+
+8
+
+6,77
+
+8 5,76
+
+13
+
+7,58
+
+13
+
+8,74
+
+13 12,74
+
+8 7,71
+
+9
+
+8,81
+
+9
+
+8,77
+
+9
+
+7,11
+
+8 8,84
+
+11
+
+8,33
+
+11
+
+9,26
+
+11
+
+7,81
+
+8 8,47
+
+14
+
+9,96
+
+14
+
+8,1
+
+14
+
+8,84
+
+8 7,04
+
+6
+
+7,24
+
+6
+
+6,13
+
+6
+
+6,08
+
+8 5,25
+
+4
+
+4,26
+
+4
+
+3,1
+
+4
+
+5,39
+
+19 12,5
+
+12 10,84
+
+12
+
+9,13
+
+12
+
+8,15
+
+8 5,56
+
+7
+
+4,82
+
+7
+
+7,26
+
+7
+
+6,42
+
+8 7,91
+
+5
+
+5,68
+
+5
+
+4,74
+
+5
+
+5,73
+
+8 6,89
+
+9,00
+
+7,50
+
+9,00
+
+7,50
+
+9,00
+
+7,50
+
+9,00 7,50
+
+Varianza 11,00
+Correlación
+
+y
+
+0,816
+
+3,75 11,00
+
+3,75 11,00
+
+0,816
+
+0,816
+
+y = 3 + 0,5 * x
+
+3,75 11,00 3,75
+0,816
+
+Misma Estadística, Diferentes Historias
+
+Anscombe, F.J. (1973). Graphs in Statistical Analysis. The American Statistician 27, 1, 17–21.
+
+Metas de la Visualización
+Comunicación
+Presentar información y transmitir hallazgos
+Análisis y exploración
+Apoyar el razonamiento y la búsqueda de patrones
+✓ Confirmación
+Permitir contrastar hipótesis y verificar resultados
+Registro/almacenamiento
+Mantener información disponible mediante una representación
+visual que apoye el razonamiento
+Una misma visualización puede cumplir más de una meta
+
+Exploración vs Comunicación
+Exploración: aún estamos buscando qué hay en los datos
+✓ Buscar patrones
+✓ Encontrar anomalías
+✓ Comparar alternativas
+✓ Formular hipótesis
+✓ Hacer nuevas preguntas
+Comunicación: ya tenemos algo que queremos transmitir
+✓ Explicar resultados
+✓ Resumir información
+✓ Destacar hallazgos
+✓ Facilitar decisiones
+✓ Contar una historia
+
+Visualización de Datos e Infografía
+Infografía y visualización de datos comunican información a través de gráficos
+
+Infografía
+✓ Combina gráficos, texto, imágenes y elementos de diseño
+✓ Suele construir una narrativa
+✓ La composición y el diseño tienen un papel importante
+Visualización de datos
+✓ Se centra en representar datos mediante recursos visuales
+✓ Puede utilizarse para explorar, analizar o comunicar
+✓ Busca facilitar la interpretación de patrones, relaciones y tendencias
+No son categorías excluyentes: una visualización puede formar parte de una infografía
+
+Dos grandes contextos de visualización
+Visualización científica
+✓ Trabaja principalmente con fenómenos del mundo físico o científico
+✓ Vemos Mediciones, simulaciones, modelos, fenómenos espaciales o
+temporales
+✓ Aplicado en medicina, meteorología, ingeniería, física
+Visualización de información
+✓ Trabaja principalmente con datos abstractos o estructurados
+✓ Vemos registros, categorías, relaciones, métricas
+✓ Aplicado en negocios, finanzas, redes sociales, dashboards
+
+Una Breve Historia de la Visualización
+1786
+Gráficos
+Estadísticos
+William Playfair
+Introduce gráficos
+como barras y líneas
+para representar
+datos cuantitativos
+de manera visual
+
+John Snow
+Utiliza un mapa para
+relacionar la ubicación
+de los casos de cólera
+con una posible fuente
+de contagio
+
+1869
+
+Mapa del
+Cólera
+
+Campania de
+Napoleón
+
+1854
+
+Charles Minard
+Integra en una misma
+representación el
+recorrido, el tamaño
+del ejército, la
+dirección y la
+temperatura
+
+John Tukey
+Impulsa el uso de
+representaciones gráficas
+para explorar datos,
+descubrir patrones y
+formular hipótesis
+
+Análisis
+Exploratorio
+de Datos
+
+1970s
+
+1990s
+Visualización
+Interactiva
+La computadora
+permite explorar
+grandes volúmenes
+de datos mediante
+representaciones
+dinámicas e
+interactivas
+
+Actualidad
+
+Dashboards ·
+Big Data · IA
+
+La Visualización está en Todas Partes
+CIENCIA
+
+SALUD
+
+EMPRESAS
+
+FINANZAS
+
+EXPERIMENTOS Y SIMULACIONES
+
+DIAGNÓSTICO Y MONITOREO
+
+INDICADORES Y DASHBOARDS
+
+MERCADOS Y RIESGOS
+
+GOBIERNO
+
+DEPORTES
+
+INTELIGENCIA ARTIFICIAL
+
+INTERNET DE LAS COSAS
+
+DATOS ABIERTOS Y POLÍTICAS PÚBLICAS
+
+RENDIMIENTO Y ESTRATEGIA
+
+INTERPRETACIÓN DE MODELOS
+
+MONITOREO EN TIEMPO REAL
+
+Ejemplos de Visualización
+“La Carta figurativa de las sucesivas pérdidas de hombres de la armada francesa en la campaña
+de Rusia de Napoleón en 1812-1813” creada por Charles Joseph Minard en 1869
+
+Ejemplos de Visualización
+“La Carta figurativa de las sucesivas pérdidas de hombres de la armada francesa en la campaña de Rusia de Napoleón
+en 1812-1813” creada por Charles Joseph Minard en 1869
+
+Variables Visualizadas
+Saldo de vidas humanas
+Localización geográfica
+Dirección del ejercito
+Cronología
+Evolución de temperatura
+
+Ejemplos de Visualización
+Flujo de Viento en Tiempo Real
+
+http://hint.fm/wind/
+
+Ejemplos de Visualización
+Seguimiento de rayos en tiempo real
+
+https://www.iweathernet.com/lightning/latest-lightning-strikes-on-google-maps
+
+Ejemplos de Visualización
+Mapa animado en tiempo real del pronostico
+
+https://www.windy.com/
+
+Ejemplos de Visualización
+Códice Atlántico (Codex Atlanticus)
+✓ Colección encuadernada de bocetos ,
+dibujos y escrituras de Leonardo Da
+Vinci
+✓ Tiene 12 volúmenes y consta de 1.119
+hojas que datan de 1478 a 1519
+✓ Tratan temas como: vuelo, armamento,
+instrumentos musicales, matemáticas y
+botánica
+✓ Este códice fue reunido por el escultor
+Pompeo Leoni a finales del siglo XVI
+✓ Actualmente se encuentra en la
+Biblioteca Ambrosiana, en Milán, Italia
+https://codex-atlanticus.it
+
+Ejemplos de Visualización
+Filtros de Selección
+Números de Hojas
+
+Año de creación
+Categorías
+Subcategorías
+
+Ejemplos de Visualización
+
+Ejemplos de Visualización
+Aaron Koblin, es un artista estadounidense de medios digitales, pionero de la
+visualización de datos, el crowdsourcing y la realidad virtual
+
+https://proyectoidis.org/aaron-koblin/
+
+Ejemplos de Visualización
+Flight Patterns
+experimento visual que
+transforma los datos del tráfico
+aéreo de Estados Unidos en
+tramas orgánicas de luz
+
+https://proyectoidis.org/aaron-koblin/
+
+✓ Cada línea representa la
+trayectoria de un vuelo
+✓ El color puede codificar
+variables como altitud o tipo
+de aeronave
+✓ La superposición de
+trayectorias revela rutas y
+concentraciones de tráfico
+✓ La animación muestra cómo
+los patrones cambian a lo
+largo del día
+
+Ejemplos de Visualización
+Amsterdam SMS
+proyecto que transforma el
+tráfico de mensajes de texto
+en la ciudad durante el Año
+Nuevo en un mapa 3D
+Variables que visualiza:
+✓ Posición geográfica por
+zonas de la ciudad
+✓ Tiempo
+✓ Cantidad de SMS
+✓ Distribución espacial de
+la actividad
+✓ Movimiento temporal:
+cambio de actividad en
+el día
+https://proyectoidis.org/aaron-koblin/
+
+Ejemplos de Visualización
+Visualización de algoritmo
+Bubble Sort
+✓ Los elementos se representan
+visualmente (altura=valor)
+✓ Su posición cambia a medida
+que el algoritmo los compara e
+intercambia (evolución del
+algoritmo)
+✓ La animación permite observar
+el proceso de ordenamiento
+paso a paso
+
+https://www.sortvision.com/es
+
+Recursos para seguir explorando
+https://infogram.com/examples
+
+Recursos para seguir explorando
+https://flowingdata.com
+
+Recursos para seguir explorando
+https://observablehq.com/
+
+Cinco Ideas para llevarnos Hoy
+✓ Visualizar es representar datos para facilitar su comprensión
+✓ Toda visualización tiene un propósito: explorar, analizar,
+comunicar o confirmar
+✓ La percepción humana es fundamental para interpretar
+representaciones visuales
+✓ Visualizar puede revelar patrones y relaciones que no son
+evidentes en los datos originales
+✓ La visualización es interdisciplinaria y combina datos,
+computación, percepción, interacción y diseño
+
+Bibliografía – Lecturas
+Ward M. | Grinstein G | Keim D. (2015).
+Interactive Data Visualization. 2da Edición. Florida, CRC Press
+Tominski C. | Schumann H. (2019).
+Interactive Visual Data Analysis. Florida, CRC Press
+Munzner T. (2014). Capítulo 1
+Visualization Analysis & Design. Florida, CRC Press
+Tufte E. R. (2001).
+The Visual Display of Quantitative Information. Cheshire, Graphics Press
+Julie Steele and Noah Iliinsky. 2011. Designing Data Visualizations. O'Reilly Media,
+Inc.
+
+

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica y Evaluación: Bases de Datos - Normalización & NoSQL</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <style>
+        .code-block {
+            background: #1e1e24;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.95rem;
+            margin: 0.8rem 0;
+            overflow-x: auto;
+        }
+        .options-grid {
+            margin: 1rem 0;
+        }
+        .nose-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .action-bar {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .answer-reveal {
+            display: none;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #166534;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <span class="badge">Bases de Datos — UNLP</span>
+    <h1>Loop de Práctica: Normalización & NoSQL</h1>
+    <p>Simulacro interactivo con exportación JSON para evaluación con IA. Responde cada ejercicio o indica tus dudas para el diagnóstico de errores.</p>
+</header>
+
+<main id="quiz-container">
+
+    <!-- Ejercicio 1: Normalización 1FN / 2FN -->
+    <div class="card" data-qid="q1" data-tema="Normalización">
+        <span class="badge tag-red">Crítica</span>
+        <h2>1. Identificación de Dependencias Funcionales y 2FN</h2>
+        <p>Dado el esquema de ventas:</p>
+        <div class="code-block">Pedido(idPedido, idProducto, fecha, idCliente, nombreCliente, nombreProducto, precioUnitario, cantidad)
+PK: (idPedido, idProducto)</div>
+        <p>¿Qué afirmación es correcta respecto a su estado de normalización?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q1', 'A')">A. Está en 2FN porque no existen atributos multivaluados y cada celda es atómica.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q1', 'B')">B. Viola la 2FN porque nombreProducto depende solo de idProducto, que es parte de la PK.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q1', 'C')">C. Viola la 1FN porque hay dependencia transitiva entre idCliente y nombreCliente.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q1', 'D')">D. Cumple 3FN ya que todos los atributos no primos dependen funcionalmente de la fecha.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans1')">Ver respuesta modelo</button>
+        <div id="ans1" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> B. Para estar en 2FN, todo atributo no clave debe depender por completo de la clave primaria compuesta. Aquí, <code>idProducto &rarr; nombreProducto, precioUnitario</code> es una dependencia parcial.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q1" class="nose-checkbox">
+            <label for="nose-q1">No sé el concepto / Necesito refuerzo en dependencias parciales</label>
+        </div>
+        <textarea class="duda-input" id="duda-q1" placeholder="Dudas o notas específicas sobre este ejercicio..."></textarea>
+    </div>
+
+    <!-- Ejercicio 2: Normalización 3FN -->
+    <div class="card" data-qid="q2" data-tema="Normalización 3FN">
+        <span class="badge tag-amber">Alta</span>
+        <h2>2. Eliminación de Dependencias Transitivas (3FN)</h2>
+        <p>Dado el esquema: <code>Cliente(dni, nombre, apellido, códigoPostal, ciudad)</code> con PK <code>dni</code>, donde <code>códigoPostal &rarr; ciudad</code>:</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q2', 'A')">A. Está en 3FN porque la clave primaria es simple (un solo atributo).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q2', 'B')">B. Viola 3FN debido a que existe una dependencia transitiva (dni &rarr; códigoPostal &rarr; ciudad).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q2', 'C')">C. Viola 2FN porque ciudad no depende de una clave candidata alternativa.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q2', 'D')">D. Se normaliza agrupando dni y ciudad en una nueva tabla puente muchos a muchos.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans2')">Ver respuesta modelo</button>
+        <div id="ans2" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> B. Viola 3FN por dependencia transitiva. Se descompone en <code>Cliente(dni, nombre, apellido, códigoPostal(FK))</code> y <code>Localidad(códigoPostal, ciudad)</code>.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q2" class="nose-checkbox">
+            <label for="nose-q2">Necesito refuerzo en dependencias transitivas</label>
+        </div>
+        <textarea class="duda-input" id="duda-q2" placeholder="Dudas o notas específicas sobre este ejercicio..."></textarea>
+    </div>
+
+    <!-- Ejercicio 3: MongoDB Documental -->
+    <div class="card" data-qid="q3" data-tema="MongoDB">
+        <span class="badge tag-red">Crítica</span>
+        <h2>3. MongoDB: Consultas y Agregaciones</h2>
+        <p>¿Qué consulta devuelve los libros disponibles con año de publicación superior a 1980 en la colección <code>libros</code>?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q3', 'A')">A. db.libros.find({ disponible: true, anio: { $gt: 1980 } })</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q3', 'B')">B. db.libros.select({ disponible: true, anio: { $higher: 1980 } })</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q3', 'C')">C. db.libros.filter({ $and: [ { disponible: 1 }, { anio: 1980 } ] })</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q3', 'D')">D. db.libros.aggregate([ { $project: { disponible: true, anio: { $gte: 1980 } } } ])</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans3')">Ver respuesta modelo</button>
+        <div id="ans3" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> A. <code>$gt</code> es el operador estándar de comparación para "greater than" en MongoDB.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q3" class="nose-checkbox">
+            <label for="nose-q3">Dudas con sintaxis de operadores de MongoDB</label>
+        </div>
+        <textarea class="duda-input" id="duda-q3" placeholder="Dudas o notas específicas sobre este ejercicio..."></textarea>
+    </div>
+
+    <!-- Ejercicio 4: Redis Clave/Valor -->
+    <div class="card" data-qid="q4" data-tema="Redis">
+        <span class="badge tag-amber">Alta</span>
+        <h2>4. Redis: Estructuras y Comandos</h2>
+        <p>Si ejecutas el comando <code>INCR contador_visitas</code> sobre una clave que aún <strong>no existe</strong> en Redis:</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q4', 'A')">A. Arroja un error de tipo NIL o KeyNotFoundError.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q4', 'B')">B. Inicializa la clave en 0 antes de realizar la operación y devuelve 1.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q4', 'C')">C. Setea el valor como string vacío y devuelve 0.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q4', 'D')">D. Deja la clave en estado bloqueante esperando una escritura previa.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans4')">Ver respuesta modelo</button>
+        <div id="ans4" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> B. En Redis, si la clave no existe para <code>INCR</code>, se asume un valor inicial de 0 y se incrementa inmediatamente a 1.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q4" class="nose-checkbox">
+            <label for="nose-q4">Necesito repasar comandos clave-valor en Redis</label>
+        </div>
+        <textarea class="duda-input" id="duda-q4" placeholder="Dudas o notas específicas sobre este ejercicio..."></textarea>
+    </div>
+
+    <!-- Ejercicio 5: Grafos Neo4j -->
+    <div class="card" data-qid="q5" data-tema="Neo4j Grafos">
+        <span class="badge tag-amber">Alta</span>
+        <h2>5. Bases de Datos de Grafos (Neo4j)</h2>
+        <p>En el modelo de datos de grafos de propiedades utilizado por Neo4j, las aristas (relaciones):</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q5', 'A')">A. Son siempre implícitas y se resuelven mediante joins en tiempo de ejecución.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q5', 'B')">B. Son entidades de primer orden dirigidas, con tipo y pueden contener propiedades propias.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q5', 'C')">C. Solo pueden conectar nodos del mismo tipo o etiqueta (label).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q5', 'D')">D. No admiten direccionamiento ni ponderación de pesos.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans5')">Ver respuesta modelo</button>
+        <div id="ans5" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> B. En Labeled Property Graph (LPG), las relaciones están dirigidas, tienen nombre/tipo y almacenan propiedades clave-valor (ej. fecha, peso).
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q5" class="nose-checkbox">
+            <label for="nose-q5">No sé bien el modelo de grafos</label>
+        </div>
+        <textarea class="duda-input" id="duda-q5" placeholder="Dudas o notas específicas sobre este ejercicio..."></textarea>
+    </div>
+
+</main>
+
+<div class="action-bar">
+    <p style="margin:0; font-size:0.95rem; color:var(--text-secondary);">Completa las opciones y dudas, luego exporta para evaluación con IA:</p>
+    <button class="btn" onclick="exportarResultados()">📥 Exportar para Eval. IA</button>
+</div>
+
+<script>
+const userAnswers = {};
+
+function selectOption(element, qid, choice) {
+    const parent = element.parentElement;
+    parent.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    userAnswers[qid] = choice;
+}
+
+function toggleAnswer(id) {
+    const el = document.getElementById(id);
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+}
+
+function exportarResultados() {
+    const cards = document.querySelectorAll('.card');
+    const payload = {
+        materia: "Bases de Datos",
+        fecha: new Date().toISOString(),
+        ejercicios: []
+    };
+
+    cards.forEach(card => {
+        const qid = card.dataset.qid;
+        const tema = card.dataset.tema;
+        const respuesta = userAnswers[qid] || null;
+        const noSabe = card.querySelector('.nose-checkbox')?.checked || false;
+        const duda = card.querySelector('.duda-input')?.value.trim() || "";
+
+        payload.ejercicios.push({
+            qid: qid,
+            tema: tema,
+            respuesta_usuario: respuesta,
+            nose_no_se: noSabe,
+            duda_especifica: duda
+        });
+    });
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eval-bd-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repaso Flash Teórico: Clases 1 a 3 (DM y ML)</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<header>
+    <span class="badge tag-amber">Flash Review</span>
+    <span class="badge">Minería y ML</span>
+    <h1>Repaso Teórico: Clases 1, 2 y 3</h1>
+    <p>Conceptos formales, formulaciones matemáticas y criterios antes de la práctica autónoma.</p>
+</header>
+
+<main>
+    <!-- BLOQUE 1 -->
+    <section class="card">
+        <h2>1. CRISP-DM y Preprocesamiento</h2>
+        <div class="key-point">
+            <strong>CRISP-DM:</strong> Más del $80\%$ del esfuerzo se invierte en la preparación de los datos.
+        </div>
+        <p>
+            <strong>Caja Blanca vs Caja Negra:</strong> Árboles de decisión y modelos lineales son interpretables ($\text{Caja Blanca}$); las redes neuronales profundas operan como representaciones opacas ($\text{Caja Negra}$).
+        </p>
+        <p>
+            <strong>Estandarización ($z$-score):</strong>
+            $$\mu = \frac{1}{N}\sum_{i=1}^N x_i, \quad \sigma = \sqrt{\frac{1}{N}\sum_{i=1}^N (x_i - \mu)^2}, \quad z = \frac{x - \mu}{\sigma}$$
+            Obligatoria en métodos basados en distancias euclidianas como KNN:
+            $$d(\mathbf{p}, \mathbf{q}) = \sqrt{\sum_{i=1}^n (p_i - q_i)^2}$$
+            Los árboles de decisión son <strong>invariantes</strong> a transformaciones monótonas de las variables independientes.
+        </p>
+    </section>
+
+    <!-- BLOQUE 2 -->
+    <section class="card">
+        <h2>2. Evaluación de Modelos y Fuga de Datos</h2>
+        <div class="key-point">
+            <strong>Métrica Accuracy:</strong> Fracción de predicciones correctas sobre el total de muestras.
+            $$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
+        </div>
+        <p>
+            <strong>Sobreajuste ($\textit{Overfitting}$):</strong> Ocurre cuando el modelo memoriza el ruido del conjunto de entrenamiento:
+            $$\text{Error}_{\text{train}} \to 0, \quad \text{Error}_{\text{test}} \gg \text{Error}_{\text{train}}$$
+        </p>
+        <p>
+            <strong>Data Leakage:</strong> Incluir la variable objetivo $y$ dentro de la matriz de características $X$. El árbol elegirá esa variable en la raíz ($Gini = 0$ o $\text{Ganancia} = \text{máxima}$), logrando $\text{Accuracy} = 1.0$ de manera espuria.
+        </p>
+    </section>
+
+    <!-- BLOQUE 3 -->
+    <section class="card">
+        <h2>3. Árboles de Decisión: Métricas de Desorden</h2>
+        <div class="key-point">
+            El algoritmo busca el atributo y umbral que maximice la reducción de impureza en cada partición recursiva.
+        </div>
+        
+        <p><strong>1. Entropía de Shannon (ID3 / C4.5):</strong></p>
+        $$H(S) = - \sum_{i=1}^{C} p_i \log_2(p_i)$$
+        <p>La Ganancia de Información al particionar por el atributo $A$ es:</p>
+        $$\text{Gain}(S, A) = H(S) - \sum_{v \in \text{Valores}(A)} \frac{|S_v|}{|S|} H(S_v)$$
+
+        <p><strong>2. Índice de Impureza de Gini (CART):</strong></p>
+        $$\text{Gini}(S) = 1 - \sum_{i=1}^{C} p_i^2$$
+        <p>Partición ponderada con Gini:</p>
+        $$\text{Gini}_{\text{split}}(S, A) = \sum_{v \in \text{Valores}(A)} \frac{|S_v|}{|S|} \text{Gini}(S_v)$$
+
+        <p>
+            <strong>Poda Preventiva ($\textit{Pre-pruning}$):</strong> Limitar $\text{max\_depth} = d$, $\text{min\_samples\_split} = k$, o $\text{min\_samples\_leaf} = m$ para prevenir árboles sobreajustados.
+        </p>
+    </section>
+</main>
+
+<footer>
+    <p style="text-align: center; margin-top: 2rem; color: #6e6e73;">
+        Cátedra de Minería de Datos y Aprendizaje Automático — UNLP
+    </p>
+</footer>
+
+</body>
+</html>

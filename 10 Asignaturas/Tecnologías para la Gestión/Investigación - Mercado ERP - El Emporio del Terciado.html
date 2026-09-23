@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajo de Investigación — Mercado ERP | El Emporio del Terciado</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --bg-card: #181b23;
+            --bg-card-alt: #1e2130;
+            --border: #2a2e3d;
+            --text: #e4e6eb;
+            --text-secondary: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 0;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 48px 24px 36px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+        .header-badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .header-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .header-meta span { display: flex; align-items: center; gap: 6px; }
+
+        /* Sections */
+        .section { margin-bottom: 40px; }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+            font-weight: 800;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card p, .card li {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .card ul { padding-left: 20px; }
+        .card li { margin-bottom: 6px; }
+
+        /* Company Profile */
+        .company-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .company-stat {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+        .company-stat .label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        .company-stat .value {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent-blue);
+        }
+
+        /* Pyramid */
+        .pyramid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            margin: 24px 0;
+        }
+        .pyramid-level {
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        .pyramid-level:first-child {
+            width: 50%;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+            border-radius: 12px 12px 0 0;
+        }
+        .pyramid-level:nth-child(2) {
+            width: 75%;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-amber);
+        }
+        .pyramid-level:last-child {
+            width: 100%;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+            border-radius: 0 0 12px 12px;
+        }
+        .pyramid-level .erps {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .pyramid-marker {
+            position: absolute;
+            right: -100px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent-amber);
+            color: var(--bg);
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .comparison-table thead th {
+            background: var(--bg-card-alt);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+        }
+        .comparison-table thead th:first-child { width: 30%; }
+        .comparison-table thead th.odoo { color: var(--accent-purple); }
+        .comparison-table thead th.sap { color: var(--accent-cyan); }
+        .comparison-table tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .comparison-table tbody tr:last-child td { border-bottom: none; }
+        .comparison-table tbody td:first-child {
+            font-weight: 700;
+            color: var(--text);
+        }
+        .comparison-table tbody tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+        /* Verdict */
+        .verdict-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+            border: 2px solid var(--accent-purple);
+            border-radius: 14px;
+            padding: 28px;
+        }
+        .verdict-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--accent-purple);
+        }
+        .verdict-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 12px; }
+        .verdict-card strong { color: var(--text); }
+
+        /* Score Badge */
+        .score-container {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .score-box {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .score-box .erp-name {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .score-box .score {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .score-box .score-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .score-box.winner {
+            border-color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.05);
+        }
+        .score-box.winner .score { color: var(--accent-green); }
+
+        /* Callout */
+        .callout {
+            background: rgba(245, 158, 11, 0.08);
+            border-left: 4px solid var(--accent-amber);
+            border-radius: 0 10px 10px 0;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .callout strong { color: var(--accent-amber); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 32px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 22px; }
+            .pyramid-level:first-child { width: 70%; }
+            .pyramid-level:nth-child(2) { width: 85%; }
+            .pyramid-marker { display: none; }
+            .comparison-table { font-size: 11px; }
+            .score-container { flex-direction: column; }
+        }
+
+        /* Print */
+        @media print {
+            body { background: #fff; color: #1a1a1a; }
+            .card, .company-stat, .score-box { border: 1px solid #ddd; background: #fafafa; }
+            .comparison-table thead th { background: #f3f4f6; }
+            .verdict-card { border-color: #6b21a8; background: #faf5ff; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-badge">Tecnologías para la Gestión — UNLP 2026</div>
+            <h1>Trabajo de Investigación: Mercado ERP</h1>
+            <p class="subtitle">Análisis comparativo de soluciones ERP para El Emporio del Terciado (La Plata)</p>
+            <div class="header-meta">
+                <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Agustín Barthe
+                </span>
+                <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Septiembre 2026
+                </span>
+                <span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    Cátedra: Prof. Diego Erben
+                </span>
+            </div>
+        </div>
+
+        <!-- 1. PERFIL DE LA EMPRESA -->
+        <div class="section">
+            <h2 class="section-title"><span class="section-number">1</span> Perfil de la Empresa Asignada</h2>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    El Emporio del Terciado — La Plata, Buenos Aires
+                </h3>
+                <p>Distribuidor líder de placas melamínicas, MDF, fenólicos, perfilería y herrajes para muebles y construcción en la región de La Plata. Distribuidor oficial de Egger y Faplac. Opera en el segmento de materiales de construcción y amoblamiento con atención tanto a clientes particulares (B2C) como a profesionales carpinteros, arquitectos y constructoras (B2B).</p>
+            </div>
+
+            <div class="company-grid">
+                <div class="company-stat">
+                    <div class="label">Sucursales</div>
+                    <div class="value">3</div>
+                    <div class="label" style="margin-top:4px; font-size:10px;">Casa Central (C.39) + Egger Haus (C.72) + City Bell</div>
+                </div>
+                <div class="company-stat">
+                    <div class="label">Dotación Estimada</div>
+                    <div class="value">50 – 80</div>
+                    <div class="label" style="margin-top:4px; font-size:10px;">Empleados (vendedores, operarios, admin.)</div>
+                </div>
+                <div class="company-stat">
+                    <div class="label">Sector Industrial</div>
+                    <div class="value" style="font-size:14px;">Distribución Maderas y Construcción</div>
+                </div>
+                <div class="company-stat">
+                    <div class="label">Reputación Online</div>
+                    <div class="value">3.9 / 5</div>
+                    <div class="label" style="margin-top:4px; font-size:10px;">Google (~800 opiniones)</div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <h3 class="card-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    Principales Dolores Operativos Detectados (Diagnóstico Previo - TPI Bloque 1)
+                </h3>
+                <ul>
+                    <li><strong>Silos de Stock entre 3 sucursales:</strong> Inventarios desconectados; consultas telefónicas entre locales para verificar disponibilidad de placas en tiempo real.</li>
+                    <li><strong>Doble carga manual:</strong> El vendedor cotiza en mostrador y el operario de taller vuelve a tipear las medidas de corte en el optimizador de la seccionadora (Lepton Pack / OptiCut).</li>
+                    <li><strong>Aprovisionamiento empírico:</strong> Sin analítica de mermas ni demanda: las compras a Egger/Faplac se definen por intuición o planillas Excel aisladas.</li>
+                    <li><strong>Sin cotizador web 24/7:</strong> Cierre de presupuestos obligatorio a las 15:30 hs (1h antes del local) por cuello de botella manual.</li>
+                    <li><strong>Dependencia de empleados clave:</strong> Calidad de atención polarizada (3.9/5 en Google con opiniones extremas ligadas a personas puntuales).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 2. PIRÁMIDE DE MERCADO ERP -->
+        <div class="section">
+            <h2 class="section-title"><span class="section-number">2</span> Pirámide del Mercado ERP en Argentina</h2>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">
+                El mercado ERP argentino se estructura en tres estratos según el tamaño de empresa, complejidad operativa y volumen de inversión. El mercado se estima en ~<strong>USD 84-85 millones</strong> (2025-2026), con más del 48% de las nuevas implementaciones adoptando modelos nativos en la nube.
+            </p>
+
+            <div class="pyramid">
+                <div class="pyramid-level">
+                    Grandes Corporaciones / Multinacionales
+                    <div class="erps">SAP S/4HANA | Oracle Cloud ERP | Microsoft Dynamics 365 | Calipso</div>
+                </div>
+                <div class="pyramid-level" style="position: relative;">
+                    Mid-Market / Empresas Medianas
+                    <div class="erps">SAP Business One | Odoo | Bejerman | Finnegans | Flexxus | BAS CS</div>
+                    <span class="pyramid-marker">El Emporio del Terciado</span>
+                </div>
+                <div class="pyramid-level">
+                    PyMEs y Microempresas
+                    <div class="erps">Tango Gestión (Axoft) | Dux Software | Contabilium | Commercy | Bind ERP</div>
+                </div>
+            </div>
+
+            <div class="callout">
+                <strong>Ubicación en la pirámide:</strong> El Emporio del Terciado se posiciona en el estrato <strong>Mid-Market / Mediana Empresa</strong> por su dotación de 50-80 empleados, operación multi-sucursal (3 locales) y complejidad logística (distribución oficial de marcas líderes, corte a medida, atención B2B profesional y B2C minorista). Este segmento demanda ERPs que integren inventario multi-depósito, POS, CRM, analítica gerencial y cumplimiento fiscal ARCA (ex-AFIP).
+            </div>
+        </div>
+
+        <!-- 3. COMPARATIVA DE 2 ERPs -->
+        <div class="section">
+            <h2 class="section-title"><span class="section-number">3</span> Análisis Comparativo: Odoo Enterprise vs. SAP Business One</h2>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">
+                Se seleccionaron dos soluciones ERP del segmento Mid-Market con fuerte presencia en Argentina y capacidades técnicas adecuadas para distribución de materiales de construcción. Ambas cubren los requerimientos de inventario multi-depósito, POS, CRM, cumplimiento fiscal, y presentan diferencias clave en modelo de negocio, extensibilidad e inversión inicial.
+            </p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Dimensión</th>
+                        <th class="odoo">Odoo Enterprise (v17/v18)</th>
+                        <th class="sap">SAP Business One</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Arquitectura</td>
+                        <td>Open-source core + módulos Enterprise propietarios. Base de datos PostgreSQL. Hosting: Odoo Cloud, Odoo.sh o on-premise.</td>
+                        <td>Propietario (SAP). Base de datos SAP HANA (in-memory) o MS SQL Server. Cloud (AWS/Azure) u on-premise.</td>
+                    </tr>
+                    <tr>
+                        <td>Inventario Multi-Depósito</td>
+                        <td>Multi-warehouse nativo con reglas de reabastecimiento automático entre sucursales, trazabilidad por lote/serial, barcode scanning, rutas logísticas inter-sucursal.</td>
+                        <td>Multi-warehouse nativo con bin locations, MRP para sugerencias automáticas de compra (mín/máx + lead time), trazabilidad batch/serial, barcode scanning.</td>
+                    </tr>
+                    <tr>
+                        <td>POS (Punto de Venta)</td>
+                        <td>Módulo POS nativo integrado: impresoras fiscales, lectores de código, modo offline, multi-tienda con cierres de caja independientes.</td>
+                        <td>Integración vía add-ons de partners certificados (ej. POS terminal integrado con facturación). No tiene módulo POS nativo out-of-the-box.</td>
+                    </tr>
+                    <tr>
+                        <td>CRM</td>
+                        <td>CRM nativo: pipeline de oportunidades, historial de interacciones, lead scoring con IA predictiva, integración directa con cotizaciones y órdenes de venta.</td>
+                        <td>CRM nativo: gestión de leads, oportunidades, pipeline de ventas, historial de cliente. Integración directa con cotizaciones y facturación.</td>
+                    </tr>
+                    <tr>
+                        <td>E-commerce</td>
+                        <td>Módulo de webshop integrado, sincronizado en tiempo real con inventario y precios de las 3 sucursales. Integración nativa con Mercado Pago.</td>
+                        <td>Sin e-commerce nativo. Se integra vía APIs/add-ons con plataformas externas (Tiendanube, Mercado Libre, WooCommerce).</td>
+                    </tr>
+                    <tr>
+                        <td>Corte y Optimización</td>
+                        <td>Módulos de terceros para optimización 1D (perfiles, molduras) y 2D (placas de MDF/melamina) que generan órdenes de corte desde cotizaciones. Integración vía MRP Manufacturing.</td>
+                        <td>Módulo de producción ligera con Bill of Materials (BOM) y órdenes de trabajo. Para optimización de corte 2D se requieren add-ons de partners especializados.</td>
+                    </tr>
+                    <tr>
+                        <td>Localización Fiscal Argentina</td>
+                        <td>Facturación electrónica ARCA (ex-AFIP) con módulos de la comunidad y partners (Adhoc, Quilsoft). Gestión de IVA, Percepciones/Retenciones IIBB.</td>
+                        <td>Localización certificada por SAP y partners (Seidor, One Solutions). Facturación electrónica ARCA, retenciones/percepciones, ajuste por inflación.</td>
+                    </tr>
+                    <tr>
+                        <td>Analítica / BI</td>
+                        <td>Dashboards nativos en cada módulo. Reportes exportables. Para BI avanzado: integración con herramientas externas (Metabase, Power BI).</td>
+                        <td>Dashboards embebidos + Crystal Reports + motor analítico de SAP HANA con drill-down instantáneo. Analítica predictiva (cash flow forecasting) nativa con HANA.</td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--accent-purple); font-weight: 800;">Inteligencia Artificial</td>
+                        <td>
+                            <strong>Nativa en Odoo 17/18:</strong><br>
+                            &bull; OCR automático para facturas de proveedores<br>
+                            &bull; Lead scoring predictivo y forecast de ventas<br>
+                            &bull; IA generativa para emails marketing y descripciones de productos e-commerce<br>
+                            &bull; Agentes de IA personalizables para consultas internas de stock/precios<br>
+                            &bull; Voice-to-text y scheduling inteligente
+                        </td>
+                        <td>
+                            <strong>Limitada nativamente en SAP B1:</strong><br>
+                            &bull; Joule (asistente IA generativo de SAP) <em>no está embebido nativamente</em> en B1 — requiere desarrollo custom vía SAP BTP (Business Technology Platform)<br>
+                            &bull; Motor analítico predictivo de HANA (forecasting de cash flow)<br>
+                            &bull; Enterprise Search inteligente en transacciones<br>
+                            &bull; Para IA avanzada: se requiere inversión adicional en BTP + Service Layer API
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Clientes Similares</td>
+                        <td>Distribuidoras de materiales de construcción (corralones), cadenas de hardware retail y distribuidores industriales en Argentina y LATAM utilizan Odoo para multi-warehouse, POS y e-commerce integrado.</td>
+                        <td>Distribuidoras de materiales, madereras y corralones en LATAM. Reportan mejoras del 25-40% en precisión de inventario y velocidad de despacho tras implementación.</td>
+                    </tr>
+                    <tr>
+                        <td>Partners en Argentina</td>
+                        <td>
+                            &bull; <strong>Birtum</strong> (Gold Partner, Top Performer LATAM 2025)<br>
+                            &bull; <strong>Quilsoft</strong> (Partner histórico argentino)<br>
+                            &bull; <strong>Adhoc</strong> (Gold Partner, especialista en localización fiscal)
+                        </td>
+                        <td>
+                            &bull; <strong>Seidor Argentina</strong> (Platinum Partner global)<br>
+                            &bull; <strong>One Solutions S.A.</strong> (Especialista exclusivo SAP B1)<br>
+                            &bull; <strong>Exxis Group</strong> (Premier Partner regional)<br>
+                            &bull; <strong>Invenzis</strong> (Consultoría e implementación SAP B1)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--accent-green); font-weight: 800;">Costos Estimados (USD)</td>
+                        <td>
+                            <strong>Licencia Enterprise:</strong> Suscripción por usuario/mes (precio regional LATAM ajustado). Plan Standard o Custom (con Studio y API externa).<br><br>
+                            <strong>Implementación (Año 1):</strong> Desde USD 600 (básica) hasta USD 15.000+ para despliegues multi-warehouse complejos con optimizador de corte custom.<br><br>
+                            <strong>Estimado para El Emporio (25-40 usuarios):</strong> <em>USD 8.000 – 20.000 Año 1</em> (licencias + implementación + capacitación).
+                        </td>
+                        <td>
+                            <strong>Licencia Perpetua:</strong> Professional User ~USD 2.500-3.000; Limited User ~USD 1.300-1.600. Mantenimiento anual ~20%.<br>
+                            <strong>Licencia SaaS:</strong> USD 40-110/usuario/mes.<br><br>
+                            <strong>Implementación (Año 1):</strong> USD 55.000 – 120.000+ (licencias + consultoría + migración + capacitación) para 15-30 usuarios activos en 3 locales.<br><br>
+                            <strong>Estimado para El Emporio:</strong> <em>USD 55.000 – 90.000 Año 1</em>.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 4. MATRIZ DE PONDERACIÓN -->
+        <div class="section">
+            <h2 class="section-title"><span class="section-number">4</span> Matriz de Ponderación Comparativa</h2>
+            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">
+                Se ponderaron 10 criterios clave con pesos relativos según la relevancia para El Emporio del Terciado. Calificación de 1 a 5 (5 = excelente).
+            </p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Criterio</th>
+                        <th style="width:8%; text-align:center;">Peso</th>
+                        <th class="odoo" style="text-align:center;">Odoo</th>
+                        <th class="sap" style="text-align:center;">SAP B1</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Inventario Multi-Depósito</td>
+                        <td style="text-align:center;">15%</td>
+                        <td style="text-align:center;">4.5</td>
+                        <td style="text-align:center;">5.0</td>
+                    </tr>
+                    <tr>
+                        <td>POS Nativo Integrado</td>
+                        <td style="text-align:center;">12%</td>
+                        <td style="text-align:center;">5.0</td>
+                        <td style="text-align:center;">3.0</td>
+                    </tr>
+                    <tr>
+                        <td>CRM y Gestión Comercial</td>
+                        <td style="text-align:center;">10%</td>
+                        <td style="text-align:center;">4.5</td>
+                        <td style="text-align:center;">4.0</td>
+                    </tr>
+                    <tr>
+                        <td>E-commerce Integrado</td>
+                        <td style="text-align:center;">8%</td>
+                        <td style="text-align:center;">5.0</td>
+                        <td style="text-align:center;">2.5</td>
+                    </tr>
+                    <tr>
+                        <td>Optimización de Corte</td>
+                        <td style="text-align:center;">10%</td>
+                        <td style="text-align:center;">4.0</td>
+                        <td style="text-align:center;">3.5</td>
+                    </tr>
+                    <tr>
+                        <td>Inteligencia Artificial</td>
+                        <td style="text-align:center;">10%</td>
+                        <td style="text-align:center;">4.5</td>
+                        <td style="text-align:center;">2.5</td>
+                    </tr>
+                    <tr>
+                        <td>Localización Fiscal (ARCA)</td>
+                        <td style="text-align:center;">12%</td>
+                        <td style="text-align:center;">4.0</td>
+                        <td style="text-align:center;">4.5</td>
+                    </tr>
+                    <tr>
+                        <td>Analítica / BI</td>
+                        <td style="text-align:center;">8%</td>
+                        <td style="text-align:center;">3.5</td>
+                        <td style="text-align:center;">5.0</td>
+                    </tr>
+                    <tr>
+                        <td>Costo Total (Inversión Año 1)</td>
+                        <td style="text-align:center;">10%</td>
+                        <td style="text-align:center;">5.0</td>
+                        <td style="text-align:center;">2.0</td>
+                    </tr>
+                    <tr>
+                        <td>Escalabilidad y Solidez</td>
+                        <td style="text-align:center;">5%</td>
+                        <td style="text-align:center;">4.0</td>
+                        <td style="text-align:center;">5.0</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:800; color: var(--accent-purple); font-size:14px;">PUNTAJE PONDERADO TOTAL</td>
+                        <td style="text-align:center; font-weight:800;">100%</td>
+                        <td style="text-align:center; font-weight:800; color: var(--accent-purple); font-size:16px;">4.38</td>
+                        <td style="text-align:center; font-weight:800; color: var(--accent-cyan); font-size:16px;">3.58</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout" style="margin-top: 16px;">
+                <strong>Cálculo del puntaje ponderado:</strong><br>
+                Odoo: (4.5&times;0.15)+(5.0&times;0.12)+(4.5&times;0.10)+(5.0&times;0.08)+(4.0&times;0.10)+(4.5&times;0.10)+(4.0&times;0.12)+(3.5&times;0.08)+(5.0&times;0.10)+(4.0&times;0.05) = <strong>4.38</strong><br>
+                SAP B1: (5.0&times;0.15)+(3.0&times;0.12)+(4.0&times;0.10)+(2.5&times;0.08)+(3.5&times;0.10)+(2.5&times;0.10)+(4.5&times;0.12)+(5.0&times;0.08)+(2.0&times;0.10)+(5.0&times;0.05) = <strong>3.58</strong>
+            </div>
+        </div>
+
+        <!-- 5. DICTAMEN DE ASESORÍA -->
+        <div class="section">
+            <h2 class="section-title"><span class="section-number">5</span> Dictamen de Asesoría y Recomendación Final</h2>
+
+            <div class="score-container">
+                <div class="score-box winner">
+                    <div class="erp-name" style="color: var(--accent-purple);">Odoo Enterprise</div>
+                    <div class="score">4.38</div>
+                    <div class="score-label">Puntaje Ponderado</div>
+                    <div style="margin-top: 8px; font-size: 11px; font-weight: 700; color: var(--accent-green); background: rgba(16,185,129,0.15); padding: 3px 10px; border-radius: 6px; display: inline-block;">RECOMENDADO</div>
+                </div>
+                <div class="score-box">
+                    <div class="erp-name" style="color: var(--accent-cyan);">SAP Business One</div>
+                    <div class="score" style="color: var(--accent-cyan);">3.58</div>
+                    <div class="score-label">Puntaje Ponderado</div>
+                </div>
+            </div>
+
+            <div class="verdict-card">
+                <h3 class="verdict-title">Recomendación: Odoo Enterprise (v18)</h3>
+
+                <p>Desde la perspectiva de consultoría de <strong>Aura Digital Consulting</strong>, y evaluados todos los criterios técnicos, funcionales y económicos para el caso de <strong>El Emporio del Terciado</strong>, se recomienda la implementación de <strong>Odoo Enterprise</strong> como solución ERP integral. Las razones fundamentales son:</p>
+
+                <p><strong>1. Ecosistema unificado nativo (POS + E-commerce + Inventario + CRM):</strong> Odoo ofrece en una sola base de datos todos los módulos que El Emporio necesita para resolver sus dolores principales: un POS integrado al inventario multi-depósito (elimina la consulta telefónica entre sucursales), un webshop sincronizado en tiempo real (habilita el cotizador 24/7 que hoy no existe) y un CRM nativo que centraliza el historial del carpintero profesional B2B (reduce la dependencia de empleados clave).</p>
+
+                <p><strong>2. Ventaja competitiva en IA (2025-2026):</strong> Odoo 17/18 incorpora nativamente OCR de facturas, lead scoring predictivo, IA generativa para marketing, y la posibilidad de configurar agentes de IA para consultas internas de stock y precios. SAP Business One, en cambio, requiere inversión adicional en la plataforma BTP para acceder a capacidades de IA similares.</p>
+
+                <p><strong>3. Costo total drásticamente inferior:</strong> La inversión estimada de Año 1 con Odoo (USD 8.000-20.000 para 25-40 usuarios) es entre 3x y 6x menor que SAP Business One (USD 55.000-90.000). Para una empresa mediana en el contexto económico argentino, esta diferencia es determinante.</p>
+
+                <p><strong>4. Extensibilidad para optimización de corte:</strong> Existen módulos de la comunidad Odoo y de terceros que implementan optimización 1D (perfiles/molduras) y 2D (placas de melamina/MDF) directamente integrados al workflow de ventas y manufactura, solucionando el cuello de botella de la doble carga manual en el taller.</p>
+
+                <p><strong>Cuándo elegir SAP Business One:</strong> Si El Emporio proyecta un crecimiento hacia operaciones más complejas (integración con cadenas internacionales de supply chain, múltiples divisiones de negocio, o necesidad de analítica avanzada con HANA in-memory), SAP Business One ofrece mayor robustez estructural y escalabilidad corporativa a largo plazo. Sin embargo, para el perfil actual y el horizonte de 2-3 años, Odoo Enterprise es la elección óptima.</p>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p><strong>Tecnologías para la Gestión</strong> — Licenciatura en Sistemas, UNLP</p>
+            <p>Segundo Cuatrimestre 2026 — Cátedra Prof. Diego Erben</p>
+            <p style="margin-top: 8px;">Trabajo de Investigación: Mercado ERP | Agustín Barthe</p>
+        </div>
+
+    </div>
+</body>
+</html>

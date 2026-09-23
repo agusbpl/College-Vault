@@ -1,9 +1,11 @@
 # 📂 Minería y ML
 
-## 👨‍🏫 Cátedra y Contacto
+## 👨‍🏫 Cátedra, Horarios y Contacto
 - **Profesores**: Dr. Franco Ronchetti y Dr. Waldo Hasperué
-- **Emails**: fronchetti@lidi.info.unlp.edu.ar / whasperue@lidi.info.unlp.edu.ar
+- **Emails**: `fronchetti@lidi.info.unlp.edu.ar` / `whasperue@lidi.info.unlp.edu.ar`
 - **Plataforma**: Moodle
+- **Horarios de Cursada**:
+  - 📖 **Teoría**: Viernes a partir de las 13:00 hs (Aula 14)
 
 ## 📚 Recursos
 ```dataviewjs
@@ -29,7 +31,10 @@ SORT file.name ASC
 ```
 
 ## 🎯 Tareas y Entregas
-*No hay tareas pendientes*
+- [x] Completar y validar actividades 1 a 8 de Árboles de Decisión (Clase 3) #dm-y-ml 📅 2026-09-14
+- [ ] Definir grupo y propuesta de tema para el Trabajo Grupal de Extracción de Conocimiento #dm-y-ml
+- [ ] Repasar Clases 1 a 3 (CRISP-DM, KNN, Métricas y Árboles) 📅 2026-09-18 #dm-y-ml
+- [ ] Resolver práctica interactiva de KNN y Árboles de Decisión en /teach con evaluator loop 📅 2026-09-23 #dm-y-ml
 
 ## 📝 Requisitos de Evaluación
 - **Aprobación de la materia**:

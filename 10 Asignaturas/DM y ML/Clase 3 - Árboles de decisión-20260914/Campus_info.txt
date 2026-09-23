@@ -1,0 +1,18 @@
+This data set consists of Placement data of students in a XYZ campus. It includes secondary and higher secondary school percentage and specialization. It also includes degree specialization, type and Work experience and salary offers to the placed students.
+
+
+sl_no: Serial Number
+gender: Male='M',Female='F'
+ssc_p: Secondary Education percentage- 10th Grade
+ssc_b: Board of Education- Central/ Others
+hsc_p: Higher Secondary Education percentage- 12th Grade
+hsc_b: Board of Education- Central/ Others
+hsc_s: Specialization in Higher Secondary Education
+degree_p: Degree Percentage
+degree_t: Under Graduation(Degree type)- Field of degree education
+workex: Work Experience - Yes/No
+etest_p: Employment Test Percentage
+specialisation: MBA Specialisation
+mba_p: MBA Percentage
+status (classs): Placed / Not placed
+salary: Salary if placed

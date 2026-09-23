@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showcase de Diseños para Evaluator Loop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Inter', -apple-system, sans-serif;
+            padding: 2rem 1.5rem 5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .showcase-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #21262d;
+        }
+        .showcase-header h1 {
+            color: #f0f6fc;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        .showcase-header p {
+            color: #8b949e;
+            font-size: 1.05rem;
+        }
+
+        .theme-section {
+            margin-bottom: 4rem;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .theme-bar {
+            padding: 1rem 1.5rem;
+            background: #0d1117;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .theme-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #58a6ff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .theme-desc {
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+        .theme-canvas {
+            padding: 2.5rem 2rem;
+        }
+
+        /* ==============================================================
+           ESTILO 1: VERCEL / GITHUB DARK (Developer Minimalist Dark)
+           ============================================================== */
+        .preview-dark {
+            background-color: #090a0f;
+            color: #e6edf3;
+            font-family: 'Inter', sans-serif;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid #21262d;
+        }
+        .preview-dark .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(56, 189, 248, 0.12);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            margin-bottom: 0.75rem;
+        }
+        .preview-dark .card-box {
+            background: #12151d;
+            border: 1px solid #272d38;
+            border-radius: 12px;
+            padding: 1.6rem;
+            margin-top: 1rem;
+            transition: border-color 0.2s;
+        }
+        .preview-dark .card-box:hover {
+            border-color: #388bfd;
+        }
+        .preview-dark h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #f0f6fc;
+            margin-bottom: 0.5rem;
+        }
+        .preview-dark p {
+            color: #8b949e;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .preview-dark .option-item {
+            background: #181d27;
+            border: 1px solid #272d38;
+            border-radius: 8px;
+            padding: 0.85rem 1.1rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.92rem;
+            color: #c9d1d9;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .preview-dark .option-item:hover {
+            background: #1f2633;
+            border-color: #485368;
+            color: #ffffff;
+        }
+        .preview-dark .option-item.selected {
+            background: rgba(56, 189, 248, 0.08);
+            border-color: #38bdf8;
+            color: #f0f6fc;
+            font-weight: 500;
+        }
+        .preview-dark .kbd-pill {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            background: #21262d;
+            padding: 0.2rem 0.45rem;
+            border-radius: 4px;
+            color: #8b949e;
+            border: 1px solid #30363d;
+        }
+        .preview-dark .dark-textarea {
+            width: 100%;
+            background: #0d1117;
+            border: 1px solid #272d38;
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: #c9d1d9;
+            font-family: inherit;
+            font-size: 0.88rem;
+            margin-top: 1rem;
+            resize: vertical;
+        }
+        .preview-dark .dark-btn {
+            background: #238636;
+            color: #ffffff;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* ==============================================================
+           ESTILO 2: NORDIC EDITORIAL / TUFTE PAPER (Limpio, Libro Académico)
+           ============================================================== */
+        .preview-editorial {
+            background-color: #fbfbf9;
+            color: #2c2b29;
+            font-family: 'Newsreader', Georgia, serif;
+            border-radius: 12px;
+            padding: 2.5rem 2.2rem;
+            border: 1px solid #e5e4de;
+        }
+        .preview-editorial h2 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1a1918;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.4rem;
+        }
+        .preview-editorial .editorial-meta {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #797670;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eae8e1;
+            padding-bottom: 0.75rem;
+        }
+        .preview-editorial .card-box {
+            background: #ffffff;
+            border: 1px solid #e8e6de;
+            border-radius: 6px;
+            padding: 1.8rem;
+            margin-top: 1.2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .preview-editorial h3 {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1a1918;
+            margin-bottom: 0.7rem;
+        }
+        .preview-editorial p {
+            font-size: 1.08rem;
+            line-height: 1.65;
+            color: #44423e;
+            margin-bottom: 1.2rem;
+        }
+        .preview-editorial .option-item {
+            font-family: 'Inter', sans-serif;
+            background: #fafaf8;
+            border: 1px solid #e5e3db;
+            border-radius: 4px;
+            padding: 0.85rem 1.1rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+            color: #33312c;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .preview-editorial .option-item:hover {
+            background: #f0eeea;
+            border-color: #c9c6bd;
+        }
+        .preview-editorial .option-item.selected {
+            background: #f4efe6;
+            border-color: #b58900;
+            color: #1a1918;
+            font-weight: 500;
+        }
+        .preview-editorial .editorial-input {
+            width: 100%;
+            background: #fafaf8;
+            border: 1px solid #e0ded6;
+            border-radius: 4px;
+            padding: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #2c2b29;
+            margin-top: 1rem;
+            resize: vertical;
+        }
+        .preview-editorial .editorial-btn {
+            font-family: 'Inter', sans-serif;
+            background: #1a1918;
+            color: #fbfbf9;
+            border: none;
+            padding: 0.7rem 1.3rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+        }
+
+        /* ==============================================================
+           ESTILO 3: LINEAR / STRIPE MODERN GLASS (Tech Minimal Glass)
+           ============================================================== */
+        .preview-linear {
+            background: radial-gradient(circle at 10% 10%, #151828 0%, #0d0f17 100%);
+            color: #f1f5f9;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            border-radius: 14px;
+            padding: 2.2rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .preview-linear .card-box {
+            background: rgba(26, 31, 46, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.7rem;
+            margin-top: 1.2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .preview-linear .glow-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            margin-bottom: 0.8rem;
+        }
+        .preview-linear h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+        .preview-linear p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            margin-bottom: 1.2rem;
+        }
+        .preview-linear .option-item {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 0.9rem 1.2rem;
+            margin-bottom: 0.7rem;
+            font-size: 0.93rem;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .preview-linear .option-item:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-1px);
+            color: #ffffff;
+        }
+        .preview-linear .option-item.selected {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.15) 100%);
+            border-color: #6366f1;
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 0 16px rgba(99, 102, 241, 0.25);
+        }
+        .preview-linear .linear-textarea {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 0.8rem;
+            color: #f1f5f9;
+            font-family: inherit;
+            font-size: 0.88rem;
+            margin-top: 1rem;
+            resize: vertical;
+        }
+        .preview-linear .linear-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: #ffffff;
+            border: none;
+            padding: 0.7rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+            transition: all 0.15s ease;
+        }
+        .preview-linear .linear-btn:hover {
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* Utilidad de selección interactiva de opciones en la preview */
+        .option-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            opacity: 0.6;
+            flex-shrink: 0;
+        }
+        .selected .option-indicator {
+            opacity: 1;
+            background: currentColor;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="showcase-header">
+    <h1>Comparativa de Estilos para Evaluator Loop</h1>
+    <p>Elige la identidad visual que prefieras para las prácticas interactivas y exámenes de tus materias.</p>
+</div>
+
+<!-- OPCION 1 -->
+<div class="theme-section">
+    <div class="theme-bar">
+        <div class="theme-title">
+            <span>Opción 1: Developer Dark (Estilo GitHub / Vercel Dark)</span>
+        </div>
+        <div class="theme-desc">Modo oscuro sobrio, tipografía Inter & Fira Code, perfecto para programar de noche con cero fatiga visual.</div>
+    </div>
+    <div class="theme-canvas">
+        <div class="preview-dark">
+            <span class="badge-pill">Bases de Datos &bull; UNLP</span>
+            <h3>Normalización: Dependencias Funcionales y 2FN</h3>
+            <p>Dado el esquema <code>Pedido(idPedido, idProducto, fecha, idCliente, nombreCliente, nombreProducto, precioUnitario, cantidad)</code> con PK compuesta <code>(idPedido, idProducto)</code>:</p>
+            
+            <div class="card-box">
+                <div class="option-item" onclick="toggleSelect(this)">
+                    <span class="kbd-pill">A</span>
+                    <span>Está en 2FN porque no existen atributos multivaluados y cada celda es atómica.</span>
+                </div>
+                <div class="option-item selected" onclick="toggleSelect(this)">
+                    <span class="kbd-pill">B</span>
+                    <span>Viola la 2FN porque nombreProducto depende solo de idProducto, que es parte de la PK.</span>
+                </div>
+                <div class="option-item" onclick="toggleSelect(this)">
+                    <span class="kbd-pill">C</span>
+                    <span>Viola la 1FN porque hay dependencia transitiva entre idCliente y nombreCliente.</span>
+                </div>
+                <textarea class="dark-textarea" placeholder="Escribe tus dudas sobre este ejercicio..."></textarea>
+                <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
+                    <button class="dark-btn">📥 Exportar para Eval. IA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- OPCION 2 -->
+<div class="theme-section">
+    <div class="theme-bar">
+        <div class="theme-title" style="color: #b58900;">
+            <span>Opción 2: Nordic Editorial / Tufte Paper (Modo Libro de Estudio)</span>
+        </div>
+        <div class="theme-desc">Fondo marfil cálido, serif elegante (Newsreader), alto contraste de lectura y sensación de libro universitario clásico.</div>
+    </div>
+    <div class="theme-canvas">
+        <div class="preview-editorial">
+            <div class="editorial-meta">Visualización de Grandes Volúmenes de Datos &bull; Práctica 1</div>
+            <h2>Canales Visuales y Precisión Perceptual</h2>
+            <p>Al codificar una variable cuantitativa continua, ¿cuál es el canal gráfico con menor tasa de distorsión en la cognición humana?</p>
+            
+            <div class="card-box">
+                <div class="option-item selected" onclick="toggleSelect(this)">
+                    <span style="font-weight:600; width:18px;">A.</span>
+                    <span>Posición sobre una escala común alineada (ej: scatter plot o gráfico de barras).</span>
+                </div>
+                <div class="option-item" onclick="toggleSelect(this)">
+                    <span style="font-weight:600; width:18px;">B.</span>
+                    <span>Área y tamaño relativo de superficies circulares (ej: diagramas de burbujas).</span>
+                </div>
+                <div class="option-item" onclick="toggleSelect(this)">
+                    <span style="font-weight:600; width:18px;">C.</span>
+                    <span>Tono cromático (hue / matiz de color) sobre mapa de calor.</span>
+                </div>
+                <textarea class="editorial-input" placeholder="Anota tus dudas o puntos a reforzar..."></textarea>
+                <div style="margin-top: 1.2rem; display: flex; justify-content: flex-end;">
+                    <button class="editorial-btn">Exportar Evaluación</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- OPCION 3 -->
+<div class="theme-section">
+    <div class="theme-bar">
+        <div class="theme-title" style="color: #818cf8;">
+            <span>Opción 3: Linear Tech Glass (Modern SaaS Glassmorphism)</span>
+        </div>
+        <div class="theme-desc">Gradientes oscuros, efecto vidrio (blur), tipografía Jakarta moderna, sombras sutiles e iluminación violeta/índigo.</div>
+    </div>
+    <div class="theme-canvas">
+        <div class="preview-linear">
+            <span class="glow-badge">Sistemas ERP &bull; Unidad 3</span>
+            <h3>Evaluación de Selección de Software PyME</h3>
+            <p>Para una empresa manufacturera y distribuidora de 25 empleados, ¿cuál es el principal argumento a favor de una arquitectura modular como Odoo?</p>
+            
+            <div class="card-box">
+                <div class="option-item selected" onclick="toggleSelect(this)">
+                    <span class="option-indicator">&#10003;</span>
+                    <span>Menor costo total de propiedad (TCO) y modularidad progresiva adaptada a recursos limitados.</span>
+                </div>
+                <div class="option-item" onclick="toggleSelect(this)">
+                    <span class="option-indicator"></span>
+                    <span>Garantiza soporte bancario multinacional estricto que las suites corporativas no ofrecen.</span>
+                </div>
+                <div class="option-item" onclick="toggleSelect(this)">
+                    <span class="option-indicator"></span>
+                    <span>Requiere obligatoriamente un departamento de 10 desarrolladores ABAP en planta.</span>
+                </div>
+                <textarea class="linear-textarea" placeholder="¿Qué dudas o trade-offs detectas en este caso?..."></textarea>
+                <div style="margin-top: 1.2rem; display: flex; justify-content: flex-end;">
+                    <button class="linear-btn">Exportar para Eval. IA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleSelect(el) {
+    const parent = el.parentElement;
+    parent.querySelectorAll('.option-item').forEach(item => item.classList.remove('selected'));
+    el.classList.add('selected');
+}
+</script>
+
+</body>
+</html>

@@ -1,9 +1,12 @@
 # 📂 Bases de Datos
 
-## 👨‍🏫 Cátedra y Contacto
+## 👨‍🏫 Cátedra, Horarios y Contacto
 - **Profesor**: Esp. Luciano Marrero
-- **Email**: lmarrero@lidi.info.unlp.edu.ar
+- **Email**: `lmarrero@lidi.info.unlp.edu.ar`
 - **Plataforma**: IDEAS
+- **Horarios de Cursada**:
+  - 📖 **Teoría**: Miércoles de 10:00 a 13:00 hs (Aula Android, Ed. CIyTT)
+  - 💻 **Práctica**: Jueves a las 18:00 hs (Aula 9)
 
 ## 📚 Recursos
 ```dataviewjs
@@ -29,7 +32,7 @@ SORT file.name ASC
 ```
 
 ## 🎯 Tareas y Entregas
-*No hay tareas pendientes*
+- [ ] Resolver práctica de normalización (1FN, 2FN, 3FN) y NoSQL (Mongo/Redis) en /teach con evaluator loop 📅 2026-09-23 #bd
 
 ## 📝 Requisitos de Evaluación
 - **Modalidad**: Coloquio presencial y defensa de un trabajo práctico experimental individual o grupal sobre bases de datos NoSQL.

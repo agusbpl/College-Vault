@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repaso 1º Parcial: Tecnologías para la Gestión - Bloque 1 & ERP</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <style>
+        .nose-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .action-bar {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .answer-reveal {
+            display: none;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #166534;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <span class="badge">Tecnologías para la Gestión — UNLP</span>
+    <h1>Repaso 1º Parcial: TIC, Modelado AS-IS/TO-BE y Sistemas ERP</h1>
+    <p>Evaluador interactivo sobre conceptos clave de examen teórico y aplicación en consultoría. Exporta el JSON para la devolución del tutor IA.</p>
+</header>
+
+<main id="quiz-container">
+
+    <div class="card" data-qid="g1" data-tema="Sistemas de Información y Rol Gerencial">
+        <span class="badge tag-red">Crítica</span>
+        <h2>1. Jerarquía de Sistemas de Información (Laudon)</h2>
+        <p>En la pirámide organizacional, un sistema <strong>ERP (Enterprise Resource Planning)</strong> integra fundamentalmente:</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'g1', 'A')">A. Únicamente el nivel estratégico para el cálculo de escenarios macroeconómicos.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'g1', 'B')">B. Los procesos transaccionales operativos y de gestión media en una base de datos única y compartida.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'g1', 'C')">C. Exclusivamente la comunicación externa con clientes sin tocar la contabilidad ni el inventario.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'g1', 'D')">D. Redes sociales corporativas para marketing de contenidos.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans_g1')">Ver respuesta modelo</button>
+        <div id="ans_g1" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> B. Un ERP centraliza la operación (ventas, compras, producción, finanzas) en una base relacional única, eliminando silos de datos entre departamentos.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-g1" class="nose-checkbox">
+            <label for="nose-g1">Necesito repasar la pirámide de sistemas (TPS, MIS, DSS, ERP)</label>
+        </div>
+        <textarea class="duda-input" id="duda-g1" placeholder="Dudas sobre sistemas de información..."></textarea>
+    </div>
+
+    <div class="card" data-qid="g2" data-tema="Sistemas ERP y Mercado">
+        <span class="badge tag-red">Crítica</span>
+        <h2>2. Criterios de Selección: Odoo vs SAP S/4HANA</h2>
+        <p>Para una PyME manufacturera y distribuidora de 25 empleados (como el caso <em>El Emporio del Terciado</em> en el TPI), ¿cuál es la principal ventaja estratégica de seleccionar una solución como <strong>Odoo</strong> frente a un gigante de gran escala como <strong>SAP S/4HANA Enterprise</strong>?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'g2', 'A')">A. Menor costo total de propiedad (TCO), curvas de adopción más ágiles y modularidad flexible adaptada a recursos limitados.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'g2', 'B')">B. Odoo garantiza certificación bancaria global obligatoria que SAP no posee.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'g2', 'C')">C. Requiere obligatoriamente un equipo propio de 10 desarrolladores ABAP en planta permanente.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'g2', 'D')">D. Carece por completo de módulos de facturación o gestión de stock.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans_g2')">Ver respuesta modelo</button>
+        <div id="ans_g2" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> A. En PyMEs, la complejidad de implementación, el costo de consultoría y el licenciamiento de soluciones como SAP pueden asfixiar la empresa; Odoo brinda rápida puesta en marcha modular con un TCO alcanzable.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-g2" class="nose-checkbox">
+            <label for="nose-g2">Dudas con trade-offs de selección ERP en PyMEs</label>
+        </div>
+        <textarea class="duda-input" id="duda-g2" placeholder="Dudas sobre selección de software..."></textarea>
+    </div>
+
+    <div class="card" data-qid="g3" data-tema="Modelado AS-IS / TO-BE">
+        <span class="badge tag-amber">Alta</span>
+        <h2>3. Metodología de Diagnóstico de Procesos</h2>
+        <p>¿Cuál es la función del diagnóstico de brecha (Gap Analysis) entre el proceso <strong>AS-IS</strong> y el modelo <strong>TO-BE</strong>?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'g3', 'A')">A. Documentar exclusivamente las fallas del personal para definir despidos inmediatos.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'g3', 'B')">B. Identificar cuellos de botella, redundancias y definir los requerimientos funcionales que la nueva tecnología debe resolver.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'g3', 'C')">C. Demostrar que los procesos empresariales nunca deben modificarse con la llegada del software.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'g3', 'D')">D. Auditar únicamente las declaraciones impositivas ante el organismo fiscal.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem;" onclick="toggleAnswer('ans_g3')">Ver respuesta modelo</button>
+        <div id="ans_g3" class="answer-reveal">
+            <strong>Respuesta Modelo:</strong> B. El análisis de brecha permite contrastar cómo opera hoy la empresa vs. cómo debería operar con el ERP, trazando la hoja de ruta de parametrización y capacitación.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-g3" class="nose-checkbox">
+            <label for="nose-g3">Dudas sobre modelado de procesos organizacionales</label>
+        </div>
+        <textarea class="duda-input" id="duda-g3" placeholder="Dudas sobre AS-IS y TO-BE..."></textarea>
+    </div>
+
+</main>
+
+<div class="action-bar">
+    <p style="margin:0; font-size:0.95rem; color:var(--text-secondary);">Exporta el JSON para recibir feedback y reforzar antes del parcial:</p>
+    <button class="btn" onclick="exportarResultados()">📥 Exportar para Eval. IA</button>
+</div>
+
+<script>
+const userAnswers = {};
+
+function selectOption(element, qid, choice) {
+    const parent = element.parentElement;
+    parent.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    userAnswers[qid] = choice;
+}
+
+function toggleAnswer(id) {
+    const el = document.getElementById(id);
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+}
+
+function exportarResultados() {
+    const cards = document.querySelectorAll('.card');
+    const payload = {
+        materia: "Tecnologías para la Gestión",
+        fecha: new Date().toISOString(),
+        ejercicios: []
+    };
+
+    cards.forEach(card => {
+        const qid = card.dataset.qid;
+        const tema = card.dataset.tema;
+        const respuesta = userAnswers[qid] || null;
+        const noSabe = card.querySelector('.nose-checkbox')?.checked || false;
+        const duda = card.querySelector('.duda-input')?.value.trim() || "";
+
+        payload.ejercicios.push({
+            qid: qid,
+            tema: tema,
+            respuesta_usuario: respuesta,
+            nose_no_se: noSabe,
+            duda_especifica: duda
+        });
+    });
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eval-gestion-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
