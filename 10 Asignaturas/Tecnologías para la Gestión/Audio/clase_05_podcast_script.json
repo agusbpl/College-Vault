@@ -1,0 +1,42 @@
+[
+  {
+    "speaker": "Tomas",
+    "text": "¡Hola a todos! Bienvenidos a este episodio especial de repaso. Hoy nos metemos de lleno en la Unidad 3 de Tecnologías para la Gestión: la segunda parte de Sistemas ERP dictada por Diego Erben. ¿Qué tal, Elena?"
+  },
+  {
+    "speaker": "Elena",
+    "text": "¡Hola, Tomás! Muy entusiasmada, porque esta clase dejó conceptos fundamentales. Especialmente para el trabajo de investigación que tenemos que entregar y para encarar el TPI de El Emporio del Terciado."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Totalmente. Y el punto de partida es un número que asusta un poco: según las estadísticas que vimos en clase, el setenta por ciento de los proyectos de implementación de ERP fracasan o no cumplen con alguna de las tres variables del triángulo de hierro: tiempo, alcance o costos."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Tal cual. Y lo que remarcaba Diego es que el problema casi nunca es el software en sí. El fracaso viene de no gestionar las expectativas de los directivos, querer cambiar todo junto de golpe sin medir qué puede absorber la empresa, o la falta de compromiso del cliente interno."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Claro, por eso se insiste tanto en la estructura del equipo. Tiene que haber un líder de proyecto interno de la empresa y un líder de proyecto por parte de la consultora, con roles definidos y sponsors claros que banquen las decisiones difíciles."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Y hablando de decisiones difíciles: la etapa de selección. Ahí vimos la diferencia entre un RFI, que es el pedido de información general para filtrar candidatos, y el RFP, el requerimiento formal de propuesta donde se le exige al proveedor que cotice sobre procesos puntuales."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Exacto, como el ejemplo que daban del acopio de mercadería o la trazabilidad con remito electrónico. Si no bajas los requerimientos a tierra con una matriz de ponderación, terminas comprando por simpatía comercial y no por necesidad técnica."
+  },
+  {
+    "speaker": "Elena",
+    "text": "Y ojo al piojo con el consejo de oro para el trabajo práctico: cuando relevemos costos de ERP, nos presentamos como consultores externos asesorando a una pyme. Así conseguimos rangos reales de fee mensual y costo de implementación sin quedar atrapados en un funnel comercial."
+  },
+  {
+    "speaker": "Tomas",
+    "text": "Excelente síntesis, Elena. Con esto tenemos los argumentos listos para justificar la elección de software en el informe de consultoría. ¡A meterle ficha al estudio!"
+  },
+  {
+    "speaker": "Elena",
+    "text": "¡Totalmente! Nos vemos en el próximo episodio. ¡Éxitos a todos!"
+  }
+]
