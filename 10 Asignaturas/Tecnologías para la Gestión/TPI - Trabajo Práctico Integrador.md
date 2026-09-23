@@ -25,44 +25,45 @@ tags:
 - **Entregas**: Se suben al Drive asignado antes del inicio de cada clase práctica indicada.
 - **Evaluación Final**: Exposición oral integradora en las semanas 15 y 16 (03/12 y 10/12).
 - **Documentos de Referencia**:
-  - 📄 [[Recursos/Trabajo Práctico Integrador/TPI - Consigna y Cronograma.pdf|Consigna Completa y Cronograma (PDF)]]
+  - 📄 [[Recursos/Trabajo Práctico Integrador/Cronograma_entregas_TPI_2026.pdf|Cronograma Oficial de Entregas TPI 2026 (PDF)]]
+  - 📋 [[Recursos/Trabajo Práctico Integrador/Cronograma_entregas_TPI_2026|Ficha de Cronograma de Entregas 2026 (Markdown)]]
+  - 📄 [[Recursos/Trabajo Práctico Integrador/TPI - Consigna y Cronograma.pdf|Consigna Completa y Cronograma Base (PDF)]]
   - 📄 [[Recursos/Trabajo Práctico Integrador/TPI - Cómo Investigar la Empresa Asignada.pdf|Guía de Investigación de Empresa (PDF)]]
 
 ---
 
-## 📅 Cronograma de Entregas por Bloque Temático
+## 📅 Cronograma de Entregas por Bloque Temático (Oficial 2026)
 
 ### 🧱 BLOQUE 1 — Diagnóstico Digital y Arquitectura de Sistemas
-| Sem. | Fecha | Clase Práctica | Entrega TP | Contenido del Entregable |
-| :---: | :---: | :--- | :--- | :--- |
-| **2** | 27/08 | Kick-off, Análisis Estratégico, Diagnóstico digital y Mapeo AS-IS | — | Formación de grupos y asignación de empresa. |
-| **3** | 03/09 | Identificación de problemas / oportunidades y Diseño TO-BE | **Entrega 1** | Contexto, FODA, madurez digital, mapeo AS-IS y supuestos explícitos. |
-| **4** | 10/09 | Arquitectura de sistemas | **Entrega 2** (Cierre B1) | Identificación de dolores, diseño TO-BE y arquitectura de sistemas propuesta. |
+| Fecha | Instancia | Tema | Qué deben producir |
+| :---: | :--- | :--- | :--- |
+| **27/08** | **Entrega 1** | Diagnóstico inicial | Equipo y empresa. Análisis estratégico. Madurez digital y sistemas actuales. AS-IS de 2 o 3 procesos. |
+| **03/09** | **Entrega 2** | Problemas y TO-BE | Problemas y oportunidades de mejora. Rediseño TO-BE de los procesos mapeados. |
+| **10/09** | **Entrega 3 · Cierre** | Arquitectura | Arquitectura de sistemas objetivo e integración con visión procesos-personas-tecnología. |
 
 ### 🏢 BLOQUE 2 — Sistemas Transaccionales: ERP, CRM y BI
-| Sem. | Fecha | Clase Práctica | Entrega TP | Contenido del Entregable |
-| :---: | :---: | :--- | :--- | :--- |
-| **5** | 17/09 | Introducción a ERP | — | Desarrollo conceptual. |
-| **6** | 24/09 | ERP en profundidad | **Entrega 3** | Diagnóstico de necesidades ERP: módulos requeridos y alcance. |
-| **7** | 01/10 | Evaluación del mercado ERP | **Entrega 4** | Comparativa de soluciones ERP y justificación de selección. |
-| **8** | 08/10 | CRM + Ecommerce | **Entrega 5** | Propuesta de CRM y/o plataforma Ecommerce con integración omnicanal. |
-| **9** | 15/10 | Business Intelligence (BI) | **Entrega 6** (Cierre B2) | Propuesta de BI: modelo de datos, KPIs clave y mockups de dashboards. |
-| **10** | 22/10 | Status y seguimiento de trabajos | — | Revisión intermedia de avance. |
+| Fecha | Instancia | Tema | Qué deben producir |
+| :---: | :--- | :--- | :--- |
+| **17/09** | — | Introducción a ERP | Clase conceptual. Base teórica para la Entrega 4. |
+| **24/09** | — | ERP en profundidad | Continuación del desarrollo conceptual sobre ERP *(No hay entrega nueva)*. |
+| **01/10** | **Entrega 4** | **Evaluación ERP** | **Selección y justificación de ERP/equivalente: mercado, funcionalidades, costo, escalabilidad y soporte.** |
+| **08/10** | **Entrega 5** | CRM + Ecommerce | Propuesta de CRM y/o Ecommerce / omnicanalidad adaptada a la empresa. |
+| **15/10** | **Entrega 6 · Cierre** | Business Intelligence | KPIs clave y diseño de tablero de indicadores aplicado a la empresa. |
+| **22/10** | Checkpoint | Status de trabajos | Devolución grupal y seguimiento del Informe de Consultoría. No hay entrega nueva. |
 
 ### 🤖 BLOQUE 3 — Automatización, IA y Estrategia Digital
-| Sem. | Fecha | Clase Práctica | Entrega TP | Contenido del Entregable |
-| :---: | :---: | :--- | :--- | :--- |
-| **11** | 29/10 | IA y Automatización | — | Desarrollo conceptual. |
-| **12** | 05/11 | Smart Everything (IoT, Big Data, Cloud) | **Entrega 7** | Propuesta de automatización de procesos (RPA), IA y tecnologías emergentes. |
-| **12b**| 12/11 | Roadmap de implementación y Matriz de riesgos | **Entrega 8** (Cierre B3) | Roadmap priorizado (qué se implementa primero y por qué) + Matriz de riesgos. |
+| Fecha | Instancia | Tema | Qué deben producir |
+| :---: | :--- | :--- | :--- |
+| **29/10 y 05/11** | **Entrega 7** | IA y automatización | Automatización e IA aplicada (RPA, IA) y, si corresponde, IoT, Big Data y Cloud. |
+| **12/11** | **Entrega 8 · Cierre** | Roadmap y riesgos + Evaluación | Roadmap priorizado de implementación y matriz de riesgos con estrategias de mitigación. Business Case: costo-beneficio y ROI estimado. |
 
 ### 💼 BLOQUE 4 — Evaluación Económica y Presentación Final
-| Sem. | Fecha | Clase Práctica | Entrega TP | Contenido del Entregable |
-| :---: | :---: | :--- | :--- | :--- |
-| **13** | 19/11 | *Feriado — Día de La Plata* | — | Sin actividad presencial. |
-| **14** | 26/11 | Gestión del cambio y Evaluación económica | **Entrega 9** | Plan de gestión del cambio + Business Case (costo-beneficio y ROI estimado). |
-| **15** | 03/12 | Presentación final (Grupo 1) | **Exposición Oral** | Defensa del Informe de Consultoría completo. |
-| **16** | 10/12 | Presentación final (Grupo 2) | **Exposición Oral** | Defensa del Informe de Consultoría completo. |
+| Fecha | Instancia | Tema | Qué deben producir |
+| :---: | :--- | :--- | :--- |
+| **19/11** | — | *Feriado — Día de La Plata* | Sin clase práctica. |
+| **26/11** | — | *Asueto — Día No Docente* | Sin clase práctica. |
+| **03/12** | **Presentación final** | Evaluación · Grupo 1 | Exposición oral integradora del Informe de Consultoría completo. |
+| **10/12** | **Presentación final** | Evaluación · Grupo 2 | Continuación de exposiciones, según cantidad de grupos. |
 
 ---
 

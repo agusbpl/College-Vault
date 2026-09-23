@@ -10,12 +10,17 @@ WHERE !completed AND file.folder != "30 Plantillas" AND text != "" AND text != "
 | Asignatura                      | Fecha  | Tipo (Examen/Proyecto)             | Estado    |
 | :------------------------------ | :----- | :--------------------------------- | :-------- |
 | **Bases de Datos**              | 01-oct | Definición de Trabajo Experimental | Pendiente |
-| **Tecnologías para la Gestión** | 06-oct | Entrega Trabajo de Investigación (Mercado ERP) | Pendiente |
+| **Tecnologías para la Gestión** | 01-oct | TPI - Entrega 4 (Evaluación y Selección ERP) | Pendiente |
+| **Tecnologías para la Gestión** | 06-oct | Entrega Trabajo de Investigación Teórico (Mercado ERP) | Pendiente |
+| **Tecnologías para la Gestión** | 08-oct | TPI - Entrega 5 (CRM + Ecommerce)  | Pendiente |
+| **Tecnologías para la Gestión** | 15-oct | TPI - Entrega 6 (Business Intelligence - Cierre B2) | Pendiente |
 | **Tecnologías para la Gestión** | 20-oct | 1º Parcial Teórico                 | Pendiente |
 | **Bases de Datos**              | 22-oct | Entrega de Trabajo Experimental    | Pendiente |
+| **Tecnologías para la Gestión** | 05-nov | TPI - Entrega 7 (IA y Automatización / RPA) | Pendiente |
 | **Minería y ML**                | 04-nov | 1ra. Fecha de Examen Escrito       | Pendiente |
 | **Visualización**               | 04-nov | 1ra. Fecha de Examen Escrito       | Pendiente |
 | **Bases de Datos**              | 05-nov | Defensa de Trabajo Experimental    | Pendiente |
+| **Tecnologías para la Gestión** | 12-nov | TPI - Entrega 8 (Roadmap, Riesgos y ROI - Cierre B3) | Pendiente |
 | **Minería y ML**                | 18-nov | 2da. Fecha de Examen Escrito       | Pendiente |
 | **Visualización**               | 18-nov | 2da. Fecha de Examen Escrito       | Pendiente |
 | **Tecnologías para la Gestión** | 01-dic | 2º Parcial Teórico                 | Pendiente |
