@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 01: Fundamentos de IA & Machine Learning — UNLP</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        /* Estilos complementarios Nordic Editorial */
+        .section-header {
+            margin-top: 3rem;
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 1px solid var(--border-default);
+            padding-bottom: 0.6rem;
+        }
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.55rem;
+            color: var(--text-title);
+        }
+        .section-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 9px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .tag-blue { background: #e0f2fe; color: #0369a1; }
+        .tag-green { background: #dcfce7; color: #15803d; }
+        .tag-amber { background: #fef3c7; color: #b45309; }
+        .tag-purple { background: #f3e8ff; color: #7e22ce; }
+        .tag-gray { background: #f3f4f6; color: #4b5563; }
+
+        .callout {
+            background: #fdfbf7;
+            border-left: 3px solid var(--accent-ochre);
+            padding: 1.2rem 1.4rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.4rem 0;
+            font-size: 1.02rem;
+        }
+        .callout strong {
+            color: var(--text-title);
+        }
+
+        .formula-box {
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1.4rem;
+            margin: 1.4rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .formula-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-ochre);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .formula-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 1rem;
+            text-align: center;
+            margin: 0.8rem 0;
+            overflow-x: auto;
+        }
+        .formula-steps {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-body);
+        }
+        .formula-steps ol {
+            padding-left: 1.3rem;
+            margin-top: 0.5rem;
+        }
+        .formula-steps li {
+            margin-bottom: 0.5rem;
+        }
+
+        .analogy-box {
+            background: #f0fdf4;
+            border-left: 3px solid #16a34a;
+            padding: 1.1rem 1.3rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.2rem 0;
+            font-size: 0.98rem;
+        }
+        .analogy-box strong {
+            color: #166534;
+        }
+
+        /* Video Embed Container */
+        .video-container {
+            margin: 1.8rem 0;
+            background: #0f172a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        .video-header {
+            padding: 0.7rem 1.2rem;
+            background: #1e293b;
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .video-header span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Interactive Widgets */
+        .interactive-widget {
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1.6rem;
+            margin: 1.8rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .widget-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-title);
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .widget-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+        }
+        .widget-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+            padding: 1rem;
+            background: #fbfbf9;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            align-items: center;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+        }
+        .control-group label {
+            font-weight: 500;
+            color: var(--text-title);
+        }
+        .control-group input[type="range"] {
+            cursor: pointer;
+            accent-color: var(--accent-ochre);
+        }
+        .btn-group {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .widget-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-strong);
+            padding: 0.4rem 0.8rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--text-body);
+            transition: all 0.15s ease;
+        }
+        .widget-btn:hover {
+            background: #f3f4f6;
+            border-color: var(--accent-ink);
+        }
+        .widget-btn.active {
+            background: var(--accent-ink);
+            color: #ffffff;
+            border-color: var(--accent-ink);
+        }
+
+        .canvas-container {
+            position: relative;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+        canvas {
+            display: block;
+            background: #ffffff;
+            cursor: crosshair;
+        }
+        .widget-readout {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.8rem 1rem;
+            border-radius: 4px;
+            color: #1e293b;
+        }
+
+        /* Tabla de comparación */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.4rem 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+        }
+        .styled-table th, .styled-table td {
+            border: 1px solid var(--border-default);
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        .styled-table th {
+            background: #f8f8f6;
+            color: var(--text-title);
+            font-weight: 600;
+        }
+        .styled-table tr:nth-child(even) {
+            background: #fdfdfc;
+        }
+
+        /* Code Blocks */
+        .code-container {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1.4rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.86rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        .code-container .code-header {
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-size: 0.76rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0.4rem;
+        }
+
+        .action-banner {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 1.2rem 1.4rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .action-banner-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            color: #1e293b;
+        }
+        .action-btn {
+            background: #0f172a;
+            color: #ffffff;
+            padding: 0.6rem 1.1rem;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.84rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.15s ease;
+        }
+        .action-btn:hover {
+            background: #334155;
+        }
+
+        /* SVG Icon helper */
+        .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.8rem;">
+        <span class="badge" style="margin-bottom:0;">Minería de Datos y Aprendizaje Automático</span>
+        <span class="section-tag tag-blue">UNLP Informática · 2026</span>
+        <span class="section-tag tag-green">Lección 01</span>
+    </div>
+    <h1>Clase 1: Introducción a la Inteligencia Artificial y Fundamentos del Aprendizaje Automático</h1>
+    <p>Desglose exhaustivo de definiciones de inteligencia, paradigmas simbólicos vs inductivos, formulación matemática paso a paso de métricas de distancia, simuladores visuales en vivo y laboratorio de programación.</p>
+</header>
+
+<main>
+
+    <!-- NAVEGACIÓN RÁPIDA -->
+    <div style="background: #f8f8f6; border: 1px solid var(--border-default); border-radius: 6px; padding: 1.1rem 1.4rem; margin-bottom: 2.2rem; font-family: 'Inter', sans-serif; font-size: 0.86rem;">
+        <strong style="color: var(--text-title); display: block; margin-bottom: 0.5rem;">Índice Temático de la Lección:</strong>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
+            <a href="#modulo1" style="color: var(--accent-ochre); text-decoration: none;">1. ¿Qué es Inteligencia?</a> ·
+            <a href="#modulo2" style="color: var(--accent-ochre); text-decoration: none;">2. Paradigmas: Simbólico vs No Simbólico</a> ·
+            <a href="#modulo3" style="color: var(--accent-ochre); text-decoration: none;">3. Taxonomía de ML y Modelo KNN</a> ·
+            <a href="#modulo4" style="color: var(--accent-ochre); text-decoration: none;">4. Fórmulas de Distancia Desglosadas</a> ·
+            <a href="#modulo5" style="color: var(--accent-ochre); text-decoration: none;">5. Estandarización y Escalamiento</a> ·
+            <a href="#modulo6" style="color: var(--accent-ochre); text-decoration: none;">6. Laboratorio Práctico & Ejercicios Cátedra</a>
+        </div>
+    </div>
+
+    <!-- MÓDULO 1 -->
+    <section id="modulo1">
+        <div class="section-header">
+            <span class="section-tag tag-purple">Módulo 1</span>
+            <h2>La Naturaleza de la Inteligencia: Filosofía, Límites y Medición</h2>
+        </div>
+
+        <p>
+            Al iniciar el estudio de la Inteligencia Artificial (IA), la primera barrera no es computacional sino epistemológica: <em>no existe una definición universal y unívoca de inteligencia</em>. En la cátedra de la UNLP, exploramos cómo los psicólogos, biólogos e ingenieros en computación han abordado este concepto.
+        </p>
+
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Autor / Investigador</th>
+                    <th>Definición Fundamental</th>
+                    <th>Analogía Operativa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Alfred Binet</strong> (1905, creador del 1er test psicométrico)</td>
+                    <td><em>"Juicio, sentido común y capacidad de adaptarse a las circunstancias. Criticar los propios actos."</em></td>
+                    <td>El timonel de un barco que no se aferra a un mapa estático, sino que ajusta las velas según la fuerza del viento y reconoce cuándo cambiar de rumbo.</td>
+                </tr>
+                <tr>
+                    <td><strong>Jean Piaget</strong> (Pionero del desarrollo cognitivo)</td>
+                    <td><em>"Es lo que usas cuando no sabes qué hacer. Conjunto de operaciones lógicas para las que está capacitado el ser humano."</em></td>
+                    <td>Resolver un laberinto en una habitación a oscuras: cuando las reglas preestablecidas fallan, la mente formula hipótesis dinámicas.</td>
+                </tr>
+                <tr>
+                    <td><strong>David Wechsler</strong> (Autor escalas WAIS/WISC)</td>
+                    <td><em>"Capacidad global de actuar con propósito, pensar racionalmente y lidiar eficazmente con el entorno."</em></td>
+                    <td>Un director de orquesta que coordina recursos diversos con una meta definida en tiempo real.</td>
+                </tr>
+                <tr>
+                    <td><strong>François Chollet</strong> (Google / Keras, creador de ARC)</td>
+                    <td><em>"Eficiencia en la adquisición de nuevas habilidades ante tareas desconocidas y no entrenadas previamente."</em></td>
+                    <td>Un estudiante que aprende las reglas de un juego de cartas en 2 minutos solo observando dos rondas, sin necesidad de ver 10 millones de partidas.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout">
+            <strong>IA Estrecha (Narrow / Débil) vs. IA General (AGI):</strong>
+            Toda la IA contemporánea —desde los clasificadores de cáncer y AlphaFold hasta ChatGPT y Claude— es <strong>IA Estrecha</strong>: sistemas optimizados para tareas específicas mediante cálculo estadístico en dominios cerrados o de alta dimensionalidad. La <strong>AGI</strong> (capacidad de transferir conocimiento autónomamente a cualquier ámbito humano, con sentido común y razonamiento fluido) sigue siendo un horizonte teórico no alcanzado.
+        </div>
+
+        <h3>Métricas de Evaluación: De Alan Turing a François Chollet</h3>
+        <p>
+            ¿Cómo comprobamos si un sistema es inteligente? A lo largo de la historia se han propuesto tres hitos evaluativos fundamentales:
+        </p>
+
+        <ol style="margin-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li style="margin-bottom: 0.8rem;">
+                <strong>El Test de Turing (1950):</strong> Propuesto por Alan Turing bajo el "Juego de la Imitación". Si un evaluador humano a través de un teletipo no logra distinguir si su interlocutor es una persona o una máquina, la máquina aprueba. Superado formalmente en 2014, el test mide <em>comportamiento imitativo superficial</em>, no comprensión.
+            </li>
+            <li style="margin-bottom: 0.8rem;">
+                <strong>La Habitación China de John Searle (1980):</strong> Demostró que la manipulación de símbolos formales (sintaxis) no implica comprensión mental (semántica). Una persona dentro de una sala con un catálogo de reglas que traduce caracteres chinos no "entiende" chino; simplemente ejecuta un programa.
+            </li>
+            <li style="margin-bottom: 0.8rem;">
+                <strong>ARC-AGI (Abstraction and Reasoning Corpus, Chollet):</strong> Diseñado para medir generalización genuina frente a memorización. Presenta puzzles geométricos 2D que un niño resuelve al instante, pero que los LLMs más gigantescos fallan estrepitosamente porque no pueden memorizarlos previamente en su corpus de texto.
+            </li>
+        </ol>
+
+        <!-- VIDEO EMBED: SEARLE -->
+        <div class="video-container">
+            <div class="video-header">
+                <span>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 2c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
+                    BBC Studios — El Experimento de la Habitación China (John Searle)
+                </span>
+                <span>Filosofía de la Mente & IA</span>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/D0MD4sRHj1M" title="The Chinese Room Experiment" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <!-- VIDEO EMBED: CHOLLET ARC -->
+        <div class="video-container">
+            <div class="video-header">
+                <span>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 2c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
+                    François Chollet — Por qué los grandes modelos no razonan y la misión de ARC-AGI
+                </span>
+                <span>Razonamiento vs Memorización</span>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/UakqL6Pj9xo" title="Francois Chollet ARC-AGI" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO 2 -->
+    <section id="modulo2">
+        <div class="section-header">
+            <span class="section-tag tag-blue">Módulo 2</span>
+            <h2>Paradigmas de la IA: Simbólico (Deductivo) vs. No Simbólico (Inductivo)</h2>
+        </div>
+
+        <p>
+            La historia de la IA se divide en dos grandes épocas dominadas por formas opuestas de inferencia lógica:
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0;">
+            <div style="background: #ffffff; border: 1px solid var(--border-default); border-radius: 6px; padding: 1.4rem;">
+                <h4 style="font-family: 'Inter', sans-serif; font-size: 1.1rem; color: #1e3a8a; margin-bottom: 0.6rem;">
+                    1. IA Simbólica (Siglo XX) — Deducción
+                </h4>
+                <p style="font-size: 0.95rem; margin-bottom: 0.8rem;">
+                    <strong>Enfoque Top-Down:</strong> Se codifican manualmente las reglas lógicas del dominio y se combinan con hechos para deducir respuestas.
+                </p>
+                <div style="background: #eff6ff; padding: 0.8rem; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.82rem; color: #1e40af;">
+                    Reglas + Datos &rarr; Respuestas
+                </div>
+                <ul style="font-size: 0.9rem; margin-top: 0.8rem; padding-left: 1.2rem;">
+                    <li><strong>Sistemas Expertos (MYCIN, 1970s):</strong> 500 reglas IF-THEN en Lisp para diagnóstico médico.</li>
+                    <li><strong>Lógica Difusa (Fuzzy Logic):</strong> Representación de grados continuos de verdad entre 0 y 1.</li>
+                    <li><strong>Límite:</strong> Cuello de botella en la captura del conocimiento experto; fragilidad ante excepciones.</li>
+                </ul>
+            </div>
+
+            <div style="background: #ffffff; border: 1px solid var(--border-default); border-radius: 6px; padding: 1.4rem;">
+                <h4 style="font-family: 'Inter', sans-serif; font-size: 1.1rem; color: #065f46; margin-bottom: 0.6rem;">
+                    2. IA No Simbólica (Siglo XXI) — Inducción
+                </h4>
+                <p style="font-size: 0.95rem; margin-bottom: 0.8rem;">
+                    <strong>Enfoque Bottom-Up (Machine Learning):</strong> La máquina observa miles de ejemplos de entradas y salidas para descubrir la función matemática subyacente.
+                </p>
+                <div style="background: #ecfdf5; padding: 0.8rem; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.82rem; color: #047857;">
+                    Datos + Respuestas &rarr; Reglas (Modelo)
+                </div>
+                <ul style="font-size: 0.9rem; margin-top: 0.8rem; padding-left: 1.2rem;">
+                    <li><strong>Modelos Inductivos:</strong> Árboles, Redes Neuronales, SVM, Ensambles.</li>
+                    <li><strong>Generalización Estadística:</strong> Capacidad de predecir casos nunca vistos.</li>
+                    <li><strong>Requisitos:</strong> Big Data masivo + Cómputo acelerado (GPUs/TPUs).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- FORMULA DESGLOSADA: LÓGICA DIFUSA -->
+        <div class="formula-box">
+            <div class="formula-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm4-4H6v-2h10v2zm0-4H6V7h10v2z"/></svg>
+                Fórmula Desglosada: Función Triangular de Pertenencia en Lógica Difusa (Lotfi Zadeh, 1965)
+            </div>
+            <p style="font-size: 0.95rem;">
+                En lógica booleana clásica, una temperatura de $21.9^\circ\text{C}$ es estrictamente $0$ (No Templada) y a $22.0^\circ\text{C}$ pasa a ser $1$ (Templada). La lógica difusa elimina este salto artificial mediante una función de pertenencia $\mu_A(x) \in [0, 1]$:
+            </p>
+            <div class="formula-display">
+                $$\mu_A(x) = \max\left(0, \; \min\left(\frac{x - a}{b - a}, \; \frac{c - x}{c - b}\right)\right)$$
+            </div>
+            <div class="formula-steps">
+                <strong>Anatomía matemática de la fórmula paso a paso:</strong>
+                <ol>
+                    <li><strong>Variable de entrada $x$:</strong> El valor físico real medido por el sensor (ej: $x = 24^\circ\text{C}$).</li>
+                    <li><strong>Parámetros $a, b, c$:</strong> Definen la geometría del triángulo.
+                        <ul>
+                            <li>$a$: El límite inferior donde la pertenencia empieza a subir ($\mu(a) = 0$).</li>
+                            <li>$b$: El vértice o cúspide ideal donde la pertenencia es máxima e indiscutible ($\mu(b) = 1$).</li>
+                            <li>$c$: El límite superior donde la pertenencia vuelve a caer a cero ($\mu(c) = 0$).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Rampa ascendente $\frac{x - a}{b - a}$:</strong> Calcula la fracción de subida hacia la cúspide. Si $x = a$, vale $0$; si $x = b$, vale $1$.</li>
+                    <li><strong>Rampa descendente $\frac{c - x}{c - b}$:</strong> Calcula la fracción de bajada desde la cúspide. A medida que $x$ crece hacia $c$, el valor desciende de $1$ a $0$.</li>
+                    <li><strong>Operador $\min(\dots)$:</strong> Elige la pendiente activa según si estamos a la izquierda o derecha del pico $b$.</li>
+                    <li><strong>Operador $\max(0, \dots)$:</strong> Trunca a cero cualquier valor fuera del intervalo $[a, c]$, garantizando que la pertenencia nunca sea negativa.</li>
+                </ol>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogía Cotidiana:</strong> Es como graduar el agua de la ducha. No existe un interruptor binario donde el agua sea "congelada" o "hirviendo"; existe un continuo donde a $25^\circ\text{C}$ el agua es un 70% templada y un 30% fresca simultáneamente.
+            </div>
+        </div>
+
+        <!-- SIMULADOR INTERACTIVO 1: LÓGICA DIFUSA -->
+        <div class="interactive-widget">
+            <div class="widget-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                Simulador Interactivo 1: Membresía en Lógica Difusa vs. Lógica Clásica
+            </div>
+            <div class="widget-subtitle">
+                Mueve el control deslizante de temperatura para ver cómo se evalúan las funciones de pertenencia en tiempo real.
+            </div>
+            <div class="widget-controls">
+                <div class="control-group" style="flex: 1; min-width: 240px;">
+                    <label for="tempSlider">Temperatura ambiente ($x$): <span id="tempVal" style="color:var(--accent-ochre); font-weight:700;">22.0</span> °C</label>
+                    <input type="range" id="tempSlider" min="0" max="40" step="0.5" value="22">
+                </div>
+                <div class="btn-group">
+                    <button class="widget-btn active" id="btnFuzzyMode">Modo Difuso (Fuzzy)</button>
+                    <button class="widget-btn" id="btnCrispMode">Modo Clásico (Booleano)</button>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="fuzzyCanvas" width="760" height="240"></canvas>
+            </div>
+
+            <div class="widget-readout" id="fuzzyReadout">
+                Evaluando pertenencia matemática...
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO 3 -->
+    <section id="modulo3">
+        <div class="section-header">
+            <span class="section-tag tag-green">Módulo 3</span>
+            <h2>Taxonomía del Machine Learning y el Algoritmo de Memoria: KNN</h2>
+        </div>
+
+        <p>
+            El aprendizaje automático organiza sus problemas en cuatro cuadrantes fundamentales según la disponibilidad de etiquetas y el objetivo computacional:
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.4rem 0;">
+            <div style="border: 1px solid var(--border-default); border-radius: 4px; padding: 1rem; background: #fafaf9;">
+                <strong style="color: var(--text-title); display: block; font-family: 'Inter', sans-serif; font-size: 0.92rem; margin-bottom: 0.3rem;">
+                    1. Supervisado ($X \to Y$)
+                </strong>
+                <p style="font-size: 0.88rem; margin: 0; color: var(--text-body);">
+                    Se cuenta con datos de entrada $X$ y etiquetas objetivo $Y$.
+                    <br>&bull; <strong>Clasificación:</strong> $Y$ es discreto/categórico (ej: Fraude / No Fraude, Cáncer / Benigno).
+                    <br>&bull; <strong>Regresión:</strong> $Y$ es continuo/numérico (ej: Precio de una propiedad, temperatura de mañana).
+                </p>
+            </div>
+            <div style="border: 1px solid var(--border-default); border-radius: 4px; padding: 1rem; background: #fafaf9;">
+                <strong style="color: var(--text-title); display: block; font-family: 'Inter', sans-serif; font-size: 0.92rem; margin-bottom: 0.3rem;">
+                    2. No Supervisado ($X \to \text{Estructura}$)
+                </strong>
+                <p style="font-size: 0.88rem; margin: 0; color: var(--text-body);">
+                    Solo se dispone de matriz de datos $X$ sin etiquetas previas.
+                    <br>&bull; <strong>Clustering:</strong> Agrupamiento natural de patrones afines (K-Means, DBSCAN).
+                    <br>&bull; <strong>Reducción de Dimensionalidad:</strong> Comprimir atributos preservando varianza (PCA, t-SNE).
+                </p>
+            </div>
+            <div style="border: 1px solid var(--border-default); border-radius: 4px; padding: 1rem; background: #fafaf9;">
+                <strong style="color: var(--text-title); display: block; font-family: 'Inter', sans-serif; font-size: 0.92rem; margin-bottom: 0.3rem;">
+                    3. Por Refuerzo (RL)
+                </strong>
+                <p style="font-size: 0.88rem; margin: 0; color: var(--text-body);">
+                    Un agente interactúa con un entorno mediante ensayo y error, maximizando una función de recompensa acumulativa ($R_t$). Ej: AlphaGo, robótica bípeda.
+                </p>
+            </div>
+            <div style="border: 1px solid var(--border-default); border-radius: 4px; padding: 1rem; background: #fafaf9;">
+                <strong style="color: var(--text-title); display: block; font-family: 'Inter', sans-serif; font-size: 0.92rem; margin-bottom: 0.3rem;">
+                    4. Autosupervisado & Generativo
+                </strong>
+                <p style="font-size: 0.88rem; margin: 0; color: var(--text-body);">
+                    El modelo genera sus propias etiquetas a partir de la estructura del dato (ej: predecir el siguiente token de texto en LLMs, o reconstruir partes ocultas de imágenes).
+                </p>
+            </div>
+        </div>
+
+        <h3>El Algoritmo Basado en Memoria: K-Nearest Neighbors (KNN)</h3>
+        <p>
+            El clasificador <strong>KNN ($K$-Vecinos Más Cercanos)</strong> es el modelo paradigmático del <em>aprendizaje por memoria</em> o aprendizaje vago (<strong>lazy learning</strong>). A diferencia de los árboles de decisión o redes neuronales, KNN:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1.2rem; font-size: 0.98rem;">
+            <li><strong>Fase de Entrenamiento ($O(1)$):</strong> No aprende ninguna fórmula ni optimiza pesos. Simplemente almacena la totalidad de los datos en memoria.</li>
+            <li><strong>Fase de Inferencia ($O(N \cdot d)$):</strong> Cuando llega un nuevo registro sin etiqueta $\mathbf{x}_{\text{nuevo}}$, calcula la distancia geométrica hacia <em>cada uno de los $N$ registros</em> del conjunto de entrenamiento, ordena las distancias y selecciona los $k$ más próximos.</li>
+            <li><strong>Decisión por Voto Mayoritario:</strong> La clase asignada es la moda entre sus $k$ vecinos.</li>
+        </ul>
+
+        <div class="analogy-box">
+            <strong>Analogía Popular:</strong> <em>"Dime con quién andas y te diré quién eres."</em> Si te mudas a un vecindario desconocido y quieres saber si la gente prefiere el té o el café, tocas la puerta de tus 3 vecinos más próximos ($k=3$). Si 2 toman café y 1 toma té, asumes con alta probabilidad que tú también estarás en un entorno cafetero.
+        </div>
+
+        <!-- VIDEO EMBED: STATQUEST KNN -->
+        <div class="video-container">
+            <div class="video-header">
+                <span>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 22c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
+                    StatQuest with Josh Starmer — K-Nearest Neighbors (KNN), Claramente Explicado
+                </span>
+                <span>Fundamento Algorítmico</span>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/HVXime0nQeI" title="StatQuest KNN" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <!-- SIMULADOR INTERACTIVO 2: KNN 2D PLAYGROUND -->
+        <div class="interactive-widget">
+            <div class="widget-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                Simulador Interactivo 2: Laboratorio 2D de Vecindad y Clasificación KNN
+            </div>
+            <div class="widget-subtitle">
+                Haz clic en el plano para mover la muestra de prueba ($X_{\text{test}}$) o ajusta los parámetros para observar en vivo el radio de vecindad y la clasificación resultante.
+            </div>
+
+            <div class="widget-controls">
+                <div class="control-group">
+                    <label for="kSlider">Hiperparámetro $k$: <strong id="kDisplay" style="color:var(--accent-ochre);">3</strong></label>
+                    <input type="range" id="kSlider" min="1" max="9" step="2" value="3">
+                </div>
+                <div class="control-group">
+                    <label>Métrica de Distancia:</label>
+                    <div class="btn-group">
+                        <button class="widget-btn active" id="btnEuclidean">Euclidiana ($L_2$)</button>
+                        <button class="widget-btn" id="btnManhattan">Manhattan ($L_1$)</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Ponderación:</label>
+                    <div class="btn-group">
+                        <button class="widget-btn active" id="btnWeightUniform">Uniforme (1 voto)</button>
+                        <button class="widget-btn" id="btnWeightDistance">Inverso Distancia ($1/d$)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="knnCanvas" width="760" height="340"></canvas>
+            </div>
+
+            <div class="widget-readout" id="knnReadout">
+                Calculando distancias a los $N$ puntos de entrenamiento...
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO 4 -->
+    <section id="modulo4">
+        <div class="section-header">
+            <span class="section-tag tag-amber">Módulo 4</span>
+            <h2>Fórmulas de Distancia: Desglose Matemático Paso a Paso</h2>
+        </div>
+
+        <p>
+            El corazón de los métodos basados en instancias, clustering y sistemas de recomendación radica en cómo se mide numéricamente la <em>disimilitud</em> entre dos vectores de características $\mathbf{p} = (p_1, p_2, \dots, p_n)$ y $\mathbf{q} = (q_1, q_2, \dots, q_n) \in \mathbb{R}^n$.
+        </p>
+
+        <!-- VIDEO EMBED: DISTANCIAS -->
+        <div class="video-container">
+            <div class="video-header">
+                <span>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 22c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
+                    Krish Naik — Distancia Euclidiana y Distancia Manhattan en Machine Learning
+                </span>
+                <span>Métricas de Espacio</span>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/RJ9TpkWKyU0" title="Euclidean and Manhattan Distance" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <!-- FORMULA 1: EUCLIDIANA -->
+        <div class="formula-box">
+            <div class="formula-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                1. Distancia Euclidiana (Norma $L_2$)
+            </div>
+            <p style="font-size: 0.95rem;">
+                Mide la longitud del segmento rectilíneo directo más corto entre dos puntos en un espacio euclidiano $n$-dimensional (generalización del Teorema de Pitágoras).
+            </p>
+            <div class="formula-display">
+                $$d_2(\mathbf{p}, \mathbf{q}) = \|\mathbf{p} - \mathbf{q}\|_2 = \sqrt{\sum_{i=1}^n (p_i - q_i)^2}$$
+            </div>
+            <div class="formula-steps">
+                <strong>Desglose paso a paso:</strong>
+                <ol>
+                    <li><strong>Resta por componentes $(p_i - q_i)$:</strong> Calcula la diferencia unidimensional en la característica $i$ (ej: diferencia de edad entre dos personas).</li>
+                    <li><strong>Elevación al cuadrado $(\dots)^2$:</strong> Cumple dos funciones vitales:
+                        <ul>
+                            <li>Garantiza que la distancia siempre sea positiva, eliminando el signo de la resta.</li>
+                            <li><strong>Penalización cuadrática:</strong> Desvíos grandes reciben un castigo proporcionalmente mucho mayor que desvíos pequeños.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Sumatoria $\sum_{i=1}^n$:</strong> Acumula las diferencias al cuadrado a lo largo de las $n$ dimensiones del dataset.</li>
+                    <li><strong>Raíz cuadrada $\sqrt{\dots}$:</strong> Regresa la escala dimensional a las unidades originales de las variables (de metros cuadrados a metros).</li>
+                </ol>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogía:</strong> La trayectoria recta del vuelo de un dron entre dos edificios.
+            </div>
+        </div>
+
+        <!-- FORMULA 2: MANHATTAN -->
+        <div class="formula-box">
+            <div class="formula-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                2. Distancia Manhattan o City-Block (Norma $L_1$)
+            </div>
+            <p style="font-size: 0.95rem;">
+                Suma las distancias absolutas proyectadas a lo largo de los ejes perpendiculares de coordenadas.
+            </p>
+            <div class="formula-display">
+                $$d_1(\mathbf{p}, \mathbf{q}) = \|\mathbf{p} - \mathbf{q}\|_1 = \sum_{i=1}^n |p_i - q_i|$$
+            </div>
+            <div class="formula-steps">
+                <strong>Desglose paso a paso:</strong>
+                <ol>
+                    <li><strong>Valor absoluto $|p_i - q_i|$:</strong> Toma la magnitud pura de la separación en cada coordenada, descartando la dirección.</li>
+                    <li><strong>Ausencia de potencias:</strong> Al no elevar al cuadrado, no penaliza agresivamente los valores atípicos (<strong>outliers</strong>). Es significativamente más robusta cuando los datos tienen ruido severo.</li>
+                </ol>
+            </div>
+            <div class="analogy-box">
+                <strong>Analogía:</strong> El recorrido de un taxi por las calles perpendiculares de Manhattan o de la ciudad de La Plata: el auto no puede atravesar los edificios en diagonal, debe recorrer avenidas y calles en ángulo recto.
+            </div>
+        </div>
+
+        <!-- FORMULA 3: MINKOWSKI -->
+        <div class="formula-box">
+            <div class="formula-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                3. Distancia Minkowski Generalizada (Norma $L_p$)
+            </div>
+            <p style="font-size: 0.95rem;">
+                Es la formulación paramétrica unificada que engloba a la distancia Manhattan ($p=1$), la Euclidiana ($p=2$) y la distancia Chebyshev de tablero de ajedrez ($p \to \infty$):
+            </p>
+            <div class="formula-display">
+                $$d_p(\mathbf{p}, \mathbf{q}) = \|\mathbf{p} - \mathbf{q}\|_p = \left( \sum_{i=1}^n |p_i - q_i|^p \right)^{\frac{1}{p}}$$
+            </div>
+        </div>
+
+        <!-- FORMULA 4: VOTO PONDERADO -->
+        <div class="formula-box">
+            <div class="formula-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                4. Voto Ponderado por Inverso de Distancia
+            </div>
+            <p style="font-size: 0.95rem;">
+                En KNN clásico con $k=3$, si 2 vecinos a $100\text{ metros}$ votan Clase B y 1 vecino a solo $1\text{ metro}$ vota Clase A, el voto simple declara ganadora a la Clase B. Para resolver esta injusticia espacial, se pondera el voto por el inverso de la distancia:
+            </p>
+            <div class="formula-display">
+                $$w_i = \frac{1}{d(\mathbf{x}, \mathbf{x}_i) + \epsilon}, \quad \hat{y} = \arg\max_{c} \sum_{i: y_i = c} w_i$$
+            </div>
+            <div class="formula-steps">
+                <strong>¿Por qué sumamos $\epsilon$?</strong>
+                Si el punto de consulta coincide exactamente con un punto de entrenamiento, $d = 0$. La división por cero provocaría una indeterminación matemática ($\to \infty$); sumando un factor infinitesimal ($\epsilon = 10^{-6}$) se evita el error numérico preservando el peso dominante.
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO 5 -->
+    <section id="modulo5">
+        <div class="section-header">
+            <span class="section-tag tag-purple">Módulo 5</span>
+            <h2>Estandarización y Escalamiento de Características</h2>
+        </div>
+
+        <p>
+            Dado que KNN, SVM y K-Means dependen enteramente de distancias euclidianas o Manhattan, son <strong>extremadamente vulnerables a la escala de las variables</strong>.
+        </p>
+
+        <div class="callout" style="background: #fef2f2; border-left: 3px solid #dc2626;">
+            <strong>El Peligro del Desbalance de Escala:</strong>
+            Supongamos que clasificamos clientes por <em>Edad</em> ($20$ a $70$ años) e <em>Ingresos</em> ($\$200.000$ a $\$5.000.000$).
+            <br>La diferencia en ingresos será de varios cientos de miles, mientras que la diferencia en edad será como máximo $50$.
+            <br>Al calcular $\sqrt{(p_{\text{ingreso}} - q_{\text{ingreso}})^2 + (p_{\text{edad}} - q_{\text{edad}})^2}$, el término de la edad queda completamente eclipsado y diluido. El algoritmo actuará como si la edad no existiera.
+        </div>
+
+        <div class="formula-box">
+            <div class="formula-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm4-4H6v-2h10v2zm0-4H6V7h10v2z"/></svg>
+                Estandarización $Z$-Score (Distribución Normal Estándar)
+            </div>
+            <p style="font-size: 0.95rem;">
+                Transforma la variable para que su media sea $\mu = 0$ y su desviación estándar sea $\sigma = 1$:
+            </p>
+            <div class="formula-display">
+                $$\mu = \frac{1}{N}\sum_{i=1}^N x_i, \quad \sigma = \sqrt{\frac{1}{N}\sum_{i=1}^N (x_i - \mu)^2}, \quad z_i = \frac{x_i - \mu}{\sigma}$$
+            </div>
+        </div>
+
+        <div class="formula-box">
+            <div class="formula-title">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm4-4H6v-2h10v2zm0-4H6V7h10v2z"/></svg>
+                Escalamiento Min-Max (Normalización a Rango Fijo $[0, 1]$)
+            </div>
+            <p style="font-size: 0.95rem;">
+                Comprime todos los valores estrictamente entre el mínimo ($0$) y el máximo ($1$):
+            </p>
+            <div class="formula-display">
+                $$x_{\text{scaled}} = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$$
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO 6 -->
+    <section id="modulo6">
+        <div class="section-header">
+            <span class="section-tag tag-blue">Módulo 6</span>
+            <h2>Laboratorio Práctico & Ejercicios Teóricos de Cátedra</h2>
+        </div>
+
+        <p>
+            La teoría adquiere solidez cuando se implementa directamente en código. A continuación tienes los tres desafíos prácticos de programación diseñados para esta clase, junto con el script de evaluación local y el notebook de Colab:
+        </p>
+
+        <div class="action-banner">
+            <div class="action-banner-text">
+                <strong>Acceso Inmediato a los Entornos de Código:</strong>
+                <div style="font-size: 0.85rem; color: #475569; margin-top: 0.2rem;">
+                    Script local listo para correr con pruebas automáticas, o Notebook en Google Colab con 1 clic.
+                </div>
+            </div>
+            <div style="display:flex; gap: 0.6rem;">
+                <a href="#ejecutar-local" class="action-btn">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    Ver Script Local
+                </a>
+            </div>
+        </div>
+
+        <h3>Desafío 1: Implementación Vectorizada de Métricas en NumPy</h3>
+        <p style="font-size: 0.95rem;">
+            Debes implementar las tres funciones de distancia sin usar bucles <code>for</code> lentos de Python, aprovechando las operaciones matriciales vectorizadas de NumPy:
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span>python · desafio_metricas.py</span>
+                <span>NumPy Vectorizado</span>
+            </div>
+<pre>import numpy as np
+
+def distancia_euclidiana(p, q):
+    """
+    Calcula la distancia Euclidiana (L2) entre dos vectores p y q.
+    Fórmula: sqrt( sum( (p_i - q_i)^2 ) )
+    """
+    diff = np.array(p) - np.array(q)
+    return np.sqrt(np.sum(diff ** 2))
+
+def distancia_manhattan(p, q):
+    """
+    Calcula la distancia Manhattan (L1) entre dos vectores p y q.
+    Fórmula: sum( |p_i - q_i| )
+    """
+    diff = np.array(p) - np.array(q)
+    return np.sum(np.abs(diff))
+
+def distancia_minkowski(p, q, p_order=3):
+    """
+    Calcula la distancia Minkowski de orden p_order entre p y q.
+    Fórmula: ( sum( |p_i - q_i|^p ) )^(1/p)
+    """
+    diff = np.array(p) - np.array(q)
+    return np.sum(np.abs(diff) ** p_order) ** (1.0 / p_order)</pre>
+        </div>
+
+        <h3>Desafío 2: Construcción de un Clasificador KNN desde Cero</h3>
+        <p style="font-size: 0.95rem;">
+            Construir la clase <code>KNNClassifierScratch</code> implementando los métodos de la API de Scikit-Learn (<code>fit</code> y <code>predict</code>), permitiendo alternar entre voto uniforme y voto ponderado por distancia:
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span>python · knn_scratch.py</span>
+                <span>API Scikit-Learn compatible</span>
+            </div>
+<pre>class KNNClassifierScratch:
+    def __init__(self, k=3, metric='euclidean', weights='uniform'):
+        self.k = k
+        self.metric = metric
+        self.weights = weights
+        self.X_train = None
+        self.y_train = None
+
+    def fit(self, X, y):
+        # Enfoque lazy: solo almacenamos las muestras en memoria
+        self.X_train = np.array(X)
+        self.y_train = np.array(y)
+        return self
+
+    def predict(self, X):
+        X = np.array(X)
+        return np.array([self._predict_single(x) for x in X])
+
+    def _predict_single(self, x):
+        # 1. Calcular distancias a todos los puntos de entrenamiento
+        if self.metric == 'euclidean':
+            distances = np.sqrt(np.sum((self.X_train - x) ** 2, axis=1))
+        elif self.metric == 'manhattan':
+            distances = np.sum(np.abs(self.X_train - x), axis=1)
+
+        # 2. Obtener los índices de los k vecinos más próximos
+        k_indices = np.argsort(distances)[:self.k]
+        k_labels = self.y_train[k_indices]
+        k_distances = distances[k_indices]
+
+        # 3. Votación
+        if self.weights == 'uniform':
+            classes, counts = np.unique(k_labels, return_counts=True)
+            return classes[np.argmax(counts)]
+        elif self.weights == 'distance':
+            eps = 1e-6
+            w = 1.0 / (k_distances + eps)
+            scores = {}
+            for label, weight in zip(k_labels, w):
+                scores[label] = scores.get(label, 0.0) + weight
+            return max(scores, key=scores.get)</pre>
+        </div>
+
+        <div id="ejecutar-local" class="card" style="background: #fbfbf9; margin-top: 2rem;">
+            <h3>Ejecución y Autoevaluación Inmediata en Local</h3>
+            <p>
+                Hemos creado el script de autoevaluación en tu repositorio local con una suite de pruebas preconfiguradas. Puedes ejecutarlo en cualquier momento desde tu terminal:
+            </p>
+            <div class="code-container" style="background: #0f172a;">
+                <div class="code-header">
+                    <span>bash · terminal</span>
+                    <span>Ejecución directa</span>
+                </div>
+<pre>python3 "/home/spogus/College-Vault/10 Asignaturas/DM y ML/Sesiones/practica_clase1.py"</pre>
+            </div>
+        </div>
+
+        <!-- PREGUNTAS TEÓRICAS DE CÁTEDRA -->
+        <div class="card" style="margin-top: 2rem; border-left: 3px solid var(--accent-ink);">
+            <h3>Preguntas Teóricas Oficiales de la Cátedra (Para Examen)</h3>
+            <p>Responde mentalmente a estas tres cuestiones clave antes de pasar a la Clase 2:</p>
+            
+            <div style="margin-bottom: 1.2rem;">
+                <strong>1. Distinción Epistemológica: Searle vs. Turing en los LLMs Actuales</strong>
+                <p style="font-size: 0.95rem; margin-top: 0.3rem;">
+                    <em>Pregunta:</em> Si ChatGPT aprueba el Test de Turing en una conversación de 20 minutos, ¿demuestra esto que posee autoconciencia y comprensión real? Justifica según el argumento de la Habitación China de John Searle.
+                    <br><span style="color: var(--text-muted); font-size: 0.88rem;"><strong>Respuesta esperada:</strong> No. Searle demostró que la manipulación sintáctica perfecta de símbolos basada en probabilidades estadísticas ($P(w_t | w_{1:t-1})$) carece de intencionalidad y significado semántico interno. Simula comprensión sin poseerla.</span>
+                </p>
+            </div>
+
+            <div style="margin-bottom: 1.2rem;">
+                <strong>2. Complejidad Computacional de los Aprendices Perezosos (Lazy Learners)</strong>
+                <p style="font-size: 0.95rem; margin-top: 0.3rem;">
+                    <em>Pregunta:</em> ¿Por qué decimos que KNN tiene un costo de entrenamiento casi nulo ($O(1)$) pero un costo de inferencia prohibitivo ($O(N \cdot d)$) en Big Data?
+                    <br><span style="color: var(--text-muted); font-size: 0.88rem;"><strong>Respuesta esperada:</strong> En entrenamiento solo indexa los puntos. Pero para clasificar una sola muestra nueva, debe calcular la distancia contra los $N$ registros históricos con $d$ atributos, lo cual colapsa en datasets de millones de filas a menos que se usen estructuras de árbol espacial (KD-Tree, Ball-Tree).</span>
+                </p>
+            </div>
+
+            <div>
+                <strong>3. La Maldición de la Dimensionalidad en Espacios Euclidianos</strong>
+                <p style="font-size: 0.95rem; margin-top: 0.3rem;">
+                    <em>Pregunta:</em> ¿Qué le ocurre a la distancia euclidiana entre pares de puntos cuando la cantidad de características $d$ crece a valores muy grandes ($d > 1000$)?
+                    <br><span style="color: var(--text-muted); font-size: 0.88rem;"><strong>Respuesta esperada:</strong> La distancia entre el vecino más cercano y el más lejano tiende a converger al mismo valor (el espacio se vuelve hiperdisperso y vacío). Como consecuencia, el concepto de "cercanía" pierde significado métrico y KNN degrada a una predicción aleatoria.</span>
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <p style="text-align: center; margin-top: 3rem; color: #6e6e73; font-family: 'Inter', sans-serif; font-size: 0.82rem;">
+        Cátedra de Minería de Datos y Aprendizaje Automático — Facultad de Informática, Universidad Nacional de La Plata (UNLP)
+        <br>Orquestador Pedagógico · Material elaborado para Agustín Barthe
+    </p>
+</footer>
+
+<!-- SCRIPTS DE LOS SIMULADORES INTERACTIVOS -->
+<script>
+// --- SIMULADOR 1: LÓGICA DIFUSA ---
+(function() {
+    const canvas = document.getElementById('fuzzyCanvas');
+    const ctx = canvas.getContext('2d');
+    const slider = document.getElementById('tempSlider');
+    const tempVal = document.getElementById('tempVal');
+    const readout = document.getElementById('fuzzyReadout');
+    const btnFuzzy = document.getElementById('btnFuzzyMode');
+    const btnCrisp = document.getElementById('btnCrispMode');
+
+    let mode = 'fuzzy'; // 'fuzzy' o 'crisp'
+
+    btnFuzzy.addEventListener('click', () => {
+        mode = 'fuzzy';
+        btnFuzzy.classList.add('active');
+        btnCrisp.classList.remove('active');
+        drawFuzzy();
+    });
+
+    btnCrisp.addEventListener('click', () => {
+        mode = 'crisp';
+        btnCrisp.classList.add('active');
+        btnFuzzy.classList.remove('active');
+        drawFuzzy();
+    });
+
+    function triangular(x, a, b, c) {
+        if (x <= a || x >= c) return 0;
+        if (x === b) return 1;
+        if (x > a && x < b) return (x - a) / (b - a);
+        if (x > b && x < c) return (c - x) / (c - b);
+        return 0;
+    }
+
+    function trapezoidal(x, a, b, c, d) {
+        if (x <= a || x >= d) return 0;
+        if (x >= b && x <= c) return 1;
+        if (x > a && x < b) return (x - a) / (b - a);
+        if (x > c && x < d) return (d - x) / (d - c);
+        return 0;
+    }
+
+    function drawFuzzy() {
+        const temp = parseFloat(slider.value);
+        tempVal.innerText = temp.toFixed(1);
+
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const margin = { top: 25, right: 30, bottom: 35, left: 45 };
+        const plotW = w - margin.left - margin.right;
+        const plotH = h - margin.top - margin.bottom;
+
+        function toX(val) {
+            return margin.left + (val / 40) * plotW;
+        }
+        function toY(mu) {
+            return margin.top + (1 - mu) * plotH;
+        }
+
+        // Ejes
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(margin.left, margin.top);
+        ctx.lineTo(margin.left, margin.top + plotH);
+        ctx.lineTo(margin.left + plotW, margin.top + plotH);
+        ctx.stroke();
+
+        // Marcas eje X
+        ctx.fillStyle = '#64748b';
+        ctx.font = '11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        for (let t = 0; t <= 40; t += 5) {
+            const x = toX(t);
+            ctx.beginPath();
+            ctx.moveTo(x, margin.top + plotH);
+            ctx.lineTo(x, margin.top + plotH + 4);
+            ctx.stroke();
+            ctx.fillText(t + '°C', x, margin.top + plotH + 16);
+        }
+
+        // Marcas eje Y
+        ctx.textAlign = 'right';
+        ctx.fillText('1.0', margin.left - 8, toY(1.0) + 4);
+        ctx.fillText('0.5', margin.left - 8, toY(0.5) + 4);
+        ctx.fillText('0.0', margin.left - 8, toY(0.0) + 4);
+
+        let muFrio, muTemplado, muCalor;
+
+        if (mode === 'fuzzy') {
+            // Curva Frío: trapezoidal a=0, b=0, c=12, d=20
+            ctx.strokeStyle = '#0284c7';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let t = 0; t <= 40; t += 0.5) {
+                const mu = trapezoidal(t, -5, 0, 10, 18);
+                const x = toX(t);
+                const y = toY(mu);
+                if (t === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Curva Templado: triangular a=12, b=22, c=30
+            ctx.strokeStyle = '#16a34a';
+            ctx.beginPath();
+            for (let t = 0; t <= 40; t += 0.5) {
+                const mu = triangular(t, 12, 22, 30);
+                const x = toX(t);
+                const y = toY(mu);
+                if (t === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Curva Calor: trapezoidal a=24, b=32, c=40, d=45
+            ctx.strokeStyle = '#dc2626';
+            ctx.beginPath();
+            for (let t = 0; t <= 40; t += 0.5) {
+                const mu = trapezoidal(t, 24, 32, 40, 45);
+                const x = toX(t);
+                const y = toY(mu);
+                if (t === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            muFrio = trapezoidal(temp, -5, 0, 10, 18);
+            muTemplado = triangular(temp, 12, 22, 30);
+            muCalor = trapezoidal(temp, 24, 32, 40, 45);
+
+            // Línea vertical de la temperatura actual
+            const curX = toX(temp);
+            ctx.strokeStyle = '#b58900';
+            ctx.setLineDash([4, 4]);
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(curX, margin.top);
+            ctx.lineTo(curX, margin.top + plotH);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Puntos de intersección
+            function drawIntersect(mu, color) {
+                if (mu > 0.001) {
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.arc(curX, toY(mu), 5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            drawIntersect(muFrio, '#0284c7');
+            drawIntersect(muTemplado, '#16a34a');
+            drawIntersect(muCalor, '#dc2626');
+
+            readout.innerHTML = `<strong>Lectura Difusa a ${temp.toFixed(1)}°C:</strong> &nbsp; ` +
+                `<span style="color:#0284c7; font-weight:600;">&mu;<sub>Frío</sub> = ${muFrio.toFixed(2)}</span> &nbsp;|&nbsp; ` +
+                `<span style="color:#16a34a; font-weight:600;">&mu;<sub>Templado</sub> = ${muTemplado.toFixed(2)}</span> &nbsp;|&nbsp; ` +
+                `<span style="color:#dc2626; font-weight:600;">&mu;<sub>Caliente</sub> = ${muCalor.toFixed(2)}</span><br>` +
+                `<span style="color:#64748b; font-size:0.8rem;">Interpretación: El sistema activa simultáneamente las reglas difusas con estos pesos continuos.</span>`;
+        } else {
+            // Modo Clásico (Booleano escalonado: <16 Frío, 16-26 Templado, >=26 Caliente)
+            ctx.lineWidth = 2.5;
+
+            // Frío
+            ctx.strokeStyle = '#0284c7';
+            ctx.beginPath();
+            ctx.moveTo(toX(0), toY(1));
+            ctx.lineTo(toX(16), toY(1));
+            ctx.lineTo(toX(16), toY(0));
+            ctx.lineTo(toX(40), toY(0));
+            ctx.stroke();
+
+            // Templado
+            ctx.strokeStyle = '#16a34a';
+            ctx.beginPath();
+            ctx.moveTo(toX(0), toY(0));
+            ctx.lineTo(toX(16), toY(0));
+            ctx.lineTo(toX(16), toY(1));
+            ctx.lineTo(toX(26), toY(1));
+            ctx.lineTo(toX(26), toY(0));
+            ctx.lineTo(toX(40), toY(0));
+            ctx.stroke();
+
+            // Caliente
+            ctx.strokeStyle = '#dc2626';
+            ctx.beginPath();
+            ctx.moveTo(toX(0), toY(0));
+            ctx.lineTo(toX(26), toY(0));
+            ctx.lineTo(toX(26), toY(1));
+            ctx.lineTo(toX(40), toY(1));
+            ctx.stroke();
+
+            muFrio = temp < 16 ? 1 : 0;
+            muTemplado = (temp >= 16 && temp < 26) ? 1 : 0;
+            muCalor = temp >= 26 ? 1 : 0;
+
+            const curX = toX(temp);
+            ctx.strokeStyle = '#b58900';
+            ctx.setLineDash([4, 4]);
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(curX, margin.top);
+            ctx.lineTo(curX, margin.top + plotH);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            readout.innerHTML = `<strong>Lectura Clásica (Booleana) a ${temp.toFixed(1)}°C:</strong> &nbsp; ` +
+                `<span style="color:#0284c7;">Frío = ${muFrio}</span> &nbsp;|&nbsp; ` +
+                `<span style="color:#16a34a;">Templado = ${muTemplado}</span> &nbsp;|&nbsp; ` +
+                `<span style="color:#dc2626;">Caliente = ${muCalor}</span><br>` +
+                `<span style="color:#dc2626; font-size:0.8rem;">Fragilidad booleana: Un cambio diminuto de 15.9°C a 16.0°C conmuta violentamente de Frío a Templado.</span>`;
+        }
+    }
+
+    slider.addEventListener('input', drawFuzzy);
+    drawFuzzy();
+})();
+
+// --- SIMULADOR 2: KNN PLAYGROUND 2D ---
+(function() {
+    const canvas = document.getElementById('knnCanvas');
+    const ctx = canvas.getContext('2d');
+    const kSlider = document.getElementById('kSlider');
+    const kDisplay = document.getElementById('kDisplay');
+    const btnEuc = document.getElementById('btnEuclidean');
+    const btnMan = document.getElementById('btnManhattan');
+    const btnWUnif = document.getElementById('btnWeightUniform');
+    const btnWDist = document.getElementById('btnWeightDistance');
+    const readout = document.getElementById('knnReadout');
+
+    let currentMetric = 'euclidean';
+    let currentWeight = 'uniform';
+
+    // Datos fijos de entrenamiento normalizados [0, 10]
+    // Clase A (Cumplidores / Azul = #2563eb), Clase B (Morosos / Rojo = #dc2626)
+    const trainPoints = [
+        { id: 1, x: 2.0, y: 3.0, label: 'Cumplidor', color: '#2563eb' },
+        { id: 2, x: 2.5, y: 4.5, label: 'Cumplidor', color: '#2563eb' },
+        { id: 3, x: 3.5, y: 2.5, label: 'Cumplidor', color: '#2563eb' },
+        { id: 4, x: 4.0, y: 5.0, label: 'Cumplidor', color: '#2563eb' },
+        { id: 5, x: 5.0, y: 3.5, label: 'Cumplidor', color: '#2563eb' },
+        { id: 6, x: 5.5, y: 7.0, label: 'Moroso',    color: '#dc2626' },
+        { id: 7, x: 7.0, y: 6.0, label: 'Moroso',    color: '#dc2626' },
+        { id: 8, x: 8.0, y: 7.5, label: 'Moroso',    color: '#dc2626' },
+        { id: 9, x: 7.5, y: 4.5, label: 'Moroso',    color: '#dc2626' },
+        { id: 10, x: 8.5, y: 3.0, label: 'Moroso',   color: '#dc2626' }
+    ];
+
+    let queryPoint = { x: 4.8, y: 4.8 };
+
+    kSlider.addEventListener('input', () => {
+        kDisplay.innerText = kSlider.value;
+        drawKNN();
+    });
+
+    btnEuc.addEventListener('click', () => {
+        currentMetric = 'euclidean';
+        btnEuc.classList.add('active');
+        btnMan.classList.remove('active');
+        drawKNN();
+    });
+
+    btnMan.addEventListener('click', () => {
+        currentMetric = 'manhattan';
+        btnMan.classList.add('active');
+        btnEuc.classList.remove('active');
+        drawKNN();
+    });
+
+    btnWUnif.addEventListener('click', () => {
+        currentWeight = 'uniform';
+        btnWUnif.classList.add('active');
+        btnWDist.classList.remove('active');
+        drawKNN();
+    });
+
+    btnWDist.addEventListener('click', () => {
+        currentWeight = 'distance';
+        btnWDist.classList.add('active');
+        btnWUnif.classList.remove('active');
+        drawKNN();
+    });
+
+    canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        const margin = { top: 25, right: 30, bottom: 35, left: 45 };
+        const plotW = canvas.width - margin.left - margin.right;
+        const plotH = canvas.height - margin.top - margin.bottom;
+
+        const gx = ((mouseX - margin.left) / plotW) * 10;
+        const gy = (1 - (mouseY - margin.top) / plotH) * 10;
+
+        queryPoint.x = Math.max(0, Math.min(10, gx));
+        queryPoint.y = Math.max(0, Math.min(10, gy));
+        drawKNN();
+    });
+
+    function calcDist(p1, p2, metric) {
+        const dx = Math.abs(p1.x - p2.x);
+        const dy = Math.abs(p1.y - p2.y);
+        if (metric === 'euclidean') {
+            return Math.sqrt(dx * dx + dy * dy);
+        } else {
+            return dx + dy;
+        }
+    }
+
+    function drawKNN() {
+        const k = parseInt(kSlider.value);
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const margin = { top: 25, right: 30, bottom: 35, left: 45 };
+        const plotW = w - margin.left - margin.right;
+        const plotH = h - margin.top - margin.bottom;
+
+        function toCanvasX(x) { return margin.left + (x / 10) * plotW; }
+        function toCanvasY(y) { return margin.top + (1 - y / 10) * plotH; }
+
+        // Grid sutil
+        ctx.strokeStyle = '#f1f5f9';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 10; i++) {
+            ctx.beginPath();
+            ctx.moveTo(toCanvasX(i), toCanvasY(0));
+            ctx.lineTo(toCanvasX(i), toCanvasY(10));
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(toCanvasX(0), toCanvasY(i));
+            ctx.lineTo(toCanvasX(10), toCanvasY(i));
+            ctx.stroke();
+        }
+
+        // Ejes
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(toCanvasX(0), toCanvasY(0));
+        ctx.lineTo(toCanvasX(10), toCanvasY(0));
+        ctx.moveTo(toCanvasX(0), toCanvasY(0));
+        ctx.lineTo(toCanvasX(0), toCanvasY(10));
+        ctx.stroke();
+
+        // Etiquetas ejes
+        ctx.fillStyle = '#64748b';
+        ctx.font = '11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Característica X₁ (Historial Crediticio Normalizado)', margin.left + plotW / 2, h - 8);
+
+        ctx.save();
+        ctx.translate(14, margin.top + plotH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText('Característica X₂ (Ingreso / Deuda Normalizado)', 0, 0);
+        ctx.restore();
+
+        // 1. Calcular distancias a todos los puntos
+        const items = trainPoints.map(p => {
+            const dist = calcDist(queryPoint, p, currentMetric);
+            return { ...p, dist };
+        });
+
+        // 2. Ordenar por distancia ascendente
+        items.sort((a, b) => a.dist - b.dist);
+        const kNeighbors = items.slice(0, k);
+        const maxKDist = kNeighbors[k - 1].dist;
+
+        // 3. Dibujar frontera de vecindad
+        const qX = toCanvasX(queryPoint.x);
+        const qY = toCanvasY(queryPoint.y);
+
+        ctx.save();
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = '#b58900';
+        ctx.lineWidth = 1.8;
+
+        if (currentMetric === 'euclidean') {
+            const rPx = (maxKDist / 10) * plotW;
+            ctx.beginPath();
+            ctx.arc(qX, qY, rPx, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(181, 137, 0, 0.05)';
+            ctx.fill();
+            ctx.stroke();
+        } else {
+            // Manhattan genera un rombo en 2D: |x - x0| + |y - y0| <= d
+            const dPx = (maxKDist / 10) * plotW;
+            ctx.beginPath();
+            ctx.moveTo(qX, qY - dPx);
+            ctx.lineTo(qX + dPx, qY);
+            ctx.lineTo(qX, qY + dPx);
+            ctx.lineTo(qX - dPx, qY);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(181, 137, 0, 0.05)';
+            ctx.fill();
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // 4. Dibujar líneas hacia los k vecinos más próximos
+        kNeighbors.forEach(nb => {
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(qX, qY);
+            ctx.lineTo(toCanvasX(nb.x), toCanvasY(nb.y));
+            ctx.stroke();
+        });
+
+        // 5. Dibujar puntos de entrenamiento
+        trainPoints.forEach(p => {
+            const px = toCanvasX(p.x);
+            const py = toCanvasY(p.y);
+            const isK = kNeighbors.some(nb => nb.id === p.id);
+
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(px, py, isK ? 7 : 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (isK) {
+                ctx.strokeStyle = '#0f172a';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        });
+
+        // 6. Dibujar punto de consulta
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(qX, qY, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('X', qX, qY + 3.5);
+
+        // 7. Calcular resultado de la votación
+        let voteCumplidor = 0;
+        let voteMoroso = 0;
+
+        if (currentWeight === 'uniform') {
+            kNeighbors.forEach(nb => {
+                if (nb.label === 'Cumplidor') voteCumplidor += 1;
+                else voteMoroso += 1;
+            });
+        } else {
+            const eps = 1e-5;
+            kNeighbors.forEach(nb => {
+                const w = 1.0 / (nb.dist + eps);
+                if (nb.label === 'Cumplidor') voteCumplidor += w;
+                else voteMoroso += w;
+            });
+        }
+
+        const predictedClass = voteCumplidor >= voteMoroso ? 'Cumplidor' : 'Moroso';
+        const predColor = predictedClass === 'Cumplidor' ? '#2563eb' : '#dc2626';
+
+        readout.innerHTML = `<strong>Predicción KNN para X(${queryPoint.x.toFixed(2)}, ${queryPoint.y.toFixed(2)}):</strong> ` +
+            `<span style="color:${predColor}; font-weight:700; padding:2px 8px; border-radius:3px; background:${predictedClass === 'Cumplidor' ? '#eff6ff' : '#fef2f2'}; border:1px solid ${predColor};">${predictedClass.toUpperCase()}</span> &nbsp;|&nbsp; ` +
+            `Métrica: <em>${currentMetric.toUpperCase()}</em> &nbsp;|&nbsp; ` +
+            `Ponderación: <em>${currentWeight.toUpperCase()}</em><br>` +
+            `<span style="color:#475569; font-size:0.84rem;">Votos: Cumplidor = ${voteCumplidor.toFixed(3)} | Moroso = ${voteMoroso.toFixed(3)} &nbsp;·&nbsp; Distancia al ${k}° vecino: ${maxKDist.toFixed(3)}</span>`;
+    }
+
+    drawKNN();
+})();
+</script>
+
+</body>
+</html>
