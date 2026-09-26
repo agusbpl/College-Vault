@@ -117,10 +117,11 @@
             background: #0f172a;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+            border: 1px solid #334155;
         }
         .video-header {
-            padding: 0.7rem 1.2rem;
+            padding: 0.7rem 1.1rem;
             background: #1e293b;
             color: #f1f5f9;
             font-family: 'Inter', sans-serif;
@@ -128,17 +129,71 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #334155;
         }
-        .video-header span {
+        .video-header-left {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-weight: 500;
+        }
+        .video-header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .video-category-tag {
+            color: #94a3b8;
+            font-size: 0.75rem;
+        }
+        .yt-direct-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            color: #f8fafc;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.74rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+        .yt-direct-btn:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: #ffffff;
+        }
+        .file-protocol-notice {
+            background: #090d16;
+            color: #94a3b8;
+            padding: 0.5rem 1.1rem;
+            font-size: 0.75rem;
+            border-bottom: 1px solid #1e293b;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            font-family: 'Inter', sans-serif;
+        }
+        .file-protocol-notice a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .file-protocol-notice a:hover {
+            text-decoration: underline;
         }
         .video-wrapper {
             position: relative;
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
+            background: #000000;
         }
         .video-wrapper iframe {
             position: absolute;
@@ -433,28 +488,48 @@
         <!-- VIDEO EMBED: SEARLE -->
         <div class="video-container">
             <div class="video-header">
-                <span>
+                <div class="video-header-left">
                     <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 2c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
                     BBC Studios — El Experimento de la Habitación China (John Searle)
-                </span>
-                <span>Filosofía de la Mente & IA</span>
+                </div>
+                <div class="video-header-right">
+                    <span class="video-category-tag">Filosofía de la Mente &amp; IA</span>
+                    <a href="https://www.youtube.com/watch?v=D0MD4sRHj1M" target="_blank" rel="noopener noreferrer" class="yt-direct-btn">
+                        <svg class="icon" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                        Abrir en YouTube
+                    </a>
+                </div>
+            </div>
+            <div class="file-protocol-notice">
+                <span>Modo archivo local detectado. Si el reproductor no carga por restricciones del navegador, puedes abrirlo en pestaña externa.</span>
+                <a href="https://www.youtube.com/watch?v=D0MD4sRHj1M" target="_blank" rel="noopener noreferrer">Ver en YouTube &rarr;</a>
             </div>
             <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/D0MD4sRHj1M" title="The Chinese Room Experiment" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube-nocookie.com/embed/D0MD4sRHj1M?rel=0&amp;enablejsapi=1" title="The Chinese Room Experiment" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
         </div>
 
         <!-- VIDEO EMBED: CHOLLET ARC -->
         <div class="video-container">
             <div class="video-header">
-                <span>
+                <div class="video-header-left">
                     <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 2c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
                     François Chollet — Por qué los grandes modelos no razonan y la misión de ARC-AGI
-                </span>
-                <span>Razonamiento vs Memorización</span>
+                </div>
+                <div class="video-header-right">
+                    <span class="video-category-tag">Razonamiento vs Memorización</span>
+                    <a href="https://www.youtube.com/watch?v=UakqL6Pj9xo" target="_blank" rel="noopener noreferrer" class="yt-direct-btn">
+                        <svg class="icon" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                        Abrir en YouTube
+                    </a>
+                </div>
+            </div>
+            <div class="file-protocol-notice">
+                <span>Modo archivo local detectado. Si el reproductor no carga por restricciones del navegador, puedes abrirlo en pestaña externa.</span>
+                <a href="https://www.youtube.com/watch?v=UakqL6Pj9xo" target="_blank" rel="noopener noreferrer">Ver en YouTube &rarr;</a>
             </div>
             <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/UakqL6Pj9xo" title="Francois Chollet ARC-AGI" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube-nocookie.com/embed/UakqL6Pj9xo?rel=0&amp;enablejsapi=1" title="Francois Chollet ARC-AGI" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
         </div>
     </section>
@@ -637,14 +712,24 @@
         <!-- VIDEO EMBED: STATQUEST KNN -->
         <div class="video-container">
             <div class="video-header">
-                <span>
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 22c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
+                <div class="video-header-left">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 2c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
                     StatQuest with Josh Starmer — K-Nearest Neighbors (KNN), Claramente Explicado
-                </span>
-                <span>Fundamento Algorítmico</span>
+                </div>
+                <div class="video-header-right">
+                    <span class="video-category-tag">Fundamento Algorítmico</span>
+                    <a href="https://www.youtube.com/watch?v=HVXime0nQeI" target="_blank" rel="noopener noreferrer" class="yt-direct-btn">
+                        <svg class="icon" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                        Abrir en YouTube
+                    </a>
+                </div>
+            </div>
+            <div class="file-protocol-notice">
+                <span>Modo archivo local detectado. Si el reproductor no carga por restricciones del navegador, puedes abrirlo en pestaña externa.</span>
+                <a href="https://www.youtube.com/watch?v=HVXime0nQeI" target="_blank" rel="noopener noreferrer">Ver en YouTube &rarr;</a>
             </div>
             <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/HVXime0nQeI" title="StatQuest KNN" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube-nocookie.com/embed/HVXime0nQeI?rel=0&amp;enablejsapi=1" title="StatQuest KNN" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
         </div>
 
@@ -703,14 +788,24 @@
         <!-- VIDEO EMBED: DISTANCIAS -->
         <div class="video-container">
             <div class="video-header">
-                <span>
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 22c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
+                <div class="video-header-left">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 22c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 2c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
                     Krish Naik — Distancia Euclidiana y Distancia Manhattan en Machine Learning
-                </span>
-                <span>Métricas de Espacio</span>
+                </div>
+                <div class="video-header-right">
+                    <span class="video-category-tag">Métricas de Espacio</span>
+                    <a href="https://www.youtube.com/watch?v=p3HbBlcXDTE" target="_blank" rel="noopener noreferrer" class="yt-direct-btn">
+                        <svg class="icon" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                        Abrir en YouTube
+                    </a>
+                </div>
+            </div>
+            <div class="file-protocol-notice">
+                <span>Modo archivo local detectado. Si el reproductor no carga por restricciones del navegador, puedes abrirlo en pestaña externa.</span>
+                <a href="https://www.youtube.com/watch?v=p3HbBlcXDTE" target="_blank" rel="noopener noreferrer">Ver en YouTube &rarr;</a>
             </div>
             <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/RJ9TpkWKyU0" title="Euclidean and Manhattan Distance" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube-nocookie.com/embed/p3HbBlcXDTE?rel=0&amp;enablejsapi=1" title="Euclidean and Manhattan Distance" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
         </div>
 
@@ -1492,6 +1587,13 @@ def distancia_minkowski(p, q, p_order=3):
 
     drawKNN();
 })();
+
+// Detección proactiva de protocolo de ejecución
+if (window.location.protocol === 'file:') {
+    document.querySelectorAll('.file-protocol-notice').forEach(function(el) {
+        el.style.display = 'flex';
+    });
+}
 </script>
 
 </body>
