@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desglose & Simulación Interactiva: Distancia Euclidiana (L2) — DM y ML</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        :root {
+            --bg-page: #fbfbf9;
+            --bg-card: #ffffff;
+            --bg-canvas: #f8fafc;
+            --border-default: #e6e4dc;
+            --border-strong: #d2cfc4;
+            --text-title: #1a1917;
+            --text-body: #3c3a36;
+            --text-muted: #7d7a72;
+            --accent-ochre: #b58900;
+            --accent-blue: #0284c7;
+            --accent-green: #15803d;
+            --accent-purple: #7e22ce;
+            --accent-red: #dc2626;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        body {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 5rem;
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            font-family: 'Newsreader', Georgia, serif;
+            line-height: 1.65;
+        }
+
+        /* Encabezado */
+        .header-container {
+            border-bottom: 2px solid var(--border-default);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fef3c7;
+            color: #92400e;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 0.8rem;
+        }
+        .header-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-title);
+            line-height: 1.25;
+            margin: 0 0 0.5rem;
+        }
+        .header-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin: 0;
+        }
+
+        /* Código Principal */
+        .code-showcase {
+            background: #18181b;
+            color: #f4f4f5;
+            border-radius: 8px;
+            padding: 1.4rem;
+            margin: 1.5rem 0 2.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            font-family: var(--font-code);
+            font-size: 0.95rem;
+            position: relative;
+        }
+        .code-showcase .code-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #27272a;
+            padding-bottom: 0.6rem;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            color: #a1a1aa;
+        }
+        .code-showcase pre {
+            margin: 0;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        .hl-kw { color: #f43f5e; font-weight: 600; }
+        .hl-fn { color: #38bdf8; font-weight: 600; }
+        .hl-var { color: #facc15; }
+        .hl-com { color: #71717a; font-style: italic; }
+        .hl-num { color: #fb923c; }
+
+        /* Tarjetas de Desglose */
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin: 2rem 0;
+        }
+        .step-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            padding: 1.2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .step-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-ochre);
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .step-formula {
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            background: #f4f4f5;
+            padding: 6px 8px;
+            border-radius: 4px;
+            margin: 0.4rem 0 0.8rem;
+            color: #0f172a;
+            font-weight: 600;
+        }
+        .step-desc {
+            font-size: 0.92rem;
+            color: var(--text-body);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Laboratorio de Simulación */
+        .sim-container {
+            background: #ffffff;
+            border: 1px solid var(--border-strong);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+        }
+        .sim-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-default);
+            padding-bottom: 1rem;
+            margin-bottom: 1.4rem;
+        }
+        .sim-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-title);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sim-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 1.5rem;
+        }
+        @media (max-width: 860px) {
+            .sim-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Canvas */
+        .canvas-wrapper {
+            position: relative;
+            background: var(--bg-canvas);
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #euclidCanvas {
+            cursor: crosshair;
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            max-height: 520px;
+        }
+        .canvas-instructions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            color: #334155;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Panel Reactivo de Datos */
+        .data-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+        .metric-card {
+            background: #fafaf9;
+            border: 1px solid var(--border-default);
+            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            position: relative;
+        }
+        .metric-card.active-step {
+            border-color: var(--accent-ochre);
+            box-shadow: 0 0 0 2px rgba(181, 137, 0, 0.2);
+            background: #fffdf5;
+        }
+        .metric-card-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .metric-card-val {
+            font-family: var(--font-code);
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            word-break: break-all;
+        }
+        .metric-card-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.76rem;
+            color: #64748b;
+            margin-top: 0.2rem;
+        }
+
+        /* Controles */
+        .controls-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-default);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 1px solid var(--border-strong);
+            background: #ffffff;
+            color: var(--text-title);
+        }
+        .btn:hover {
+            background: #f4f4f5;
+            border-color: #94a3b8;
+        }
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            color: #334155;
+            cursor: pointer;
+            user-select: none;
+            margin-right: 0.8rem;
+        }
+        .toggle-group input {
+            cursor: pointer;
+        }
+
+        /* Iconos SVG inline */
+        .icon {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        /* Sección KNN */
+        .knn-section {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+        }
+        .knn-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .knn-badge {
+            background: #dbeafe;
+            color: #1e40af;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Callout */
+        .callout {
+            background: #fffbeb;
+            border-left: 4px solid var(--accent-ochre);
+            padding: 1rem 1.4rem;
+            border-radius: 0 6px 6px 0;
+            margin: 1.8rem 0;
+            font-size: 0.98rem;
+        }
+
+        .math-block {
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1.2rem 0;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado Principal -->
+    <div class="header-container">
+        <div class="header-badge">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            UNLP · Minería de Datos y Aprendizaje Automático
+        </div>
+        <h1 class="header-title">Anatomía de la Distancia Euclidiana ($L_2$)</h1>
+        <p class="header-subtitle">
+            Desglose analítico, vectorización con NumPy y laboratorio visual interactivo basado en el Teorema de Pitágoras.
+        </p>
+    </div>
+
+    <!-- Bloque de Código Exacto -->
+    <div class="code-showcase">
+        <div class="code-bar">
+            <span>desafio_metricas.py · Función objeto de estudio</span>
+            <span>NumPy Puro Vectorizado</span>
+        </div>
+        <pre><span class="hl-kw">import</span> numpy <span class="hl-kw">as</span> np
+
+<span class="hl-kw">def</span> <span class="hl-fn">distancia_euclidiana</span>(p, q):
+    <span class="hl-com">"""
+    Calcula la distancia Euclidiana (L2) entre dos vectores p y q.
+    Fórmula formal: sqrt( sum( (p_i - q_i)^2 ) )
+    """</span>
+    <span class="hl-var">diff</span> = np.array(p) - np.array(q)       <span class="hl-com"># Paso 1: Vector desplazamiento (resta coordenada a coordenada)</span>
+    <span class="hl-kw">return</span> np.sqrt(np.sum(<span class="hl-var">diff</span> ** <span class="hl-num">2</span>))     <span class="hl-com"># Pasos 2, 3 y 4: Cuadrados, sumatoria y raíz cuadrada</span></pre>
+    </div>
+
+    <!-- Introducción Conceptual -->
+    <h2>1. ¿Qué es y qué calcula esta función?</h2>
+    <p>
+        La <strong>Distancia Euclidiana</strong> representa la longitud física del segmento en línea recta más corto que une dos puntos en un espacio geométrico de $n$ dimensiones. Es el caso particular de la familia de métricas de Minkowski cuando el parámetro $p=2$, razón por la cual en Álgebra Lineal y Machine Learning se la denomina <strong>Norma $L_2$</strong>:
+    </p>
+
+    <div class="math-block">
+        $$d(\mathbf{p}, \mathbf{q}) = \|\mathbf{p} - \mathbf{q}\|_2 = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
+    </div>
+
+    <p>
+        En esencia, esta fórmula es la <strong>generalización directa del Teorema de Pitágoras</strong> ($c^2 = a^2 + b^2 \implies c = \sqrt{a^2 + b^2}$) a cualquier espacio de características dimensionales.
+    </p>
+
+    <!-- Desglose Paso a Paso -->
+    <h2>2. Desglose Mecánico: Línea por Línea</h2>
+
+    <div class="breakdown-grid">
+        <!-- Paso 1 -->
+        <div class="step-card" id="card-step-1">
+            <div>
+                <div class="step-tag">
+                    <svg class="icon" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    Paso 1 · Desplazamiento
+                </div>
+                <div class="step-formula">diff = np.array(p) - np.array(q)</div>
+                <p class="step-desc">
+                    Convierte las entradas a arreglos NumPy y ejecuta la <strong>resta elemento a elemento</strong> (<em>element-wise subtraction</em>). 
+                    Calcula la separación a lo largo de cada eje independiente: $\Delta x = p_1 - q_1$, $\Delta y = p_2 - q_2$. Físicamente es el <strong>vector cateto</strong>.
+                </p>
+            </div>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="step-card" id="card-step-2">
+            <div>
+                <div class="step-tag">
+                    <svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    Paso 2 · Cuadrados ($L_2$)
+                </div>
+                <div class="step-formula">diff ** 2</div>
+                <p class="step-desc">
+                    Eleva al cuadrado cada coordenada del vector diferencia. Esto cumple dos funciones críticas:
+                    <strong>1)</strong> Elimina signos negativos garantizando valores no negativos ($(-4)^2 = 16$).
+                    <strong>2)</strong> Modela el área geométrica de los cuadrados construidos sobre cada cateto.
+                </p>
+            </div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="step-card" id="card-step-3">
+            <div>
+                <div class="step-tag">
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Paso 3 · Sumatoria Total
+                </div>
+                <div class="step-formula">np.sum(...)</div>
+                <p class="step-desc">
+                    Colapsa todas las dimensiones sumando los cuadrados: $\Delta x^2 + \Delta y^2 + \dots + \Delta n^2$.
+                    Por el Teorema de Pitágoras, esta suma equivale exactamente al <strong>cuadrado de la hipotenusa</strong> ($c^2$).
+                </p>
+            </div>
+        </div>
+
+        <!-- Paso 4 -->
+        <div class="step-card" id="card-step-4">
+            <div>
+                <div class="step-tag">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Paso 4 · Raíz Cuadrada
+                </div>
+                <div class="step-formula">return np.sqrt(...)</div>
+                <p class="step-desc">
+                    Aplica la raíz cuadrada para cancelar la elevación al cuadrado del Paso 2. Devuelve la distancia a las unidades de medida originales del problema (la hipotenusa en línea recta $c = \sqrt{c^2}$).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Laboratorio de Simulación Interactiva -->
+    <div class="sim-container">
+        <div class="sim-header">
+            <div>
+                <h3 class="sim-title">
+                    <svg class="icon" style="color: var(--accent-ochre);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                    Laboratorio Interactivo de Simulación
+                </h3>
+                <span style="font-family:'Inter',sans-serif; font-size: 0.85rem; color: var(--text-muted);">
+                    Arrastra los puntos P y Q en el canvas o prueba los presets para observar la computación reactiva.
+                </span>
+            </div>
+            <div style="display:flex; gap: 0.5rem; align-items:center;">
+                <button class="btn" id="btnPresetPyt" title="Cargar triángulo 3-4-5 clásico">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M3 20h18L3 4z"/></svg>
+                    Triángulo Pitagórico (3, 4, 5)
+                </button>
+                <button class="btn" id="btnRandomize">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+                    Aleatorio
+                </button>
+            </div>
+        </div>
+
+        <div class="sim-layout">
+            <!-- Canvas Interactivo -->
+            <div class="canvas-wrapper">
+                <div class="canvas-instructions">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3m0 14v3M2 12h3m14 0h3"></path></svg>
+                    Haz clic o arrastra los puntos <strong>P (Dorado)</strong> y <strong>Q (Azul)</strong>
+                </div>
+                <canvas id="euclidCanvas" width="600" height="600"></canvas>
+            </div>
+
+            <!-- Panel de Computación Reactiva -->
+            <div class="data-panel">
+                <div class="metric-card" id="box-p-q">
+                    <div class="metric-card-label">
+                        <span>Puntos de Entrada</span>
+                        <span style="color:var(--text-title);">Arreglos NumPy</span>
+                    </div>
+                    <div class="metric-card-val" id="val-inputs">
+                        p = [2.0, 3.0]<br>q = [6.0, 6.0]
+                    </div>
+                    <div class="metric-card-sub">Coordenadas en el plano cartesiano 2D</div>
+                </div>
+
+                <div class="metric-card" id="box-step1">
+                    <div class="metric-card-label">
+                        <span>1. diff = p - q</span>
+                        <span style="color:var(--accent-blue);">Catetos (Δx, Δy)</span>
+                    </div>
+                    <div class="metric-card-val" id="val-diff">
+                        [-4.00, -3.00]
+                    </div>
+                    <div class="metric-card-sub" id="sub-diff">Δx = -4.00 (base), Δy = -3.00 (altura)</div>
+                </div>
+
+                <div class="metric-card" id="box-step2">
+                    <div class="metric-card-label">
+                        <span>2. diff ** 2</span>
+                        <span style="color:var(--accent-purple);">Áreas Cuadradas</span>
+                    </div>
+                    <div class="metric-card-val" id="val-diff2">
+                        [16.00, 9.00]
+                    </div>
+                    <div class="metric-card-sub" id="sub-diff2">(-4.00)² = 16.00 | (-3.00)² = 9.00</div>
+                </div>
+
+                <div class="metric-card" id="box-step3">
+                    <div class="metric-card-label">
+                        <span>3. np.sum(diff ** 2)</span>
+                        <span style="color:var(--warning);">Hipotenusa² ($c^2$)</span>
+                    </div>
+                    <div class="metric-card-val" id="val-sum">
+                        25.00
+                    </div>
+                    <div class="metric-card-sub" id="sub-sum">16.00 + 9.00 = 25.00</div>
+                </div>
+
+                <div class="metric-card active-step" id="box-step4">
+                    <div class="metric-card-label">
+                        <span>4. return np.sqrt(...)</span>
+                        <span style="color:var(--accent-green); font-weight: 700;">Distancia Final (L2)</span>
+                    </div>
+                    <div class="metric-card-val" style="font-size: 1.45rem; color: #15803d;" id="val-sqrt">
+                        d = 5.0000
+                    </div>
+                    <div class="metric-card-sub" id="sub-sqrt">√25.00 = 5.0000 unidades en línea recta</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles de Opciones de Visualización -->
+        <div class="controls-toolbar">
+            <label class="toggle-group">
+                <input type="checkbox" id="chkCatetos" checked>
+                <span>Mostrar Triángulo y Catetos ($\Delta x$, $\Delta y$)</span>
+            </label>
+            <label class="toggle-group">
+                <input type="checkbox" id="chkSquares" checked>
+                <span>Mostrar Cuadrados Geométricos de Pitágoras ($\Delta x^2$, $\Delta y^2$)</span>
+            </label>
+            <label class="toggle-group">
+                <input type="checkbox" id="chkGrid" checked>
+                <span>Malla Cartesiana</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Sección de Conexión: De 2D a N-Dimensiones en Machine Learning -->
+    <h2>3. ¿Por qué esta función es tan poderosa en Machine Learning?</h2>
+    <p>
+        En la práctica de Minería de Datos, un dato casi nunca tiene solo 2 dimensiones ($x, y$). Por ejemplo, en un dataset de clientes o pacientes, cada vector $\mathbf{x}$ puede tener decenas de atributos:
+    </p>
+
+    <div class="code-showcase" style="margin: 1.2rem 0;">
+        <pre><span class="hl-com"># Vector de 5 dimensiones: [edad, salario_k, antigüedad_años, compras_mes, reclamos]</span>
+cliente_p = [<span class="hl-num">45</span>, <span class="hl-num">120.5</span>, <span class="hl-num">4</span>, <span class="hl-num">12</span>, <span class="hl-num">0</span>]
+cliente_q = [<span class="hl-num">42</span>, <span class="hl-num">118.0</span>, <span class="hl-num">5</span>, <span class="hl-num">15</span>, <span class="hl-num">1</span>]
+
+dist = distancia_euclidiana(cliente_p, cliente_q)</pre>
+    </div>
+
+    <p>
+        <strong>La magia de NumPy:</strong> Observa que el código de la función <strong>no cambia en lo absoluto</strong>. No hay bucles <code>for</code> explícitos. 
+        NumPy ejecuta la resta y la elevación al cuadrado sobre las 5 o 10.000 dimensiones simultáneamente en memoria contigua utilizando instrucciones vectoriales SIMD de bajo nivel (C/AVX), logrando un tiempo de ejecución órdenes de magnitud más rápido.
+    </p>
+
+    <!-- Mini Simulador KNN -->
+    <div class="knn-section">
+        <div class="knn-header">
+            <div>
+                <h3 style="margin: 0; font-size: 1.2rem; color: #1e293b; display:flex; align-items:center; gap:8px;">
+                    <svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    Conexión Directa con KNN (K-Nearest Neighbors)
+                </h3>
+                <span style="font-family:'Inter',sans-serif; font-size: 0.85rem; color: #64748b;">
+                    Así usa un clasificador KNN esta misma función para decidir la clase de un nuevo punto.
+                </span>
+            </div>
+            <span class="knn-badge">Algoritmo Lazy / Basado en Instancias</span>
+        </div>
+
+        <p style="font-size: 0.95rem; margin-bottom: 1rem;">
+            Cuando ejecutas <code>knn.predict(X_test)</code>:
+        </p>
+        <ol style="font-size: 0.95rem; padding-left: 1.4rem; margin-bottom: 1.2rem;">
+            <li>Calcula <code>distancia_euclidiana(p_consulta, p_i)</code> para <strong>cada punto de entrenamiento</strong> $p_i$.</li>
+            <li>Ordena los resultados de menor a mayor distancia.</li>
+            <li>Selecciona los $K$ primeros (los más cercanos geométricamente).</li>
+            <li>Asigna la clase más frecuente por votación entre esos $K$ vecinos.</li>
+        </ol>
+
+        <div class="callout" style="margin: 0;">
+            <strong>¡Cuidado en el Parcial (Sensibilidad de Escala)!:</strong><br>
+            Al calcular $\Delta_i^2$, si una columna tiene valores en miles (ej. Salario: $300.000$) y otra en unidades (ej. Edad: $25$), la diferencia en salarios ($10.000^2 = 100.000.000$) aplastará completamente a la edad ($2^2 = 4$). Por eso en Minería de Datos <strong>siempre es obligatorio estandarizar o normalizar</strong> (con <code>StandardScaler</code> o <code>MinMaxScaler</code>) antes de utilizar la distancia Euclidiana.
+        </div>
+    </div>
+
+    <!-- Script de Simulación Matemática -->
+    <script>
+        const canvas = document.getElementById('euclidCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Estado interactivo (coordenadas lógicas entre -2 y 10)
+        let state = {
+            scale: 42,           // píxeles por unidad
+            originX: 120,        // píxeles desde el borde izquierdo
+            originY: 480,        // píxeles desde el borde superior
+            p: { x: 2.0, y: 2.0 },
+            q: { x: 5.0, y: 6.0 },
+            dragging: null,
+            showCatetos: true,
+            showSquares: true,
+            showGrid: true
+        };
+
+        // Elementos DOM reactivos
+        const valInputs = document.getElementById('val-inputs');
+        const valDiff = document.getElementById('val-diff');
+        const subDiff = document.getElementById('sub-diff');
+        const valDiff2 = document.getElementById('val-diff2');
+        const subDiff2 = document.getElementById('sub-diff2');
+        const valSum = document.getElementById('val-sum');
+        const subSum = document.getElementById('sub-sum');
+        const valSqrt = document.getElementById('val-sqrt');
+        const subSqrt = document.getElementById('sub-sqrt');
+
+        // Checkboxes
+        document.getElementById('chkCatetos').addEventListener('change', e => {
+            state.showCatetos = e.target.checked;
+            draw();
+        });
+        document.getElementById('chkSquares').addEventListener('change', e => {
+            state.showSquares = e.target.checked;
+            draw();
+        });
+        document.getElementById('chkGrid').addEventListener('change', e => {
+            state.showGrid = e.target.checked;
+            draw();
+        });
+
+        // Botones de presets
+        document.getElementById('btnPresetPyt').addEventListener('click', () => {
+            state.p = { x: 2.0, y: 2.0 };
+            state.q = { x: 5.0, y: 6.0 }; // Δx = 3, Δy = 4 -> d = 5
+            updateComputation();
+            draw();
+        });
+
+        document.getElementById('btnRandomize').addEventListener('click', () => {
+            state.p = { 
+                x: Math.round((Math.random() * 5 + 1) * 2) / 2, 
+                y: Math.round((Math.random() * 5 + 1) * 2) / 2 
+            };
+            state.q = { 
+                x: Math.round((Math.random() * 5 + 2) * 2) / 2, 
+                y: Math.round((Math.random() * 5 + 2) * 2) / 2 
+            };
+            updateComputation();
+            draw();
+        });
+
+        // Conversión Coordenadas Lógicas <-> Pantalla
+        function toScreen(x, y) {
+            return {
+                x: state.originX + x * state.scale,
+                y: state.originY - y * state.scale
+            };
+        }
+
+        function toLogical(sx, sy) {
+            return {
+                x: (sx - state.originX) / state.scale,
+                y: (state.originY - sy) / state.scale
+            };
+        }
+
+        // Renderizado del Canvas
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Malla Cartesiana
+            if (state.showGrid) {
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 1;
+                ctx.font = '10px "Inter", sans-serif';
+                ctx.fillStyle = '#94a3b8';
+
+                // Líneas verticales
+                for (let x = -2; x <= 14; x++) {
+                    const scr = toScreen(x, 0);
+                    ctx.beginPath();
+                    ctx.moveTo(scr.x, 0);
+                    ctx.lineTo(scr.x, canvas.height);
+                    ctx.stroke();
+                    if (x % 2 === 0) {
+                        ctx.fillText(x.toString(), scr.x + 3, state.originY + 14);
+                    }
+                }
+
+                // Líneas horizontales
+                for (let y = -2; y <= 14; y++) {
+                    const scr = toScreen(0, y);
+                    ctx.beginPath();
+                    ctx.moveTo(0, scr.y);
+                    ctx.lineTo(canvas.width, scr.y);
+                    ctx.stroke();
+                    if (y % 2 === 0 && y !== 0) {
+                        ctx.fillText(y.toString(), state.originX - 16, scr.y + 4);
+                    }
+                }
+
+                // Ejes principales
+                ctx.strokeStyle = '#64748b';
+                ctx.lineWidth = 1.8;
+                // Eje X
+                ctx.beginPath();
+                ctx.moveTo(0, state.originY);
+                ctx.lineTo(canvas.width, state.originY);
+                ctx.stroke();
+                // Eje Y
+                ctx.beginPath();
+                ctx.moveTo(state.originX, 0);
+                ctx.lineTo(state.originX, canvas.height);
+                ctx.stroke();
+            }
+
+            const pScr = toScreen(state.p.x, state.p.y);
+            const qScr = toScreen(state.q.x, state.q.y);
+            const vertexScr = toScreen(state.q.x, state.p.y); // Vértice del ángulo recto
+
+            const dx = state.q.x - state.p.x;
+            const dy = state.q.y - state.p.y;
+
+            // 2. Cuadrados Geométricos de Pitágoras (si está activo)
+            if (state.showSquares && (dx !== 0 || dy !== 0)) {
+                // Cuadrado sobre el cateto horizontal (Δx)
+                const sqDx = Math.abs(dx) * state.scale;
+                const signY = dy >= 0 ? 1 : -1;
+                ctx.fillStyle = 'rgba(2, 132, 199, 0.12)';
+                ctx.strokeStyle = '#0284c7';
+                ctx.lineWidth = 1.2;
+                const leftX = Math.min(pScr.x, vertexScr.x);
+                const topY = pScr.y + (signY > 0 ? 0 : -sqDx);
+                ctx.fillRect(leftX, topY, sqDx, sqDx);
+                ctx.strokeRect(leftX, topY, sqDx, sqDx);
+
+                // Cuadrado sobre el cateto vertical (Δy)
+                const sqDy = Math.abs(dy) * state.scale;
+                const signX = dx >= 0 ? 1 : -1;
+                ctx.fillStyle = 'rgba(126, 34, 206, 0.12)';
+                ctx.strokeStyle = '#7e22ce';
+                const leftY = vertexScr.x + (signX > 0 ? 0 : -sqDy);
+                const topY2 = Math.min(qScr.y, vertexScr.y);
+                ctx.fillRect(leftY, topY2, sqDy, sqDy);
+                ctx.strokeRect(leftY, topY2, sqDy, sqDy);
+            }
+
+            // 3. Catetos y Triángulo Rectángulo
+            if (state.showCatetos) {
+                // Cateto Horizontal Δx
+                ctx.strokeStyle = '#0284c7';
+                ctx.lineWidth = 2.5;
+                ctx.setLineDash([5, 4]);
+                ctx.beginPath();
+                ctx.moveTo(pScr.x, pScr.y);
+                ctx.lineTo(vertexScr.x, vertexScr.y);
+                ctx.stroke();
+
+                // Cateto Vertical Δy
+                ctx.strokeStyle = '#7e22ce';
+                ctx.beginPath();
+                ctx.moveTo(vertexScr.x, vertexScr.y);
+                ctx.lineTo(qScr.x, qScr.y);
+                ctx.stroke();
+                ctx.setLineDash([]); // Reset dash
+
+                // Cuadradito de ángulo recto en el vértice
+                const cornerSize = 10;
+                const dirX = Math.sign(pScr.x - vertexScr.x);
+                const dirY = Math.sign(qScr.y - vertexScr.y);
+                if (dirX !== 0 && dirY !== 0) {
+                    ctx.strokeStyle = '#64748b';
+                    ctx.lineWidth = 1.2;
+                    ctx.beginPath();
+                    ctx.moveTo(vertexScr.x + dirX * cornerSize, vertexScr.y);
+                    ctx.lineTo(vertexScr.x + dirX * cornerSize, vertexScr.y + dirY * cornerSize);
+                    ctx.lineTo(vertexScr.x, vertexScr.y + dirY * cornerSize);
+                    ctx.stroke();
+                }
+
+                // Etiquetas de catetos
+                ctx.font = '600 12px "Inter", sans-serif';
+                ctx.fillStyle = '#0284c7';
+                const midX = (pScr.x + vertexScr.x) / 2;
+                ctx.fillText(`Δx = ${Math.abs(state.p.x - state.q.x).toFixed(2)}`, midX - 25, pScr.y + (dy >= 0 ? -8 : 18));
+
+                ctx.fillStyle = '#7e22ce';
+                const midY = (vertexScr.y + qScr.y) / 2;
+                ctx.fillText(`Δy = ${Math.abs(state.p.y - state.q.y).toFixed(2)}`, vertexScr.x + (dx >= 0 ? 8 : -65), midY);
+            }
+
+            // 4. Hipotenusa (Distancia Euclidiana Real L2)
+            ctx.strokeStyle = '#b58900';
+            ctx.lineWidth = 3.5;
+            ctx.beginPath();
+            ctx.moveTo(pScr.x, pScr.y);
+            ctx.lineTo(qScr.x, qScr.y);
+            ctx.stroke();
+
+            // Etiqueta de la hipotenusa
+            const dist = Math.hypot(state.p.x - state.q.x, state.p.y - state.q.y);
+            const centerLineX = (pScr.x + qScr.x) / 2;
+            const centerLineY = (pScr.y + qScr.y) / 2;
+
+            ctx.save();
+            ctx.translate(centerLineX, centerLineY);
+            let angle = Math.atan2(qScr.y - pScr.y, qScr.x - pScr.x);
+            if (angle > Math.PI / 2 || angle < -Math.PI / 2) angle += Math.PI;
+            ctx.rotate(angle);
+            ctx.fillStyle = '#b58900';
+            ctx.font = '700 13px "Inter", sans-serif';
+            ctx.fillText(`d = ${dist.toFixed(2)}`, -22, -9);
+            ctx.restore();
+
+            // 5. Puntos P y Q
+            // Punto P
+            ctx.fillStyle = '#b58900';
+            ctx.beginPath();
+            ctx.arc(pScr.x, pScr.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.font = '700 13px "Inter", sans-serif';
+            ctx.fillStyle = '#78350f';
+            ctx.fillText(`P (${state.p.x.toFixed(1)}, ${state.p.y.toFixed(1)})`, pScr.x + 10, pScr.y - 10);
+
+            // Punto Q
+            ctx.fillStyle = '#0284c7';
+            ctx.beginPath();
+            ctx.arc(qScr.x, qScr.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.fillStyle = '#0369a1';
+            ctx.fillText(`Q (${state.q.x.toFixed(1)}, ${state.q.y.toFixed(1)})`, qScr.x + 10, qScr.y - 10);
+        }
+
+        // Computación reactiva paso a paso
+        function updateComputation() {
+            const px = state.p.x;
+            const py = state.p.y;
+            const qx = state.q.x;
+            const qy = state.q.y;
+
+            // Arreglos de entrada
+            valInputs.innerHTML = `p = [${px.toFixed(2)}, ${py.toFixed(2)}]<br>q = [${qx.toFixed(2)}, ${qy.toFixed(2)}]`;
+
+            // Paso 1: diff = p - q
+            const diffX = px - qx;
+            const diffY = py - qy;
+            valDiff.innerHTML = `[${diffX >= 0 ? '+' : ''}${diffX.toFixed(2)}, ${diffY >= 0 ? '+' : ''}${diffY.toFixed(2)}]`;
+            subDiff.innerHTML = `Δx = ${px.toFixed(2)} - ${qx.toFixed(2)} = ${diffX.toFixed(2)}<br>Δy = ${py.toFixed(2)} - ${qy.toFixed(2)} = ${diffY.toFixed(2)}`;
+
+            // Paso 2: diff ** 2
+            const diffX2 = diffX * diffX;
+            const diffY2 = diffY * diffY;
+            valDiff2.innerHTML = `[${diffX2.toFixed(2)}, ${diffY2.toFixed(2)}]`;
+            subDiff2.innerHTML = `(${diffX.toFixed(2)})² = ${diffX2.toFixed(2)} | (${diffY.toFixed(2)})² = ${diffY2.toFixed(2)}`;
+
+            // Paso 3: np.sum(diff ** 2)
+            const sumSquares = diffX2 + diffY2;
+            valSum.innerHTML = `${sumSquares.toFixed(2)}`;
+            subSum.innerHTML = `${diffX2.toFixed(2)} + ${diffY2.toFixed(2)} = ${sumSquares.toFixed(2)}`;
+
+            // Paso 4: np.sqrt(...)
+            const distance = Math.sqrt(sumSquares);
+            valSqrt.innerHTML = `d = ${distance.toFixed(4)}`;
+            subSqrt.innerHTML = `√(${sumSquares.toFixed(2)}) = ${distance.toFixed(4)} unidades Euclidianas`;
+        }
+
+        // Manejo de Interacción de Ratón / Arrastre
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        canvas.addEventListener('mousedown', e => {
+            const pos = getMousePos(e);
+            const pScr = toScreen(state.p.x, state.p.y);
+            const qScr = toScreen(state.q.x, state.q.y);
+
+            const distP = Math.hypot(pos.x - pScr.x, pos.y - pScr.y);
+            const distQ = Math.hypot(pos.x - qScr.x, pos.y - qScr.y);
+
+            if (distP <= 15) {
+                state.dragging = 'P';
+            } else if (distQ <= 15) {
+                state.dragging = 'Q';
+            } else {
+                if (distP < distQ) {
+                    const log = toLogical(pos.x, pos.y);
+                    state.p = { x: Math.round(log.x * 2) / 2, y: Math.round(log.y * 2) / 2 };
+                    state.dragging = 'P';
+                } else {
+                    const log = toLogical(pos.x, pos.y);
+                    state.q = { x: Math.round(log.x * 2) / 2, y: Math.round(log.y * 2) / 2 };
+                    state.dragging = 'Q';
+                }
+                updateComputation();
+                draw();
+            }
+        });
+
+        window.addEventListener('mousemove', e => {
+            if (!state.dragging) return;
+            const pos = getMousePos(e);
+            const log = toLogical(pos.x, pos.y);
+            const boundedX = Math.max(-1, Math.min(10, Math.round(log.x * 2) / 2));
+            const boundedY = Math.max(-1, Math.min(10, Math.round(log.y * 2) / 2));
+
+            if (state.dragging === 'P') {
+                state.p.x = boundedX;
+                state.p.y = boundedY;
+            } else if (state.dragging === 'Q') {
+                state.q.x = boundedX;
+                state.q.y = boundedY;
+            }
+            updateComputation();
+            draw();
+        });
+
+        window.addEventListener('mouseup', () => {
+            state.dragging = null;
+        });
+
+        // Inicializar
+        updateComputation();
+        draw();
+    </script>
+</body>
+</html>
