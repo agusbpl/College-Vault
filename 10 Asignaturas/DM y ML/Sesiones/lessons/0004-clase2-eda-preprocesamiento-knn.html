@@ -1,0 +1,2337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lección 02: Minería de Datos, EDA, Preprocesamiento & Evaluación de Modelos (KNN & Titanic) — UNLP</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        /* Estilos complementarios Nordic Editorial */
+        .section-header {
+            margin-top: 3.2rem;
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 1px solid var(--border-default);
+            padding-bottom: 0.6rem;
+        }
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.55rem;
+            color: var(--text-title);
+        }
+        .section-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 9px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .tag-blue { background: #e0f2fe; color: #0369a1; }
+        .tag-green { background: #dcfce7; color: #15803d; }
+        .tag-amber { background: #fef3c7; color: #b45309; }
+        .tag-purple { background: #f3e8ff; color: #7e22ce; }
+        .tag-gray { background: #f3f4f6; color: #4b5563; }
+        .tag-rose { background: #ffe4e6; color: #be123c; }
+
+        .callout {
+            background: #fdfbf7;
+            border-left: 3px solid var(--accent-ochre);
+            padding: 1.2rem 1.4rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.4rem 0;
+            font-size: 1.02rem;
+        }
+        .callout strong {
+            color: var(--text-title);
+        }
+
+        .formula-box {
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1.4rem;
+            margin: 1.4rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .formula-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-ochre);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .formula-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 1rem;
+            text-align: center;
+            margin: 0.8rem 0;
+            overflow-x: auto;
+        }
+        .formula-steps {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-body);
+        }
+        .formula-steps ol {
+            padding-left: 1.3rem;
+            margin-top: 0.5rem;
+        }
+        .formula-steps li {
+            margin-bottom: 0.5rem;
+        }
+
+        .analogy-box {
+            background: #f0fdf4;
+            border-left: 3px solid #16a34a;
+            padding: 1.1rem 1.3rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.2rem 0;
+            font-size: 0.98rem;
+        }
+        .analogy-box strong {
+            color: #166534;
+        }
+
+        .warning-box {
+            background: #fff1f2;
+            border-left: 3px solid #e11d48;
+            padding: 1.1rem 1.3rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.2rem 0;
+            font-size: 0.98rem;
+        }
+        .warning-box strong {
+            color: #9f1239;
+        }
+
+        /* Video Embed Container */
+        .video-container {
+            margin: 1.8rem 0;
+            background: #000000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+            border: 1px solid var(--border-default);
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #000000;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Interactive Widgets */
+        .interactive-widget {
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1.6rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .widget-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: var(--text-title);
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .widget-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            line-height: 1.45;
+        }
+        .widget-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+            padding: 1rem;
+            background: #fbfbf9;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            align-items: center;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+        }
+        .control-group label {
+            font-weight: 600;
+            color: var(--text-title);
+        }
+        .control-group input[type="range"] {
+            cursor: pointer;
+            accent-color: var(--accent-ochre);
+        }
+        .btn-group {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .widget-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-strong);
+            padding: 0.45rem 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--text-body);
+            transition: all 0.15s ease;
+        }
+        .widget-btn:hover {
+            background: #f3f4f6;
+            border-color: var(--accent-ink);
+        }
+        .widget-btn.active {
+            background: var(--accent-ink);
+            color: #ffffff;
+            border-color: var(--accent-ink);
+        }
+
+        .canvas-container {
+            position: relative;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+        canvas {
+            display: block;
+            background: #ffffff;
+            cursor: crosshair;
+        }
+        .widget-readout {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.85rem 1.1rem;
+            border-radius: 4px;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Tabla de comparación */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.4rem 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+        }
+        .styled-table th, .styled-table td {
+            border: 1px solid var(--border-default);
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        .styled-table th {
+            background: #f8f8f6;
+            color: var(--text-title);
+            font-weight: 600;
+        }
+        .styled-table tr:nth-child(even) {
+            background: #fdfdfc;
+        }
+
+        /* Code Blocks */
+        .code-container {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1.4rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.86rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        .code-container .code-header {
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-size: 0.76rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0.4rem;
+        }
+
+        .action-banner {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 1.2rem 1.4rem;
+            margin: 2.2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .action-banner-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            color: #1e293b;
+        }
+        .action-btn {
+            background: #0f172a;
+            color: #ffffff;
+            padding: 0.6rem 1.1rem;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.84rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.15s ease;
+        }
+        .action-btn:hover {
+            background: #334155;
+        }
+    
+/* --- Interactive Reading & Annotation Styles --- */
+.autoscroll-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #94a3b8;
+  margin-right: 4px;
+}
+.autoscroll-dot.on {
+  background: #15803d;
+  box-shadow: 0 0 6px rgba(21, 128, 61, 0.4);
+}
+.autoscroll-dot.paused {
+  background: #b58900;
+  box-shadow: 0 0 6px rgba(181, 137, 0, 0.4);
+}
+
+.notes-count-badge {
+  background: var(--tag-bg, #efece4);
+  color: var(--accent-ochre, #b58900);
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 1px 5px;
+  border-radius: 9999px;
+  margin-left: 2px;
+}
+
+/* Resaltado del bloque activo de lectura */
+.reading-active-block {
+  border-left: 4px solid var(--accent-ochre, #b58900) !important;
+  background-color: rgba(181, 137, 0, 0.07) !important;
+  border-radius: 0 6px 6px 0 !important;
+  box-shadow: 0 0 0 2px rgba(181, 137, 0, 0.12) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Resaltados hechos por el usuario */
+mark.user-highlight {
+  background: #fef08a;
+  color: #1e293b;
+  border-bottom: 2px solid #eab308;
+  padding: 1px 3px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+mark.user-highlight:hover {
+  background: #fde047;
+}
+
+mark.user-highlight-note {
+  background: #fed7aa;
+  border-bottom: 2px solid #f97316;
+  position: relative;
+  cursor: pointer;
+}
+mark.user-highlight-note::after {
+  content: ' 💬';
+  font-size: 0.75rem;
+}
+
+/* Tooltip flotante de selección */
+.selection-tooltip {
+  position: absolute;
+  z-index: 1050;
+  display: flex;
+  gap: 4px;
+  background: #1e2328;
+  border: 1px solid #33383f;
+  border-radius: 6px;
+  padding: 4px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  transform: translate(-50%, -115%);
+}
+.tooltip-btn {
+  background: transparent;
+  border: none;
+  color: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s;
+}
+.tooltip-btn:hover {
+  background: #33383f;
+}
+
+/* Modales y Overlays */
+.note-modal-overlay, .notes-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.note-modal-card {
+  background: #ffffff;
+  border: 1px solid var(--border-default, #e6e4dc);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 520px;
+  padding: 1.6rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  font-family: 'Inter', sans-serif;
+}
+.note-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+.note-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.note-selected-quote {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text-title);
+  background: #fbfbf9;
+  border-left: 3px solid var(--accent-ochre);
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 1rem;
+  border-radius: 0 4px 4px 0;
+}
+.note-modal-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-title);
+  margin-bottom: 0.4rem;
+}
+.note-type-chips {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.note-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.note-chip.active {
+  background: #fef3c7;
+  border-color: #b45309;
+  color: #b45309;
+  font-weight: 600;
+}
+.note-modal-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.8rem;
+  border: 1px solid var(--border-default);
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  resize: vertical;
+  outline: none;
+  margin-bottom: 1.2rem;
+}
+.note-modal-textarea:focus {
+  border-color: var(--accent-ochre);
+}
+.note-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+.btn-save {
+  background: var(--accent-ink, #1f2328);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--border-default);
+  color: var(--text-body);
+  padding: 0.5rem 0.9rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+/* Hover Card */
+.note-hover-card {
+  position: absolute;
+  z-index: 1060;
+  background: #ffffff;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  max-width: 320px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  font-family: 'Inter', sans-serif;
+}
+.note-hover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+.note-hover-time {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: 'Fira Code', monospace;
+}
+.note-hover-body {
+  font-size: 0.86rem;
+  color: var(--text-title);
+  margin-bottom: 0.6rem;
+  line-height: 1.45;
+}
+.note-hover-del {
+  background: none;
+  border: none;
+  color: #b91c1c;
+  font-size: 0.74rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* Drawer lateral */
+.notes-drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 90%;
+  max-width: 440px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -10px 0 25px rgba(0,0,0,0.1);
+  padding: 1.8rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  z-index: 2001;
+  font-family: 'Inter', sans-serif;
+}
+.notes-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-default);
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+.notes-list-container {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1.2rem;
+}
+.note-item-card {
+  background: #fbfbf9;
+  border: 1px solid var(--border-default);
+  border-radius: 6px;
+  padding: 0.85rem;
+  margin-bottom: 0.8rem;
+}
+.note-item-quote {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border-left: 2px solid var(--accent-ochre);
+  padding-left: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.note-item-comment {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-title);
+  margin-bottom: 0.4rem;
+}
+.notes-drawer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-default);
+  padding-top: 1rem;
+}
+
+</style>
+</head>
+<body>
+<header id="rb-00" class="reading-trackable">
+    <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.8rem;">
+        <span class="badge" style="margin-bottom:0;">Minería de Datos y Aprendizaje Automático</span>
+        <span class="section-tag tag-blue">UNLP Informática · 2026</span>
+        <span class="section-tag tag-green">Lección 02</span>
+    </div>
+    <h1>Clase 2: Metodología CRISP-DM, EDA, Preprocesamiento Tabular & Validación Rigurosa con KNN</h1>
+    <p>Guía analítica completa de la cátedra Ronchetti-Hasperué: de la construcción de la <em>vista minable</em> y el tratamiento de nulos al blindaje contra el <em>Data Leakage</em>, la partición estratificada y la validación cruzada con Scikit-Learn Pipelines sobre el dataset del Titanic.</p>
+</header>
+
+<!-- ========================================== -->
+<!-- 🎧 REPRODUCTOR FLOTANTE COMPACTO (NORDIC EDITORIAL THEME) -->
+<!-- ========================================== -->
+<div id="audio-studio-player" class="asp-sticky-card">
+  <div class="asp-inner">
+    <div class="asp-meta">
+      <div class="asp-tag-row">
+        <span id="asp-current-track-name" class="asp-track-label">Clase 02 · Titanic & KNN</span>
+      </div>
+      <div class="asp-timeline">
+        <span id="asp-current-time" class="asp-time">0:00</span>
+        <input type="range" id="asp-seek-bar" class="asp-slider" min="0" max="100" value="0">
+        <span id="asp-duration" class="asp-time">--:--</span>
+      </div>
+    </div>
+
+    <div class="asp-controls">
+      <button class="asp-circle-btn" onclick="aspSkip(-15)" title="Retroceder 15s">
+        <svg class="asp-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><text x="12" y="15" font-size="7" font-weight="bold" fill="currentColor" text-anchor="middle" stroke="none">15</text></svg>
+      </button>
+
+      <button id="asp-play-btn" class="asp-play-main" onclick="aspTogglePlay()" title="Reproducir / Pausa">
+        <svg id="asp-play-icon" class="asp-svg-lg" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+        <svg id="asp-pause-icon" class="asp-svg-lg" style="display:none;" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>
+
+      <button class="asp-circle-btn" onclick="aspSkip(15)" title="Adelantar 15s">
+        <svg class="asp-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><text x="12" y="15" font-size="7" font-weight="bold" fill="currentColor" text-anchor="middle" stroke="none">15</text></svg>
+      </button>
+
+      <div class="asp-speed-pills">
+        <button class="asp-pill" id="asp-speed-btn" onclick="aspCycleSpeed()" title="Velocidad">1x</button>
+      </div>
+
+      <button class="asp-pill" id="asp-autoscroll-btn" onclick="toggleAutoScroll()" title="Seguir lectura automáticamente">
+        <span id="asp-autoscroll-dot" class="autoscroll-dot on"></span>
+        <span id="asp-autoscroll-text">Auto-scroll ON</span>
+      </button>
+
+      <button class="asp-pill" onclick="toggleNotesDrawer()" title="Ver y Exportar Dudas">
+        <svg class="asp-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span id="asp-notes-count" class="notes-count-badge">0</span>
+      </button>
+
+      <a id="asp-download-link" href="../../Audio/clase_02_eda_knn_lectura.mp3" download class="asp-pill" title="Descargar MP3">
+        <svg class="asp-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </a>
+    </div>
+  </div>
+  <audio id="asp-audio-core" preload="metadata" src="../../Audio/clase_02_eda_knn_lectura.mp3"></audio>
+</div>
+
+<style>
+/* Reproductor flotante adaptado al tema Nordic Editorial (ultra compacto) */
+.asp-sticky-card {
+  position: sticky;
+  top: 0.5rem;
+  z-index: 1000;
+  margin: 0.5rem 0 1.5rem 0;
+  padding: 0.32rem 0.9rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-strong, #d2cfc4);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(26, 25, 23, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--text-body, #3c3a36);
+  transition: all 0.2s ease;
+}
+
+.asp-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.asp-meta {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.asp-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.asp-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #b58900;
+  background: #fbf7ee;
+  border: 1px solid #ebdcb2;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.asp-track-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-title, #1a1917);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.asp-timeline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.asp-time {
+  font-size: 0.7rem;
+  font-family: 'Fira Code', monospace;
+  color: var(--text-muted, #7d7a72);
+  min-width: 30px;
+  line-height: 1;
+}
+
+.asp-slider {
+  flex: 1;
+  height: 3px;
+  background: var(--border-default, #e6e4dc);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  accent-color: var(--accent-ochre, #b58900);
+}
+
+.asp-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.asp-circle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-default, #e6e4dc);
+  color: var(--text-body, #3c3a36);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.asp-circle-btn:hover {
+  background: var(--bg-input, #f7f6f2);
+  border-color: var(--border-strong, #d2cfc4);
+  color: var(--text-title, #1a1917);
+}
+
+.asp-play-main {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-ink, #1f2328);
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.asp-play-main:hover {
+  background: #33383f;
+  transform: scale(1.05);
+}
+
+.asp-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-default, #e6e4dc);
+  color: var(--text-body, #3c3a36);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+
+.asp-pill:hover {
+  background: var(--bg-input, #f7f6f2);
+  border-color: var(--border-strong, #d2cfc4);
+}
+
+.asp-svg { width: 12px; height: 12px; }
+.asp-svg-sm { width: 11px; height: 11px; }
+.asp-svg-lg { width: 13px; height: 13px; }
+
+@media (max-width: 680px) {
+  .asp-sticky-card { top: 0.5rem; padding: 0.35rem 0.6rem; }
+  .asp-inner { gap: 0.5rem; }
+}
+</style>
+
+<script>
+(function() {
+  const audio = document.getElementById("asp-audio-core");
+  const playBtn = document.getElementById("asp-play-btn");
+  const playIcon = document.getElementById("asp-play-icon");
+  const pauseIcon = document.getElementById("asp-pause-icon");
+  const seekBar = document.getElementById("asp-seek-bar");
+  const currentTimeEl = document.getElementById("asp-current-time");
+  const durationEl = document.getElementById("asp-duration");
+  const speedBtn = document.getElementById("asp-speed-btn");
+
+  const speeds = [1.0, 1.25, 1.5, 1.75, 2.0];
+  let curSpeedIdx = 0;
+
+  function formatTime(s) {
+    if (isNaN(s)) return "0:00";
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec < 10 ? "0" : ""}${sec}`;
+  }
+
+  window.aspTogglePlay = function() {
+    if (!audio.src) return;
+    if (audio.paused) {
+      audio.play();
+      playIcon.style.display = "none";
+      pauseIcon.style.display = "block";
+    } else {
+      audio.pause();
+      playIcon.style.display = "block";
+      pauseIcon.style.display = "none";
+    }
+  };
+
+  window.aspSkip = function(delta) {
+    audio.currentTime = Math.min(Math.max(audio.currentTime + delta, 0), audio.duration || 0);
+    if (window.syncPlayerSeek) window.syncPlayerSeek();
+  };
+
+  window.aspCycleSpeed = function() {
+    curSpeedIdx = (curSpeedIdx + 1) % speeds.length;
+    const spd = speeds[curSpeedIdx];
+    audio.playbackRate = spd;
+    if (speedBtn) speedBtn.textContent = spd + "x";
+  };
+
+  audio.addEventListener("timeupdate", () => {
+    if (!isNaN(audio.duration) && audio.duration > 0) {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      seekBar.value = pct;
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      durationEl.textContent = formatTime(audio.duration);
+    }
+  });
+
+  seekBar.addEventListener("input", () => {
+    if (!isNaN(audio.duration)) {
+      audio.currentTime = (seekBar.value / 100) * audio.duration;
+      if (window.syncPlayerSeek) window.syncPlayerSeek();
+    }
+  });
+
+  audio.addEventListener("ended", () => {
+    playIcon.style.display = "block";
+    pauseIcon.style.display = "none";
+  });
+})();
+</script>
+
+
+<main>
+
+    <!-- NAVEGACIÓN RÁPIDA -->
+    <div style="background: #f8f8f6; border: 1px solid var(--border-default); border-radius: 6px; padding: 1.1rem 1.4rem; margin-bottom: 2.2rem; font-family: 'Inter', sans-serif; font-size: 0.86rem;">
+        <strong style="color: var(--text-title); display: block; margin-bottom: 0.5rem;">Índice Temático de la Lección:</strong>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
+            <a href="#modulo1" style="color: var(--accent-ochre); text-decoration: none;">1. ML vs Estadística & CRISP-DM</a> ·
+            <a href="#modulo2" style="color: var(--accent-ochre); text-decoration: none;">2. Vista Minable & EDA</a> ·
+            <a href="#modulo3" style="color: var(--accent-ochre); text-decoration: none;">3. Preprocesamiento (Nulos & Codificación)</a> ·
+            <a href="#modulo4" style="color: var(--accent-ochre); text-decoration: none;">4. Escalamiento & Fuga de Datos (Data Leakage)</a> ·
+            <a href="#modulo5" style="color: var(--accent-ochre); text-decoration: none;">5. Evaluación: Overfitting & Validación Cruzada</a> ·
+            <a href="#modulo6" style="color: var(--accent-ochre); text-decoration: none;">6. Caso Titanic con Pipelines & KNN</a> ·
+            <a href="#modulo7" style="color: var(--accent-ochre); text-decoration: none;">7. Laboratorio Local & Práctica Terminal</a>
+        </div>
+    </div>
+
+    <!-- MÓDULO 1 -->
+        <section id="modulo1">
+        <div id="rb-01" class="reading-trackable section-header">
+            <span class="section-tag tag-purple">Módulo 1</span>
+            <h2>Machine Learning vs. Estadística Clásica y el Ciclo Metodológico CRISP-DM</h2>
+        </div>
+        <p id="rb-02" class="reading-trackable">
+            En la práctica profesional y académica, suele existir confusión entre la inferencia estadística clásica y el aprendizaje automático moderno. La cátedra establece una distinción epistemológica nítida:
+        </p>
+        <div id="rb-03" class="reading-trackable callout">
+            <strong>Axioma Fundamental:</strong> <em>"La estadística busca comprender el mundo a partir de los datos mediante inferencia rigurosa; el Machine Learning busca predecir el comportamiento futuro generalizando patrones."</em>
+        </div>
+        <table id="rb-04" class="reading-trackable styled-table">
+            <thead>
+                <tr>
+                    <th>Dimensión</th>
+                    <th>Estadística Clásica</th>
+                    <th>Machine Learning</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Objetivo Principal</strong></td>
+                    <td>Inferencia: explicar la relación causal o asociativa entre variables ($p$-valores, intervalos de confianza).</td>
+                    <td>Predicción: minimizar el error de generalización en instancias nunca antes vistas.</td>
+                </tr>
+                <tr>
+                    <td><strong>Dirección del Enfoque</strong></td>
+                    <td>$\text{Modelo} \rightarrow \text{Datos}$: Se postula a priori una hipótesis matemática y se evalúan supuestos.</td>
+                    <td>$\text{Datos} \rightarrow \text{Modelo}$: Se infiere la estructura subyacente de manera empírica a partir de ejemplos.</td>
+                </tr>
+                <tr>
+                    <td><strong>Supuestos Requeridos</strong></td>
+                    <td>Fuertes: normalidad de residuos, homocedasticidad, independencia estocástica.</td>
+                    <td>Débiles o implícitos: no se asume una distribución funcional previa fija.</td>
+                </tr>
+                <tr>
+                    <td><strong>Interpretabilidad</strong></td>
+                    <td>Alta (Modelos de Caja Blanca: regresión logística, tablas de coeficientes).</td>
+                    <td>Variable a baja (Modelos de Caja Negra: Ensembles profundos, Redes Neuronales).</td>
+                </tr>
+                <tr>
+                    <td><strong>Criterio de Evaluación</strong></td>
+                    <td>Significancia estadística ($p < 0.05$, $R^2$ ajustado, tests $t$/$F$).</td>
+                    <td>Capacidad predictiva en partición de prueba (Accuracy, F1-Score, ROC-AUC, MSE).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p id="rb-05" class="reading-trackable">El aprendizaje automático no es una panacea. Existen dos restricciones operativas donde su implementación resulta contraproducente o injustificada:</p>
+        <ol style="padding-left: 1.4rem; margin-bottom: 1.2rem;">
+            <li><strong>Problemas deterministas o cerrados:</strong> Si el fenómeno está regido por una fórmula física unívoca, una especificación contable o un marco regulatorio estricto (ej. cálculo de impuestos patrimoniales o balances contables), programar una lógica deductiva tradicional es $100\%$ exacto, auditable y no sufre de error estocástico.</li>
+            <li><strong>Ausencia o escasez de datos empíricos:</strong> Sin ejemplos representativos del dominio, los algoritmos inductivos colapsan. En tal caso, se debe recurrir a sistemas expertos basados en reglas declarativas.</li>
+        </ol>
+
+        <p id="rb-06" class="reading-trackable">
+            El ciclo <strong>CRISP-DM</strong> (<em>Cross-Industry Standard Process for Data Mining</em>) structure el flujo de trabajo en 6 fases iterativas:
+        <div id="rb-07" class="reading-trackable" style="background: #ffffff; border: 1px solid var(--border-default); border-radius: 6px; padding: 1.2rem; margin: 1.2rem 0;">
+            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 0.8rem; text-align: center; font-family: 'Inter', sans-serif; font-size: 0.85rem;">
+                <div style="flex: 1; min-width: 120px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.8rem; border-radius: 4px;">
+                    <strong>1. Negocio</strong><br><span style="color: var(--text-muted); font-size:0.75rem;">Definir objetivos</span>
+                </div>
+                <div style="display:flex; align-items:center;">&rarr;</div>
+                <div style="flex: 1; min-width: 120px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.8rem; border-radius: 4px;">
+                    <strong>2. Comprensión Datos</strong><br><span style="color: var(--text-muted); font-size:0.75rem;">EDA e inspección</span>
+                </div>
+                <div style="display:flex; align-items:center;">&rarr;</div>
+                <div style="flex: 1.2; min-width: 140px; background: #fef3c7; border: 2px solid #b45309; padding: 0.8rem; border-radius: 4px;">
+                    <strong>3. Preparación</strong><br><span style="color: #b45309; font-weight:700; font-size:0.75rem;">&gt;80% del Esfuerzo</span>
+                </div>
+                <div style="display:flex; align-items:center;">&rarr;</div>
+                <div style="flex: 1; min-width: 120px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.8rem; border-radius: 4px;">
+                    <strong>4. Modelado</strong><br><span style="color: var(--text-muted); font-size:0.75rem;">Entrenamiento (&lt;20%)</span>
+                </div>
+                <div style="display:flex; align-items:center;">&rarr;</div>
+                <div style="flex: 1; min-width: 120px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.8rem; border-radius: 4px;">
+                    <strong>5. Evaluación</strong><br><span style="color: var(--text-muted); font-size:0.75rem;">Métricas de generalización</span>
+                </div>
+                <div style="display:flex; align-items:center;">&rarr;</div>
+                <div style="flex: 1; min-width: 120px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.8rem; border-radius: 4px;">
+                    <strong>6. Despliegue</strong><br><span style="color: var(--text-muted); font-size:0.75rem;">Puesta en producción</span>
+                </div>
+            </div>
+        </div>
+        <div id="rb-08" class="reading-trackable analogy-box">
+            <strong>Analogía del Chef y los Ingredientes:</strong> Un cocinero de alta cocina dedica horas a lavar, desinfectar, deshuesar, picar a precisión milimétrica (<em>mise en place</em>) y marinar los ingredientes. La cocción final en el horno (el entrenamiento del modelo) dura solo unos minutos. Si los ingredientes entran con impurezas o mal cortados, ningún horno de última tecnología podrá salvar el plato: <em>"Garbage in, Garbage out"</em>.
+        </div>
+    </section>
+
+    <!-- MÓDULO 2 -->
+        <section id="modulo2">
+        <div id="rb-09" class="reading-trackable section-header">
+            <span class="section-tag tag-blue">Módulo 2</span>
+            <h2>La "Vista Minable" y el Análisis Exploratorio de Datos (EDA)</h2>
+        </div>
+        <p id="rb-10" class="reading-trackable">
+            Los sistemas transaccionales (OLTP), las bases de datos SQL relacionales normalizadas en 3FN, los logs y las APIs almacenan datos fragmentados en decenas de tablas heterogéneas. Los algoritmos de Machine Learning tabular (Scikit-Learn, PyTorch tabular, XGBoost) <strong>no pueden procesar grafos relacionales directamente</strong>: exigen una matriz $X \in \mathbb{R}^{N \times d}$.
+        </p>
+        <div id="rb-11" class="reading-trackable callout">
+            <strong>Definición de Cátedra:</strong> La <strong>Vista Minable</strong> (<em>Minable View</em>) es una estructura plana y unificada donde:
+            <ul style="margin-top:0.4rem; padding-left:1.2rem;">
+                <li>Cada <strong>fila</strong> representa una única unidad o instancia de análisis (ej. un pasajero del Titanic, un paciente médico, un cliente).</li>
+                <li>Cada <strong>columna</strong> representa un atributo, característica o <em>feature</em> medido sobre dicha instancia.</li>
+                <li>Se incorpora la variable objetivo (<em>target</em> $y$) en caso de aprendizaje supervisado.</li>
+            </ul>
+        </div>
+
+        <p id="rb-12" class="reading-trackable">El Análisis Exploratorio persigue 4 objetivos irrenunciables antes de entrenar cualquier estimador:</p>
+        <ul style="padding-left: 1.3rem; margin-bottom: 1.2rem;">
+            <li><strong>Inspección de integridad:</strong> Dimensiones exactas (`df.shape`), tipos de datos (`df.dtypes`) y recuento de nulos (`df.isnull().sum()`).</li>
+            <li><strong>Distribución univariada:</strong> Tendencia central, dispersión, asimetría (skewness) y curtosis con `df.describe()`, histogramas y diagramas de caja (boxplots).</li>
+            <li><strong>Análisis bivariado y multivariado:</strong> Matrices de correlación de Pearson/Spearman (`sns.heatmap(df.corr())`), pairplots y scatter matrices.</li>
+            <li><strong>Detección de alta dimensionalidad:</strong> Cuando el número de variables $d$ supera nuestra capacidad visual 2D/3D, empleamos proyecciones no lineales como <strong>t-SNE</strong> o <strong>PCA</strong> (como en la investigación de la cátedra que redujo 561 sensores inerciales de smartphones a 2 dimensiones para clasificar actividades humanas).</li>
+        </ul>
+
+        <!-- Video 1: EDA & Feature Understanding -->
+        <div class="video-container">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube-nocookie.com/embed/FgakZw6K1QQ" title="StatQuest: Principal Component Analysis (PCA) step-by-step" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO 3 -->
+        <section id="modulo3">
+        <div id="rb-13" class="reading-trackable section-header">
+            <span class="section-tag tag-amber">Módulo 3</span>
+            <h2>Preprocesamiento de Datos Tabulares: Nulos y Codificación Categórica</h2>
+        </div>
+        <p id="rb-14" class="reading-trackable">
+            Los algoritmos matemáticos como KNN computan distancias geométricas sobre vectores de números reales $\vec{x} \in \mathbb{R}^d$. Un valor nulo (`NaN`) o una cadena de texto (`"male"`, `"Queenstown"`) romperá de inmediato el cálculo matricial.
+        </p>
+
+        <p id="rb-15" class="reading-trackable">En el Titanic, por ejemplo, observamos nulos en <code>Age</code> (~20%), <code>Cabin</code> (~77%) y <code>Embarked</code> (~0.2%). Ante un nulo se presentan tres alternativas:</p>
+        <table id="rb-16" class="reading-trackable styled-table">
+            <thead>
+                <tr>
+                    <th>Estrategia</th>
+                    <th>Comando Pandas</th>
+                    <th>Ventajas & Desventajas Metodológicas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Eliminar Columnas</strong></td>
+                    <td><code>df.drop(columns=['Cabin'])</code></td>
+                    <td><strong>Indicado cuando:</strong> la proporción de nulos supera el 60-70% o la variable no posee poder explicativo generalizable (como <code>PassengerId</code> o <code>Ticket</code>).</td>
+                </tr>
+                <tr>
+                    <td><strong>Eliminar Filas</strong></td>
+                    <td><code>df.dropna()</code></td>
+                    <td><strong>Indicado cuando:</strong> se cuenta con abundante volumen de datos y los registros faltantes son marginales (&lt;5%). <em>Riesgo:</em> sesgar la muestra si los nulos no son aleatorios (Missing Not at Random - MNAR).</td>
+                </tr>
+                <tr>
+                    <td><strong>Imputación (Reemplazo)</strong></td>
+                    <td><code>df['Age'].fillna(median)</code></td>
+                    <td><strong>Peligro latente:</strong> Reemplazar ciegamente por la media o mediana deforma la varianza y puede crear combinaciones absurdas en el espacio de características. En escenarios avanzados se emplean modelos predictivos (KNNImputer o IterativeImputer).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p id="rb-17" class="reading-trackable">
+            No todas las variables de texto poseen la misma naturaleza semántica. Confundir la técnica de codificación introduce un <strong>sesgo métrico artificial destructivo</strong> para clasificadores basados en distancias como KNN:
+        </p>
+        <div id="rb-18" class="reading-trackable formula-box">
+            <div class="formula-title">
+                <svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                Comparativa Matemática: Ordinal Encoding vs. One-Hot Encoding
+            </div>
+            <div style="font-size: 0.95rem; line-height: 1.6;">
+                <p><strong>A. Categorical / Ordinal Encoding:</strong> Asigna números enteros respetando una relación de orden natural:
+                $$\text{Nivel de Educación}: \quad \{\text{Primaria}: 0, \; \text{Secundaria}: 1, \; \text{Universitario}: 2\}$$
+                <em>Propiedad matemática:</em> La distancia métrica tiene sentido real: $d(0, 1) = 1$, $d(0, 2) = 2$ (un universitario está a 2 niveles de primaria).</p>
+
+                <p><strong>B. One-Hot Encoding (Variables Nominales sin Orden):</strong>
+                Si asignáramos a la ciudad de embarque <code>Embarked</code>: $\{\text{Southampton}: 0, \; \text{Cherbourg}: 1, \; \text{Queenstown}: 2\}$, el algoritmo KNN calcularía:
+                $$d(\text{Southampton}, \text{Queenstown}) = |0 - 2| = 2 \quad > \quad d(\text{Southampton}, \text{Cherbourg}) = |0 - 1| = 1$$
+                ¡Esto induciría una falsa proximidad geográfica o socioeconómica inexistente en la realidad! Con One-Hot Encoding generamos tres vectores ortogonales en $\mathbb{R}^3$:
+                $$\vec{v}_S = [1, 0, 0], \quad \vec{v}_C = [0, 1, 0], \quad \vec{v}_Q = [0, 0, 1]$$
+                $$\forall i \neq j, \quad d_{\text{Euclidea}}(\vec{v}_i, \vec{v}_j) = \sqrt{(1-0)^2 + (0-1)^2 + (0-0)^2} = \sqrt{2} \approx 1.414$$
+                <strong>Todos los puertos quedan equidistantes entre sí en el hiperespacio.</strong></p>
+            </div>
+        </div>
+
+        <!-- Video 2: One-Hot Encoding StatQuest -->
+        <div class="video-container">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube-nocookie.com/embed/inN8seMm7UI" title="StatQuest: One-Hot Encoding" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO 4 -->
+        <section id="modulo4">
+        <div id="rb-19" class="reading-trackable section-header">
+            <span class="section-tag tag-rose">Módulo 4</span>
+            <h2>Escalamiento de Características y la Prevención del "Data Leakage"</h2>
+        </div>
+        <p id="rb-20" class="reading-trackable">
+            Como vimos en la Lección 01, la distancia euclidiana entre dos pasajeros $p$ y $q$ en el Titanic es:
+            $$d(p, q) = \sqrt{(Age_p - Age_q)^2 + (Fare_p - Fare_q)^2 + \sum (Embarked_{p,i} - Embarked_{q,i})^2}$$
+            La variable <code>Fare</code> (tarifa en libras) oscila entre $0$ y $512$, mientras que <code>Age</code> oscila entre $0.42$ y $80$, y las columnas de <code>Embarked</code> valen $0$ o $1$.
+            Sin escalamiento, una diferencia de £100 en la tarifa eclipsará por completo cualquier diferencia de 30 años de edad.
+        </p>
+        <div id="rb-21" class="reading-trackable warning-box">
+            <strong>⚠️ La Trampa Mortal del Principiante: Fuga de Datos (Data Leakage)</strong><br>
+            Nunca, bajo ninguna circunstancia, se debe aplicar <code>scaler.fit(X)</code> sobre todo el dataset antes de dividir en Train y Test.
+            Al calcular la media $\mu$ y la desviación estándar $\sigma$ usando todas las instancias, <strong>la información del conjunto de prueba se filtra imperceptiblemente en el conjunto de entrenamiento</strong>. Esto produce métricas de evaluación engañosamente optimistas que colapsan miserablemente en producción.
+        </div>
+        <div id="rb-22" class="reading-trackable formula-box">
+            <div class="formula-title">Regla de Oro de la Cátedra para Preprocesamiento</div>
+            <div class="code-container" style="margin: 0.5rem 0;">
+                <div class="code-header"><span>Python / Scikit-Learn</span><span>Protocolo Correcto</span></div>
+<pre><code># 1. DIVIDIR PRIMERO:
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
+
+# 2. AJUSTAR EL ESCALADOR EXCLUSIVAMENTE CON TRAIN:
+scaler = StandardScaler()
+scaler.fit(X_train)  # <-- Solo calcula mu_train y sigma_train
+
+# 3. TRANSFORMAR AMBOS CON LOS PARÁMETROS DE TRAIN:
+X_train_scaled = scaler.transform(X_train)
+X_test_scaled  = scaler.transform(X_test)  # <-- Test es transformado a ciegas</code></pre>
+            </div>
+        </div>
+
+        <div class="reading-trackable interactive-widget" id="widget-leakage">
+            <div class="widget-title">
+                <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="var(--accent-ochre)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                Simulador Interactivo: Data Leakage vs. Ajuste Aislado en Train
+            </div>
+            <div class="widget-subtitle">
+                Observa cómo cambia la media calculada ($\mu$) y cómo se contaminan los valores escalados si incluyes una muestra atípica de Test durante el ajuste del scaler.
+            </div>
+
+            <div class="widget-controls">
+                <div class="control-group">
+                    <label>Modo de Escalamiento:</label>
+                    <div class="btn-group">
+                        <button class="widget-btn active" id="btn-leak-correct" onclick="setLeakMode(false)">✅ Pipeline Riguroso (Solo Train)</button>
+                        <button class="widget-btn" id="btn-leak-wrong" onclick="setLeakMode(true)">❌ Con Fuga (Fit sobre Train + Test)</button>
+                    </div>
+                </div>
+                <div class="control-group" style="flex:1; min-width: 200px;">
+                    <label>Muestra Test Atípica (Outlier de Tarifa Fare): <span id="leak-outlier-val">450</span></label>
+                    <input type="range" id="slider-outlier" min="50" max="600" step="10" value="450" oninput="updateLeakSimulation()">
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="canvas-leakage" width="760" height="220"></canvas>
+            </div>
+
+            <div class="widget-readout" id="leakage-readout">
+                Cargando métricas de fuga de datos...
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO 5 -->
+        <section id="modulo5">
+        <div id="rb-24" class="reading-trackable section-header">
+            <span class="section-tag tag-green">Módulo 5</span>
+            <h2>Evaluación de Modelos: Overfitting, Underfitting y Particiones Avanzadas</h2>
+        </div>
+        <p id="rb-25" class="reading-trackable">
+            ¿Qué significa "aprender" en Machine Learning? La cátedra utiliza la clásica analogía pedagógica del examen escolar:
+        </p>
+        <div id="rb-26" class="reading-trackable analogy-box">
+            <strong>Analogía del Examen y la Memoria:</strong>
+            Si un profesor enseña a multiplicar usando 10 ejercicios en clase y en el examen final toma <em>exactamente esos mismos 10 ejercicios</em>, un estudiante con memoria prodigiosa obtendrá un $10/10$ sin haber comprendido jamás el algoritmo de la multiplicación. Para verificar si adquirió el <strong>concepto general</strong>, el examen debe evaluar 5 ejercicios completamente nuevos.
+        </div>
+
+        <table id="rb-27" class="reading-trackable styled-table">
+            <thead>
+                <tr>
+                    <th>Estado del Modelo</th>
+                    <th>Accuracy en Train</th>
+                    <th>Accuracy en Test</th>
+                    <th>Diagnóstico Metodológico</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Underfitting (Subajuste)</strong></td>
+                    <td>Bajo (~55%)</td>
+                    <td>Bajo (~53%)</td>
+                    <td>Modelo demasiado simple (alto sesgo / <em>high bias</em>) o variables insuficientes para capturar la frontera.</td>
+                </tr>
+                <tr>
+                    <td><strong>Modelo Equilibrado (Óptimo)</strong></td>
+                    <td>Alto (~83%)</td>
+                    <td>Alto (~81%)</td>
+                    <td>Buena capacidad de generalización. Captura el patrón estructural ignorando el ruido muestral.</td>
+                </tr>
+                <tr>
+                    <td><strong>Overfitting (Sobreajuste)</strong></td>
+                    <td>Casi perfecto (~99-100%)</td>
+                    <td>Pobre (~68-71%)</td>
+                    <td>Modelo hipercomplejo (alta varianza / <em>high variance</em>). Memorizó el ruido y las peculiaridades del conjunto de entrenamiento.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p id="rb-28" class="reading-trackable">
+            No siempre es admisible una división aleatoria estándar $80/20$. La cátedra destaca tres escenarios experimentales reales donde violar el criterio de dominio destruye la validez del experimento:
+        </p>
+        <div id="rb-29" class="reading-trackable" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin: 1.5rem 0;">
+            <div style="background: #ffffff; border: 1px solid var(--border-default); border-radius: 6px; padding: 1rem; border-top: 3px solid #0284c7;">
+                <strong style="color: #0369a1; font-family:'Inter',sans-serif; font-size:0.88rem; display:block; margin-bottom:0.4rem;">1. División Espacial (Geográfica)</strong>
+                <p style="font-size:0.85rem; margin:0; color:var(--text-body);">
+                    <em>Ejemplo:</em> Estimación de ingresos con imágenes satelitales en Buenos Aires (Abbate, Ronchetti et al., 2024). Si se mezcla aleatoriamente píxeles contiguos, Train y Test compartirán la misma manzana, produciendo <strong>autocorrelación espacial</strong> espuria. La división debe hacerse por comunas o cuadrantes aislados.
+                </p>
+            </div>
+            <div style="background: #ffffff; border: 1px solid var(--border-default); border-radius: 6px; padding: 1rem; border-top: 3px solid #b45309;">
+                <strong style="color: #b45309; font-family:'Inter',sans-serif; font-size:0.88rem; display:block; margin-bottom:0.4rem;">2. División Temporal (Series Temporales)</strong>
+                <p style="font-size:0.85rem; margin:0; color:var(--text-body);">
+                    <em>Ejemplo:</em> Predicción de radiación solar global (Iturbide, Ronchetti et al., 2023). El futuro no puede usarse para predecir el pasado. El conjunto de Train debe componerse de los meses/años precedentes y el de Test de los periodos subsiguientes.
+                </p>
+            </div>
+            <div style="background: #ffffff; border: 1px solid var(--border-default); border-radius: 6px; padding: 1rem; border-top: 3px solid #16a34a;">
+                <strong style="color: #166534; font-family:'Inter',sans-serif; font-size:0.88rem; display:block; margin-bottom:0.4rem;">3. División por Sujeto Experimental</strong>
+                <p style="font-size:0.85rem; margin:0; color:var(--text-body);">
+                    <em>Ejemplo:</em> Reconocimiento de Lengua de Señas Argentina - LSA (Ronchetti et al., 2016). Si un mismo sujeto ejecuta 20 repeticiones de una seña y repartimos 16 en Train y 4 en Test, el modelo memorizará los rasgos físicos del participante en vez de la seña. La partición debe ser <strong>Leave-One-Subject-Out</strong>.
+                </p>
+            </div>
+        </div>
+
+        <p id="rb-30" class="reading-trackable">
+            Una sola partición aleatoria de prueba posee alta variabilidad debido al componente estocástico de la selección muestral. Para obtener una estimación insesgada y robusta, promediamos múltiples ejecuciones:
+        </p>
+        <div id="rb-31" class="reading-trackable formula-box">
+            <div class="formula-title">Formulación Estadística de Validación Cruzada</div>
+            <div class="formula-display">
+                $$\bar{A} = \frac{1}{K} \sum_{k=1}^K A_k \quad \pm \quad s = \sqrt{\frac{1}{K-1} \sum_{k=1}^K (A_k - \bar{A})^2}$$
+            </div>
+            <div class="formula-steps">
+                <ol>
+                    <li><strong>K-Fold:</strong> El dataset se divide en $K$ particiones contiguas no solapadas. Se entrena con $K-1$ y se evalúa con la restante, repitiendo $K$ veces rotativas.</li>
+                    <li><strong>Stratified K-Fold:</strong> Variante obligatoria para clases desbalanceadas: garantiza que cada fold posea la misma proporción exacta de cada clase que el dataset entero.</li>
+                    <li><strong>ShuffleSplit (Monte Carlo CV):</strong> Realiza $N$ particiones aleatorias independientes con reemplazo global, permitiendo desacoplar el número de iteraciones del tamaño del conjunto de prueba.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Video 3: Cross Validation StatQuest -->
+        <div class="video-container">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube-nocookie.com/embed/fSytzGwwBVw" title="StatQuest: Cross Validation" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO 6 -->
+        <section id="modulo6">
+        <div id="rb-32" class="reading-trackable section-header">
+            <span class="section-tag tag-blue">Módulo 6</span>
+            <h2>El Algoritmo KNN en Acción: El Caso Titanic y la Dinámica de K</h2>
+        </div>
+        <p id="rb-33" class="reading-trackable">
+            El clasificador <strong>K-Nearest Neighbors</strong> es un aprendiz perezoso (<em>lazy learner</em>): no computa una función paramétrica analítica durante el entrenamiento. En su lugar, memoriza los puntos en el hiperespacio y al predecir una nueva consulta $X$, ubica sus $K$ vecinos más próximos por distancia euclidiana y somete el veredicto a votación por mayoría.
+        </p>
+
+        <div class="reading-trackable interactive-widget" id="widget-knn">
+            <div class="widget-title">
+                <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="var(--accent-ochre)"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+                Simulador Visual: Fronteras de Decisión en Titanic según el Hiperparámetro K
+            </div>
+            <div class="widget-subtitle">
+                Espacio bidimensional representativo de pasajeros: Eje X = Edad (Age), Eje Y = Tarifa (Fare).<br>
+                Puntos Azules = Sobrevivientes ($y=1$), Puntos Rojos = Víctimas ($y=0$). Experimenta variando $K$ y alternando el escalamiento.
+            </div>
+
+            <div class="widget-controls">
+                <div class="control-group">
+                    <label>Vecinos Cercanos ($K$): <strong id="k-display" style="color:var(--accent-ochre);">5</strong></label>
+                    <input type="range" id="slider-k" min="1" max="25" step="2" value="5" oninput="updateKNNSimulation()">
+                </div>
+                <div class="control-group">
+                    <label>Estandarización de Features:</label>
+                    <div class="btn-group">
+                        <button class="widget-btn active" id="btn-scale-on" onclick="setKNNScale(true)">Con StandardScaler</button>
+                        <button class="widget-btn" id="btn-scale-off" onclick="setKNNScale(false)">Sin Escalar (Fare Domina)</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Acción:</label>
+                    <button class="widget-btn" onclick="resampleKNNPoints()">🎲 Regenerar Muestra Titanic</button>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="canvas-knn" width="760" height="340"></canvas>
+            </div>
+
+            <div class="widget-readout" id="knn-readout">
+                Calculando frontera de decisión...
+            </div>
+        </div>
+
+        <p id="rb-35" class="reading-trackable">Para encadenar la normalización y el clasificador dentro de un bucle de validación cruzada sin una sola gota de fuga de datos, la cátedra utiliza la clase <code>Pipeline</code> de Scikit-Learn:</p>
+        <div id="rb-36" class="reading-trackable code-container">
+            <div class="code-header"><span>Python · Script Oficial UNLP</span><span>Titanic_KNN.ipynb</span></div>
+<pre><code>from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import ShuffleSplit, cross_validate
+
+# 1. Definir el clasificador
+K = 5
+modelo = KNeighborsClassifier(n_neighbors=K)
+
+# 2. Encapsular en Pipeline: StandardScaler + KNN
+# El pipeline garantiza que en CADA split de validación cruzada,
+# scaler.fit() se ejecute SOLO sobre las muestras de entrenamiento de ese fold.
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('knn', modelo)
+])
+
+# 3. Configurar validación cruzada con 10 repeticiones aleatorias (ShuffleSplit)
+ss = ShuffleSplit(n_splits=10, test_size=0.2, random_state=42)
+
+# 4. Computar métricas en Train y Test simultáneamente
+cv_results = cross_validate(pipeline, X, y, cv=ss, scoring=['accuracy'], return_train_score=True)
+
+mean_train = cv_results['train_accuracy'].mean()
+std_train  = cv_results['train_accuracy'].std()
+mean_test  = cv_results['test_accuracy'].mean()
+std_test   = cv_results['test_accuracy'].std()
+
+print(f"Accuracy TRAIN: {mean_train:.2f} (+/- {std_train:.2f})")
+print(f"Accuracy TEST:  {mean_test:.2f} (+/- {std_test:.2f})")</code></pre>
+        </div>
+    </section>
+
+    <!-- MÓDULO 7 -->
+        <section id="modulo7">
+        <div id="rb-37" class="reading-trackable section-header">
+            <span class="section-tag tag-purple">Módulo 7</span>
+            <h2>Laboratorio Local & Práctica de Terminal</h2>
+        </div>
+        <p id="rb-38" class="reading-trackable">
+            Para consolidar los conocimientos de esta clase, dispones de dos herramientas activadas en tu workspace local:
+        </p>
+        <div id="rb-39" class="reading-trackable action-banner">
+            <div class="action-banner-text">
+                <strong>1. Suite de Validación Automatizada por Terminal:</strong><br>
+                Hemos creado <code>practica_clase2.py</code> con 6 tests unitarios que verifican imputación de nulos, One-Hot manual, fit/transform sin fuga de datos, partición estratificada y evaluación con Pipeline de Scikit-Learn.
+            </div>
+            <div style="font-family:'Fira Code',monospace; background:#0f172a; color:#f8fafc; padding:0.5rem 0.9rem; border-radius:4px; font-size:0.82rem;">
+                python3 practica_clase2.py
+            </div>
+        </div>
+        <div id="rb-40" class="reading-trackable action-banner">
+            <div class="action-banner-text">
+                <strong>2. Jupyter Notebook Interactivo de la Cátedra:</strong><br>
+                Explora el flujo completo de EDA sobre el archivo real <code>titanic.csv</code>, visualizaciones con Plotly Express y comparación de modelos en <code>Clase2_Learn_Practica.ipynb</code>.
+            </div>
+            <div style="font-family:'Fira Code',monospace; background:#0f172a; color:#f8fafc; padding:0.5rem 0.9rem; border-radius:4px; font-size:0.82rem;">
+                jupyter lab Clase2_Learn_Practica.ipynb
+            </div>
+        </div>
+
+        <div id="rb-41" class="reading-trackable card" style="margin-top:2.5rem;">
+            <div class="card-top">
+                <span class="card-badge tag-amber">Control Teórico Rápido</span>
+                <span style="color:var(--text-muted); font-size:0.8rem;">Cuestión 01 / 02</span>
+            </div>
+            <h2>¿Por qué normalizar antes de un `train_test_split` invalida el rigor del experimento científico?</h2>
+            <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                <span class="opt-letter">A</span>
+                <span>Porque la función `StandardScaler` de Scikit-Learn arroja un error de ejecución si se invoca sobre todo el dataframe.</span>
+            </div>
+            <div class="quiz-option" onclick="selectQuizOption(this, true)">
+                <span class="opt-letter">B</span>
+                <span>Porque al computar la media $\mu$ y varianza $\sigma^2$ con todo el conjunto, la distribución de los datos de test contamina el entrenamiento (Data Leakage), inflando ficticiamente la precisión.</span>
+            </div>
+            <div class="quiz-option" onclick="selectQuizOption(this, false)">
+                <span class="opt-letter">C</span>
+                <span>Porque las variables categóricas como el puerto de embarque se convierten automáticamente en nulos.</span>
+            </div>
+            <div id="quiz-feedback-1" style="display:none; margin-top:0.8rem; font-size:0.92rem; padding:0.8rem; border-radius:4px;"></div>
+        </div>
+        <div id="rb-42" class="reading-trackable card">
+            <div class="card-top">
+                <span class="card-badge tag-amber">Control Teórico Rápido</span>
+                <span style="color:var(--text-muted); font-size:0.8rem;">Cuestión 02 / 02</span>
+            </div>
+            <h2>En un problema de reconocimiento de Lengua de Señas Argentina (LSA) con 10 personas señando, ¿cuál es la partición metodológicamente correcta?</h2>
+            <div class="quiz-option" onclick="selectQuizOption2(this, false)">
+                <span class="opt-letter">A</span>
+                <span>Un `ShuffleSplit` aleatorio al 80/20 sobre todas las muestras de video.</span>
+            </div>
+            <div class="quiz-option" onclick="selectQuizOption2(this, false)">
+                <span class="opt-letter">B</span>
+                <span>Una partición temporal tomando los primeros 8 segundos de cada seña para Train y los últimos 2 segundos para Test.</span>
+            </div>
+            <div class="quiz-option" onclick="selectQuizOption2(this, true)">
+                <span class="opt-letter">C</span>
+                <span>Una partición por sujeto experimental (Leave-One-Subject-Out), donde los videos de 8 personas entrenan el modelo y 2 personas completas se reservan exclusivamente para el testeo.</span>
+            </div>
+            <div id="quiz-feedback-2" style="display:none; margin-top:0.8rem; font-size:0.92rem; padding:0.8rem; border-radius:4px;"></div>
+        </div>
+    </section>
+
+</main>
+
+<!-- ========================================================================= -->
+<!-- COMPONENTES DE INTERACTIVIDAD DE ESTUDIO: ANOTACIONES & DUDAS -->
+<!-- ========================================================================= -->
+<div id="selection-tooltip" class="selection-tooltip" style="display:none;">
+  <button class="tooltip-btn" onclick="handleHighlightSelection()">
+    <svg class="asp-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11-6 6v3h3l6-6m-3-3 7-7a2 2 0 0 1 3 3l-7 7m-3-3 3 3"/></svg> Resaltar
+  </button>
+  <button class="tooltip-btn" onclick="handleNoteSelection()">
+    <svg class="asp-svg-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Preguntar / Anotar
+  </button>
+</div>
+
+<div id="note-modal" class="note-modal-overlay" style="display:none;">
+  <div class="note-modal-card">
+    <div class="note-modal-header">
+      <span class="asp-badge">CONSULTA / NOTA DE ESTUDIO</span>
+      <button class="note-modal-close" onclick="closeNoteModal()">&times;</button>
+    </div>
+    <div class="note-selected-quote" id="modal-selected-quote"></div>
+    
+    <label class="note-modal-label">Tipo de Anotación:</label>
+    <div class="note-type-chips">
+      <button type="button" class="note-chip active" data-type="pregunta" onclick="selectNoteType(this, 'pregunta')">❓ Pregunta conceptual</button>
+      <button type="button" class="note-chip" data-type="duda" onclick="selectNoteType(this, 'duda')">⚠️ Duda para el tutor</button>
+      <button type="button" class="note-chip" data-type="apunte" onclick="selectNoteType(this, 'apunte')">📝 Nota personal</button>
+    </div>
+
+    <label class="note-modal-label" for="note-modal-textarea">Tu consulta o reflexión:</label>
+    <textarea id="note-modal-textarea" class="note-modal-textarea" rows="3" placeholder="Escribe aquí tu duda específica para recibir devolución..."></textarea>
+
+    <div class="note-modal-actions">
+      <button class="btn-cancel" onclick="closeNoteModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveCurrentNote()">Guardar Nota</button>
+    </div>
+  </div>
+</div>
+
+<div id="note-hover-card" class="note-hover-card" style="display:none;">
+  <div class="note-hover-header">
+    <span id="note-hover-badge" class="asp-badge">PREGUNTA</span>
+    <span id="note-hover-time" class="note-hover-time"></span>
+  </div>
+  <p id="note-hover-text" class="note-hover-body"></p>
+  <div class="note-hover-actions">
+    <button class="note-hover-del" onclick="deleteActiveNote()">Eliminar nota</button>
+  </div>
+</div>
+
+<div id="notes-drawer" class="notes-drawer-overlay" style="display:none;">
+  <div class="notes-drawer-panel">
+    <div class="notes-drawer-header">
+      <div style="display:flex; align-items:center; gap:0.6rem;">
+        <span class="asp-badge">TUTORÍA IA</span>
+        <h3 style="margin:0; font-size:1.15rem; color:var(--text-title);">Mis Dudas y Anotaciones</h3>
+      </div>
+      <button class="note-modal-close" onclick="toggleNotesDrawer()">&times;</button>
+    </div>
+    <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:1rem;">
+      Todas las preguntas y pasajes que marcaste durante la clase. Puedes exportarlas en JSON para que el tutor te dé una devolución exhaustiva.
+    </p>
+    <div id="notes-list-container" class="notes-list-container"></div>
+    <div class="notes-drawer-footer">
+      <button class="asp-pill" style="background:#1e2328; color:#ffffff;" onclick="exportUserNotesJSON()">📥 Exportar Dudas (JSON)</button>
+      <button class="btn-secondary" style="font-size:0.8rem; color:#b91c1c;" onclick="clearAllNotes()">Borrar todas</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// =========================================================================
+// LÓGICA DE CUESTIONARIOS
+// =========================================================================
+function selectQuizOption(el, isCorrect) {
+    el.parentNode.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+    el.classList.add('selected');
+    const fb = document.getElementById('quiz-feedback-1');
+    fb.style.display = 'block';
+    if (isCorrect) {
+        fb.style.background = '#dcfce7';
+        fb.style.color = '#15803d';
+        fb.innerHTML = '<strong>¡Correcto!</strong> La fuga de datos invalida cualquier conclusión de generalización, ya que el modelo ya tiene pistas estadísticas de las muestras con las que será examinado.';
+    } else {
+        fb.style.background = '#fee2e2';
+        fb.style.color = '#b91c1c';
+        fb.innerHTML = '<strong>Incorrecto.</strong> Revisa el Módulo 4: la regla de oro impone que el conjunto de prueba debe permanecer completamente invisible para el cálculo de estadísticas de preprocesamiento.';
+    }
+}
+
+function selectQuizOption2(el, isCorrect) {
+    el.parentNode.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+    el.classList.add('selected');
+    const fb = document.getElementById('quiz-feedback-2');
+    fb.style.display = 'block';
+    if (isCorrect) {
+        fb.style.background = '#dcfce7';
+        fb.style.color = '#15803d';
+        fb.innerHTML = '<strong>¡Exacto!</strong> Como demostró el Dr. Ronchetti en su investigación, si no se aísla al sujeto, el clasificador memoriza la anatomía corporal y las prendas del participante en lugar de aprender el gesto dinámico.';
+    } else {
+        fb.style.background = '#fee2e2';
+        fb.style.color = '#b91c1c';
+        fb.innerHTML = '<strong>Incorrecto.</strong> Una partición aleatoria estándar filtraría fotos del mismo sujeto en Train y Test, inflando el accuracy por memorización facial/corporal.';
+    }
+}
+
+// =========================================================================
+// SIMULADOR 1: DATA LEAKAGE VISUALIZER
+// =========================================================================
+let leakModeLeak = false;
+
+function setLeakMode(isLeak) {
+    leakModeLeak = isLeak;
+    document.getElementById('btn-leak-correct').classList.toggle('active', !isLeak);
+    document.getElementById('btn-leak-wrong').classList.toggle('active', isLeak);
+    updateLeakSimulation();
+}
+
+function updateLeakSimulation() {
+    const canvas = document.getElementById('canvas-leakage');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const outlierVal = parseFloat(document.getElementById('slider-outlier').value);
+    document.getElementById('leak-outlier-val').innerText = outlierVal;
+
+    // Train data (tarifas normales del Titanic: entre 7 y 60)
+    const trainFares = [7.25, 8.05, 13.0, 15.5, 21.0, 26.0, 30.0, 35.5, 52.0, 56.5];
+    // Test data con un outlier extremo de primera clase
+    const testFares = [9.5, 14.5, 24.15, outlierVal];
+
+    // Cálculos
+    const sumTrain = trainFares.reduce((a, b) => a + b, 0);
+    const meanTrain = sumTrain / trainFares.length;
+    const stdTrain = Math.sqrt(trainFares.reduce((a, b) => a + Math.pow(b - meanTrain, 2), 0) / trainFares.length);
+
+    const allFares = trainFares.concat(testFares);
+    const sumAll = allFares.reduce((a, b) => a + b, 0);
+    const meanAll = sumAll / allFares.length;
+    const stdAll = Math.sqrt(allFares.reduce((a, b) => a + Math.pow(b - meanAll, 2), 0) / allFares.length);
+
+    const usedMean = leakModeLeak ? meanAll : meanTrain;
+    const usedStd = leakModeLeak ? stdAll : stdTrain;
+
+    // Renderizado en Canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Eje base
+    const yBaseline = 120;
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(50, yBaseline);
+    ctx.lineTo(710, yBaseline);
+    ctx.stroke();
+
+    // Rango de visualización en canvas (z de -2 a +4)
+    function zToCanvasX(z) {
+        // -2 mapea a 70px, +3.5 mapea a 690px
+        return 70 + ((z + 2) / 5.5) * (690 - 70);
+    }
+
+    // Marcas de eje z (-1, 0, 1, 2, 3)
+    [-1, 0, 1, 2, 3].forEach(z => {
+        const xPos = zToCanvasX(z);
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(xPos, yBaseline - 8);
+        ctx.lineTo(xPos, yBaseline + 8);
+        ctx.stroke();
+
+        ctx.fillStyle = z === 0 ? '#b58900' : '#64748b';
+        ctx.font = z === 0 ? 'bold 11px Inter' : '10px Inter';
+        ctx.textAlign = 'center';
+        ctx.fillText(`z=${z}`, xPos, yBaseline + 24);
+    });
+
+    // Dibujar puntos de Train escalados
+    trainFares.forEach(f => {
+        const z = (f - usedMean) / usedStd;
+        const xPos = zToCanvasX(z);
+        ctx.fillStyle = 'rgba(37, 99, 235, 0.85)';
+        ctx.beginPath();
+        ctx.arc(xPos, yBaseline - 25, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#1e3a8a';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+    });
+
+    // Dibujar puntos de Test escalados
+    testFares.forEach((f, idx) => {
+        const z = (f - usedMean) / usedStd;
+        const xPos = zToCanvasX(z);
+        const isOutlier = idx === testFares.length - 1;
+        ctx.fillStyle = isOutlier ? 'rgba(225, 29, 72, 0.95)' : 'rgba(249, 115, 22, 0.85)';
+        ctx.beginPath();
+        ctx.arc(xPos, yBaseline + 25, isOutlier ? 8 : 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#9f1239';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        if (isOutlier) {
+            ctx.fillStyle = '#be123c';
+            ctx.font = 'bold 10px Inter';
+            ctx.fillText(`Test Outlier (£${f})`, xPos, yBaseline + 48);
+        }
+    });
+
+    // Leyenda
+    ctx.textAlign = 'left';
+    ctx.font = '500 11px Inter';
+    ctx.fillStyle = '#1d4ed8';
+    ctx.fillText('● Muestras de Train (10 pasajeros)', 50, 30);
+    ctx.fillStyle = '#ea580c';
+    ctx.fillText('● Muestras de Test (4 pasajeros)', 260, 30);
+
+    // Readout
+    const readout = document.getElementById('leakage-readout');
+    if (!leakModeLeak) {
+        readout.innerHTML = `<strong>Modo: Pipeline Riguroso (Sin Fuga).</strong><br>` +
+            `Parámetros ajustados únicamente con Train: &nbsp; ` +
+            `<span style="color:#0369a1; font-weight:700;">&mu;<sub>train</sub> = £${meanTrain.toFixed(2)}</span> &nbsp;|&nbsp; ` +
+            `<span style="color:#0369a1; font-weight:700;">&sigma;<sub>train</sub> = £${stdTrain.toFixed(2)}</span><br>` +
+            `<span style="color:#475569; font-size:0.82rem;">El outlier de test (£${outlierVal}) NO contamina los parámetros del modelo. La evaluación refleja fielmente el mundo real.</span>`;
+    } else {
+        readout.innerHTML = `<strong>Modo: ❌ DATA LEAKAGE ACTIVO (Scaler ajustado con todo el dataset).</strong><br>` +
+            `Parámetros contaminados por Test: &nbsp; ` +
+            `<span style="color:#be123c; font-weight:700;">&mu;<sub>global</sub> = £${meanAll.toFixed(2)}</span> (Distorsión: +£${(meanAll - meanTrain).toFixed(2)}) &nbsp;|&nbsp; ` +
+            `<span style="color:#be123c; font-weight:700;">&sigma;<sub>global</sub> = £${stdAll.toFixed(2)}</span><br>` +
+            `<span style="color:#be123c; font-size:0.82rem;">El outlier comprimió artificialmente a todas las muestras de entrenamiento hacia el cero. ¡Tus métricas de validación están viciadas de nulidad!</span>`;
+    }
+}
+
+// =========================================================================
+// SIMULADOR 2: FRONTERAS KNN EN TITANIC (AGE vs FARE)
+// =========================================================================
+let knnScaleActive = true;
+let titanicPoints = [];
+
+function initTitanicPoints() {
+    titanicPoints = [];
+    // Generar 70 pasajeros simulados
+    // Clase 1 (Sobrevivientes): mayormente tarifas altas y mujeres/niños
+    for (let i = 0; i < 30; i++) {
+        const age = 5 + Math.random() * 45;
+        const fare = 25 + Math.random() * 120 + (Math.random() < 0.2 ? 150 : 0);
+        titanicPoints.push({ age, fare, label: 1, isTest: Math.random() < 0.25 });
+    }
+    // Clase 0 (No sobrevivientes): mayormente 3ra clase (tarifas bajas, adultos 20-50)
+    for (let i = 0; i < 40; i++) {
+        const age = 18 + Math.random() * 50;
+        const fare = 7 + Math.random() * 35;
+        titanicPoints.push({ age, fare, label: 0, isTest: Math.random() < 0.25 });
+    }
+}
+
+function resampleKNNPoints() {
+    initTitanicPoints();
+    updateKNNSimulation();
+}
+
+function setKNNScale(scale) {
+    knnScaleActive = scale;
+    document.getElementById('btn-scale-on').classList.toggle('active', scale);
+    document.getElementById('btn-scale-off').classList.toggle('active', !scale);
+    updateKNNSimulation();
+}
+
+function updateKNNSimulation() {
+    const canvas = document.getElementById('canvas-knn');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const K = parseInt(document.getElementById('slider-k').value);
+    document.getElementById('k-display').innerText = K;
+
+    const width = canvas.width;
+    const height = canvas.height;
+    ctx.clearRect(0, 0, width, height);
+
+    // Separar train y test
+    const trainPts = titanicPoints.filter(p => !p.isTest);
+    const testPts = titanicPoints.filter(p => p.isTest);
+
+    // Estadísticas para escalamiento
+    const meanAge = trainPts.reduce((a, b) => a + b.age, 0) / trainPts.length;
+    const stdAge = Math.sqrt(trainPts.reduce((a, b) => a + Math.pow(b.age - meanAge, 2), 0) / trainPts.length) || 1;
+    const meanFare = trainPts.reduce((a, b) => a + b.fare, 0) / trainPts.length;
+    const stdFare = Math.sqrt(trainPts.reduce((a, b) => a + Math.pow(b.fare - meanFare, 2), 0) / trainPts.length) || 1;
+
+    // Funciones de coordenadas espaciales
+    function toCanvasX(age) {
+        return 50 + (age / 75) * (width - 80);
+    }
+    function toCanvasY(fare) {
+        return (height - 35) - (fare / 250) * (height - 60);
+    }
+    function fromCanvasX(cx) {
+        return ((cx - 50) / (width - 80)) * 75;
+    }
+    function fromCanvasY(cy) {
+        return (((height - 35) - cy) / (height - 60)) * 250;
+    }
+
+    // Función de clasificación KNN para un punto (age, fare)
+    function predictPoint(age, fare) {
+        const dists = trainPts.map(tp => {
+            let d;
+            if (knnScaleActive) {
+                const zAgeP = (age - meanAge) / stdAge;
+                const zFareP = (fare - meanFare) / stdFare;
+                const zAgeT = (tp.age - meanAge) / stdAge;
+                const zFareT = (tp.fare - meanFare) / stdFare;
+                d = Math.sqrt(Math.pow(zAgeP - zAgeT, 2) + Math.pow(zFareP - zFareT, 2));
+            } else {
+                // Sin escalar: Fare en libras (£) domina totalmente a Age en años
+                d = Math.sqrt(Math.pow(age - tp.age, 2) + Math.pow(fare - tp.fare, 2));
+            }
+            return { d, label: tp.label };
+        });
+
+        dists.sort((a, b) => a.d - b.d);
+        const kSub = dists.slice(0, K);
+        const votesSurv = kSub.filter(x => x.label === 1).length;
+        return votesSurv > (K / 2) ? 1 : 0;
+    }
+
+    // 1. Renderizar mapa de fondo de baja resolución (Grid Decision Boundary)
+    const step = 8;
+    for (let x = 45; x < width - 25; x += step) {
+        for (let y = 20; y < height - 30; y += step) {
+            const ageVal = fromCanvasX(x);
+            const fareVal = fromCanvasY(y);
+            const pred = predictPoint(ageVal, fareVal);
+            ctx.fillStyle = pred === 1 ? 'rgba(37, 99, 235, 0.08)' : 'rgba(220, 38, 38, 0.08)';
+            ctx.fillRect(x, y, step, step);
+        }
+    }
+
+    // 2. Ejes de coordenadas
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(50, 15);
+    ctx.lineTo(50, height - 35);
+    ctx.lineTo(width - 25, height - 35);
+    ctx.stroke();
+
+    ctx.font = '10px Inter';
+    ctx.fillStyle = '#64748b';
+    ctx.textAlign = 'center';
+    ctx.fillText('Edad (Años: 0 - 75)', (width / 2) + 20, height - 12);
+    ctx.save();
+    ctx.translate(18, height / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Tarifa Fare (£: 0 - 250)', 0, 0);
+    ctx.restore();
+
+    // 3. Dibujar puntos de datos
+    titanicPoints.forEach(p => {
+        const cx = toCanvasX(p.age);
+        const cy = toCanvasY(p.fare);
+        if (cx < 45 || cx > width - 25 || cy < 15 || cy > height - 35) return;
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, p.isTest ? 6.5 : 5, 0, Math.PI * 2);
+        ctx.fillStyle = p.label === 1 ? '#2563eb' : '#dc2626';
+        ctx.fill();
+
+        if (p.isTest) {
+            ctx.strokeStyle = '#f8fafc';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        } else {
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    });
+
+    // 4. Computar Accuracy en Train y Test
+    let trainCorrect = 0;
+    trainPts.forEach(tp => {
+        if (predictPoint(tp.age, tp.fare) === tp.label) trainCorrect++;
+    });
+    const trainAcc = (trainCorrect / trainPts.length) * 100;
+
+    let testCorrect = 0;
+    testPts.forEach(tp => {
+        if (predictPoint(tp.age, tp.fare) === tp.label) testCorrect++;
+    });
+    const testAcc = testPts.length > 0 ? (testCorrect / testPts.length) * 100 : 0;
+
+    // Diagnóstico
+    let statusText = '';
+    if (K === 1) {
+        statusText = '<span style="color:#b91c1c; font-weight:700;">⚠️ ALTO OVERFITTING (Memorización de islas de ruido): Train Acc = 100%</span>';
+    } else if (K >= 21) {
+        statusText = '<span style="color:#b45309; font-weight:700;">⚠️ SUB-AJUSTE (Underfitting / Alto Sesgo): Frontera plana dominada por la clase mayoritaria.</span>';
+    } else {
+        statusText = '<span style="color:#15803d; font-weight:700;">✓ MODELO EQUILIBRADO (Buen balance sesgo-varianza).</span>';
+    }
+
+    const readout = document.getElementById('knn-readout');
+    readout.innerHTML = `<strong>Resultados con K=${K} (${knnScaleActive ? 'StandardScaler Activo' : 'Sin Escalamiento'}):</strong><br>` +
+        `Accuracy TRAIN: <strong style="color:#0369a1;">${trainAcc.toFixed(1)}%</strong> &nbsp;|&nbsp; ` +
+        `Accuracy TEST: <strong style="color:${testAcc >= 75 ? '#15803d' : '#b91c1c'};">${testAcc.toFixed(1)}%</strong> &nbsp;|&nbsp; ` +
+        `Muestras Test con aro negro: ${testPts.length}<br>` +
+        `${statusText}<br>` +
+        `<span style="color:#475569; font-size:0.82rem;">${!knnScaleActive ? '🚨 ALERTA: Sin escalar, las líneas de frontera son casi horizontales porque el eje Fare (£) abruma métricamente a la Edad.' : 'La escala isotrópica permite que la edad de los niños y las tarifas de primera clase colaboren armónicamente.'}</span>`;
+}
+
+
+// =========================================================================
+// SISTEMA DE SEGUIMIENTO DE LECTURA (AUTO-SCROLL) Y ANOTACIONES
+// =========================================================================
+
+// 1. AUTO-SCROLL CON SEGUIMIENTO DE AUDIO
+let autoScrollEnabled = true;
+let isUserScrolling = false;
+let userScrollTimeout = null;
+let currentHighlightedBlock = null;
+
+// Mapa de 43 hitos de lectura sincronizados con la voz de ElenaNeural (1205.5s)
+const readingMilestones = [
+  { id: 'rb-00', time: 0.1, label: 'Lección 02: Introducción General' },
+  { id: 'rb-01', time: 61.2, label: 'Módulo 1: Machine Learning vs Estadística' },
+  { id: 'rb-02', time: 66.0, label: 'Módulo 1: Inferencia vs Predicción' },
+  { id: 'rb-03', time: 76.1, label: 'Módulo 1: Axioma Fundamental' },
+  { id: 'rb-04', time: 91.0, label: 'Módulo 1: Tabla Comparativa ML vs Estadística' },
+  { id: 'rb-05', time: 177.9, label: 'Módulo 1: Cuándo NO usar Machine Learning' },
+  { id: 'rb-06', time: 220.7, label: 'Módulo 1: Ciclo Metodológico CRISP-DM' },
+  { id: 'rb-07', time: 234.6, label: 'Módulo 1: Fases de CRISP-DM' },
+  { id: 'rb-08', time: 249.2, label: 'Módulo 1: Analogía del Chef y los Ingredientes' },
+  { id: 'rb-09', time: 277.1, label: 'Módulo 2: Vista Minable & Análisis Exploratorio' },
+  { id: 'rb-10', time: 281.9, label: 'Módulo 2: OLTP vs Tablas Planas' },
+  { id: 'rb-11', time: 312.4, label: 'Módulo 2: Definición de Vista Minable' },
+  { id: 'rb-12', time: 339.8, label: 'Módulo 2: El Arsenal Técnico de EDA' },
+  { id: 'rb-13', time: 401.2, label: 'Módulo 3: Preprocesamiento Tabular (Nulos & Encoders)' },
+  { id: 'rb-14', time: 407.0, label: 'Módulo 3: Espacio Vectorial y Nulos' },
+  { id: 'rb-15', time: 426.5, label: 'Módulo 3: Nulos en el Titanic' },
+  { id: 'rb-16', time: 439.5, label: 'Módulo 3: Alternativas de Imputación' },
+  { id: 'rb-17', time: 487.0, label: 'Módulo 3: Codificación Categórica' },
+  { id: 'rb-18', time: 495.3, label: 'Módulo 3: Ordinal vs One-Hot Encoding' },
+  { id: 'rb-19', time: 647.0, label: 'Módulo 4: Escalamiento y Fuga de Datos (Data Leakage)' },
+  { id: 'rb-20', time: 655.0, label: 'Módulo 4: Distancia Euclidiana en el Titanic' },
+  { id: 'rb-21', time: 701.3, label: 'Módulo 4: ⚠️ La Trampa Mortal del Data Leakage' },
+  { id: 'rb-22', time: 732.1, label: 'Módulo 4: Regla de Oro del Preprocesamiento' },
+  { id: 'widget-leakage', time: 751.5, label: 'Módulo 4: Simulador Interactivo Data Leakage' },
+  { id: 'rb-24', time: 759.5, label: 'Módulo 5: Evaluación de Modelos (Overfitting & CV)' },
+  { id: 'rb-25', time: 763.0, label: 'Módulo 5: ¿Qué Significa Aprender en ML?' },
+  { id: 'rb-26', time: 768.0, label: 'Módulo 5: Analogía del Examen y la Memoria' },
+  { id: 'rb-27', time: 796.0, label: 'Módulo 5: Underfitting vs Óptimo vs Overfitting' },
+  { id: 'rb-28', time: 852.8, label: 'Módulo 5: Estrategias de Partición Científica' },
+  { id: 'rb-29', time: 861.2, label: 'Módulo 5: Partición Espacial, Temporal y por Sujeto' },
+  { id: 'rb-30', time: 936.3, label: 'Módulo 5: Validación Cruzada (K-Fold vs ShuffleSplit)' },
+  { id: 'rb-31', time: 946.1, label: 'Módulo 5: Formulación Estadística de CV' },
+  { id: 'rb-32', time: 1013.9, label: 'Módulo 6: El Algoritmo KNN en Acción' },
+  { id: 'rb-33', time: 1018.0, label: 'Módulo 6: KNN como Aprendiz Perezoso' },
+  { id: 'widget-knn', time: 1040.3, label: 'Módulo 6: Simulador Visual Fronteras de Decisión' },
+  { id: 'rb-35', time: 1073.3, label: 'Módulo 6: Pipelines Scikit-Learn Sin Fuga' },
+  { id: 'rb-36', time: 1080.0, label: 'Módulo 6: Script Titanic KNN' },
+  { id: 'rb-37', time: 1089.2, label: 'Módulo 7: Laboratorio Local & Práctica Terminal' },
+  { id: 'rb-38', time: 1095.0, label: 'Módulo 7: Herramientas del Estudiante' },
+  { id: 'rb-39', time: 1103.7, label: 'Módulo 7: Suite Automatizada practica_clase2.py' },
+  { id: 'rb-40', time: 1119.0, label: 'Módulo 7: Jupyter Notebook Interactivo' },
+  { id: 'rb-41', time: 1128.9, label: 'Módulo 7: Control Teórico Cuestión 01' },
+  { id: 'rb-42', time: 1170.0, label: 'Módulo 7: Control Teórico Cuestión 02' }
+];
+
+function updateReadingFollow(currentTime) {
+  let activeMilestone = readingMilestones[0];
+  for (let i = 0; i < readingMilestones.length; i++) {
+    if (currentTime >= readingMilestones[i].time) {
+      activeMilestone = readingMilestones[i];
+    } else {
+      break;
+    }
+  }
+
+  if (!activeMilestone) return;
+  const activeEl = document.getElementById(activeMilestone.id);
+  if (!activeEl) return;
+
+  const trackLabel = document.getElementById('asp-current-track-name');
+  if (trackLabel && activeMilestone.label) {
+    trackLabel.textContent = activeMilestone.label;
+  }
+
+  if (currentHighlightedBlock !== activeEl) {
+    if (currentHighlightedBlock) {
+      currentHighlightedBlock.classList.remove('reading-active-block');
+    }
+    activeEl.classList.add('reading-active-block');
+    currentHighlightedBlock = activeEl;
+
+    if (autoScrollEnabled && !isUserScrolling) {
+      scrollToActiveBlock(activeEl);
+    }
+  }
+}
+
+function scrollToActiveBlock(targetEl) {
+  if (!targetEl) return;
+  const rect = targetEl.getBoundingClientRect();
+  const player = document.getElementById('audio-studio-player');
+  const playerHeight = player ? player.offsetHeight : 80;
+  const targetY = window.pageYOffset + rect.top - playerHeight - 24;
+
+  window.scrollTo({
+    top: Math.max(0, targetY),
+    behavior: 'smooth'
+  });
+}
+
+function handleUserScrollInteraction() {
+  if (!isUserScrolling) {
+    isUserScrolling = true;
+    if (autoScrollEnabled) {
+      updateAutoScrollButtonUI(true, true);
+    }
+  }
+}
+
+window.addEventListener('wheel', handleUserScrollInteraction, { passive: true });
+window.addEventListener('touchmove', handleUserScrollInteraction, { passive: true });
+window.addEventListener('keydown', (e) => {
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Space'].includes(e.code)) {
+    handleUserScrollInteraction();
+  }
+});
+
+function toggleAutoScroll() {
+  if (isUserScrolling) {
+    isUserScrolling = false;
+    autoScrollEnabled = true;
+    updateAutoScrollButtonUI(true, false);
+    if (currentHighlightedBlock) {
+      scrollToActiveBlock(currentHighlightedBlock);
+    }
+  } else {
+    autoScrollEnabled = !autoScrollEnabled;
+    updateAutoScrollButtonUI(autoScrollEnabled, false);
+    if (autoScrollEnabled && currentHighlightedBlock) {
+      scrollToActiveBlock(currentHighlightedBlock);
+    }
+  }
+}
+
+function updateAutoScrollButtonUI(on, pausedByScroll) {
+  const dot = document.getElementById('asp-autoscroll-dot');
+  const txt = document.getElementById('asp-autoscroll-text');
+  if (!dot || !txt) return;
+
+  if (pausedByScroll) {
+    dot.className = 'autoscroll-dot paused';
+    txt.textContent = 'Reanudar lectura';
+  } else if (on) {
+    dot.className = 'autoscroll-dot on';
+    txt.textContent = 'Auto-scroll ON';
+  } else {
+    dot.className = 'autoscroll-dot';
+    txt.textContent = 'Auto-scroll OFF';
+  }
+}
+
+window.syncPlayerSeek = function() {
+  isUserScrolling = false;
+  if (autoScrollEnabled) {
+    updateAutoScrollButtonUI(true, false);
+  }
+  const audio = document.getElementById('asp-audio-core');
+  if (audio && !isNaN(audio.currentTime)) {
+    updateReadingFollow(audio.currentTime);
+    if (autoScrollEnabled && currentHighlightedBlock) {
+      scrollToActiveBlock(currentHighlightedBlock);
+    }
+  }
+};
+
+// 2. SISTEMA DE RESALTADO Y NOTAS EN TEXTO SELECCIONADO
+let pendingSelection = null;
+let currentNoteType = 'pregunta';
+const STORAGE_KEY = 'dm_clase2_user_notes_v1';
+let userNotes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+function getAudioTimestampStr() {
+  const audio = document.getElementById('asp-audio-core');
+  if (!audio || isNaN(audio.currentTime)) return '0:00';
+  const m = Math.floor(audio.currentTime / 60);
+  const s = Math.floor(audio.currentTime % 60);
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
+}
+
+document.addEventListener('mouseup', (e) => {
+  if (e.target.closest('#selection-tooltip') || e.target.closest('#note-modal') || e.target.closest('#notes-drawer')) {
+    return;
+  }
+
+  const selection = window.getSelection();
+  const text = selection ? selection.toString().trim() : '';
+
+  const tooltip = document.getElementById('selection-tooltip');
+  if (text.length >= 3 && selection.anchorNode && selection.anchorNode.parentElement.closest('main')) {
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    pendingSelection = {
+      text: text,
+      range: range.cloneRange(),
+      timestamp: getAudioTimestampStr(),
+      section: selection.anchorNode.parentElement.closest('section')?.id || 'general'
+    };
+
+    tooltip.style.left = `${rect.left + rect.width / 2 + window.scrollX}px`;
+    tooltip.style.top = `${rect.top + window.scrollY - 8}px`;
+    tooltip.style.display = 'flex';
+  } else {
+    if (tooltip) tooltip.style.display = 'none';
+  }
+});
+
+function handleHighlightSelection() {
+  const tooltip = document.getElementById('selection-tooltip');
+  if (tooltip) tooltip.style.display = 'none';
+  if (!pendingSelection) return;
+
+  const noteObj = {
+    id: 'n_' + Date.now(),
+    tipo: 'resaltado',
+    texto_seleccionado: pendingSelection.text,
+    seccion: pendingSelection.section,
+    comentario_usuario: '',
+    timestamp_leccion_audio: pendingSelection.timestamp,
+    fecha: new Date().toISOString()
+  };
+
+  wrapRangeWithMark(pendingSelection.range, noteObj.id, 'user-highlight');
+  userNotes.push(noteObj);
+  saveNotesToStorage();
+  window.getSelection()?.removeAllRanges();
+}
+
+function handleNoteSelection() {
+  const tooltip = document.getElementById('selection-tooltip');
+  if (tooltip) tooltip.style.display = 'none';
+  if (!pendingSelection) return;
+
+  const quoteEl = document.getElementById('modal-selected-quote');
+  if (quoteEl) quoteEl.textContent = `“${pendingSelection.text}”`;
+  
+  const textarea = document.getElementById('note-modal-textarea');
+  if (textarea) textarea.value = '';
+
+  const modal = document.getElementById('note-modal');
+  if (modal) modal.style.display = 'flex';
+  textarea?.focus();
+}
+
+function selectNoteType(btn, type) {
+  document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  currentNoteType = type;
+}
+
+function closeNoteModal() {
+  const modal = document.getElementById('note-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function saveCurrentNote() {
+  if (!pendingSelection) return;
+  const textarea = document.getElementById('note-modal-textarea');
+  const comment = textarea ? textarea.value.trim() : '';
+
+  const noteObj = {
+    id: 'n_' + Date.now(),
+    tipo: currentNoteType,
+    texto_seleccionado: pendingSelection.text,
+    seccion: pendingSelection.section,
+    comentario_usuario: comment,
+    timestamp_leccion_audio: pendingSelection.timestamp,
+    fecha: new Date().toISOString()
+  };
+
+  wrapRangeWithMark(pendingSelection.range, noteObj.id, 'user-highlight user-highlight-note');
+  userNotes.push(noteObj);
+  saveNotesToStorage();
+
+  closeNoteModal();
+  window.getSelection()?.removeAllRanges();
+}
+
+function wrapRangeWithMark(range, noteId, className) {
+  try {
+    const mark = document.createElement('mark');
+    mark.className = className;
+    mark.dataset.noteId = noteId;
+    mark.title = 'Click para ver tu nota';
+    mark.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showNoteHoverCard(noteId, mark);
+    });
+    range.surroundContents(mark);
+  } catch (err) {
+    console.warn('Could not surround range directly; stored in notes list:', err);
+  }
+}
+
+function showNoteHoverCard(noteId, element) {
+  const note = userNotes.find(n => n.id === noteId);
+  if (!note) return;
+
+  const card = document.getElementById('note-hover-card');
+  const badge = document.getElementById('note-hover-badge');
+  const time = document.getElementById('note-hover-time');
+  const body = document.getElementById('note-hover-text');
+  if (!card) return;
+
+  badge.textContent = note.tipo.toUpperCase();
+  time.textContent = `⏱️ ${note.timestamp_leccion_audio}`;
+  body.textContent = note.comentario_usuario || '(Texto resaltado para estudio)';
+
+  const rect = element.getBoundingClientRect();
+  card.style.left = `${rect.left + window.scrollX}px`;
+  card.style.top = `${rect.bottom + window.scrollY + 6}px`;
+  card.style.display = 'block';
+
+  card.dataset.activeNoteId = noteId;
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#note-hover-card') && !e.target.closest('mark.user-highlight')) {
+    const card = document.getElementById('note-hover-card');
+    if (card) card.style.display = 'none';
+  }
+});
+
+function deleteActiveNote() {
+  const card = document.getElementById('note-hover-card');
+  const noteId = card?.dataset.activeNoteId;
+  if (!noteId) return;
+
+  userNotes = userNotes.filter(n => n.id !== noteId);
+  saveNotesToStorage();
+
+  const mark = document.querySelector(`mark[data-note-id="${noteId}"]`);
+  if (mark) {
+    const parent = mark.parentNode;
+    while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+    parent.removeChild(mark);
+  }
+  card.style.display = 'none';
+}
+
+function saveNotesToStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(userNotes));
+  updateNotesCountBadge();
+  renderNotesList();
+}
+
+function updateNotesCountBadge() {
+  const badge = document.getElementById('asp-notes-count');
+  if (badge) badge.textContent = userNotes.length;
+}
+
+function toggleNotesDrawer() {
+  const drawer = document.getElementById('notes-drawer');
+  if (!drawer) return;
+  if (drawer.style.display === 'flex') {
+    drawer.style.display = 'none';
+  } else {
+    renderNotesList();
+    drawer.style.display = 'flex';
+  }
+}
+
+function renderNotesList() {
+  const container = document.getElementById('notes-list-container');
+  if (!container) return;
+
+  if (userNotes.length === 0) {
+    container.innerHTML = '<p style="font-size:0.88rem; color:var(--text-muted); font-style:italic; padding:1rem 0;">Aún no has resaltado ni añadido dudas. Selecciona cualquier frase en el texto para comenzar.</p>';
+    return;
+  }
+
+  container.innerHTML = userNotes.map(n => `
+    <div class="note-item-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
+        <span class="asp-badge">${n.tipo.toUpperCase()}</span>
+        <span style="font-size:0.72rem; font-family:'Fira Code'; color:var(--text-muted);">⏱️ ${n.timestamp_leccion_audio}</span>
+      </div>
+      <div class="note-item-quote">“${n.texto_seleccionado}”</div>
+      ${n.comentario_usuario ? `<div class="note-item-comment">${n.comentario_usuario}</div>` : ''}
+      <div style="text-align:right;">
+        <button style="background:none; border:none; color:#b91c1c; font-size:0.75rem; cursor:pointer;" onclick="deleteNoteById('${n.id}')">Eliminar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteNoteById(id) {
+  userNotes = userNotes.filter(n => n.id !== id);
+  saveNotesToStorage();
+  const mark = document.querySelector(`mark[data-note-id="${id}"]`);
+  if (mark) {
+    const parent = mark.parentNode;
+    while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+    parent.removeChild(mark);
+  }
+}
+
+function clearAllNotes() {
+  if (!confirm('¿Deseas borrar todas las dudas y resaltados guardados?')) return;
+  userNotes = [];
+  saveNotesToStorage();
+  document.querySelectorAll('mark.user-highlight').forEach(mark => {
+    const parent = mark.parentNode;
+    while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+    parent.removeChild(mark);
+  });
+}
+
+function exportUserNotesJSON() {
+  const payload = {
+    materia: "Minería de Datos y Aprendizaje Automático",
+    leccion: "Clase 2: Metodología CRISP-DM, EDA, Preprocesamiento & KNN",
+    fecha: new Date().toISOString(),
+    total_anotaciones: userNotes.length,
+    notas: userNotes
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `dudas-clase2-dm-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// 3. VINCULAR CON EL AUDIO CORE
+window.addEventListener('DOMContentLoaded', () => {
+  const audio = document.getElementById('asp-audio-core');
+  if (audio) {
+    audio.addEventListener('timeupdate', () => {
+      if (!audio.paused && !isNaN(audio.currentTime)) {
+        updateReadingFollow(audio.currentTime);
+      }
+    });
+  }
+  updateNotesCountBadge();
+});
+
+
+// Inicialización al cargar la página
+window.addEventListener('DOMContentLoaded', () => {
+    initTitanicPoints();
+    updateKNNSimulation();
+    updateLeakSimulation();
+
+    if (window.location.protocol === 'file:') {
+        document.querySelectorAll('.file-protocol-notice').forEach(el => el.style.display = 'flex');
+    }
+});
+</script>
+
+</body>
+</html>
