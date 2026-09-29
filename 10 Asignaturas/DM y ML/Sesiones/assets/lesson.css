@@ -80,10 +80,16 @@ h2 {
 .card {
     background: var(--bg-card);
     border: 1px solid var(--border-default);
-    border-radius: 4px;
-    padding: 2.2rem;
-    margin-bottom: 2.2rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    border-radius: 8px;
+    padding: 2rem 2.2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 14px rgba(26, 25, 23, 0.03);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    border-color: var(--border-strong);
+    box-shadow: 0 6px 18px rgba(26, 25, 23, 0.05);
 }
 
 .card-top {
@@ -92,23 +98,23 @@ h2 {
     align-items: center;
     font-family: 'Inter', sans-serif;
     font-size: 0.78rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
 }
 
 .card-badge {
     background: var(--tag-bg);
     color: var(--text-title);
-    padding: 0.2rem 0.55rem;
-    border-radius: 3px;
-    font-weight: 500;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     font-family: 'Inter', sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
 }
 
 .tag-red { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
-.tag-amber { background: #fef3c7; color: var(--warning); border: 1px solid #fde68a; }
+.tag-amber { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
 .tag-green { background: #dcfce7; color: var(--success); border: 1px solid #bbf7d0; }
 
 .quiz-option {
@@ -269,4 +275,175 @@ h2 {
     @page { margin: 0; }
     body { padding: 2.5cm 2cm; background: #fff; }
     .action-bar, .duda-input, .nose-box, .btn { display: none; }
+}
+
+/* ========================================================================= */
+/* EMBEDS DE VIDEO YOUTUBE LIMPIOS Y CARDS MULTIMEDIA NORDIC EDITORIAL */
+/* ========================================================================= */
+.video-container {
+    margin: 2rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(26, 25, 23, 0.08);
+    border: 1px solid var(--border-default, #e6e4dc);
+    background: #0d0f12;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.video-container:hover {
+    border-color: var(--accent-ochre, #b58900);
+    box-shadow: 0 8px 24px rgba(26, 25, 23, 0.12);
+}
+
+/* Reproductor Embebido Tradicional */
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    background: #000000;
+}
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Card Visual Nativo Anti-Error 153 para Visualización Local */
+.video-card-preview {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    cursor: pointer;
+    background: #090a0b;
+}
+.video-thumb-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+}
+.video-card-preview:hover .video-thumb-bg {
+    transform: scale(1.03);
+    filter: brightness(0.85);
+}
+.video-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(13,15,18,0.3) 0%, rgba(13,15,18,0.78) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.3rem 1.5rem;
+    box-sizing: border-box;
+}
+.video-card-badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.video-pill-tag {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+.video-pill-action {
+    background: var(--accent-ochre, #b58900);
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    transition: background 0.15s ease, transform 0.15s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.video-card-preview:hover .video-pill-action {
+    background: #d99b00;
+    transform: translateY(-1px);
+}
+.video-play-disc {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 62px;
+    height: 62px;
+    background: rgba(220, 38, 38, 0.94);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+}
+.video-card-preview:hover .video-play-disc {
+    transform: translate(-50%, -50%) scale(1.12);
+    background: #e11d48;
+}
+.video-play-disc svg {
+    width: 26px;
+    height: 26px;
+    fill: #ffffff;
+    margin-left: 3px;
+}
+.video-card-info {
+    font-family: 'Inter', sans-serif;
+    color: #ffffff;
+}
+.video-card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.01em;
+}
+.video-card-sub {
+    font-size: 0.82rem;
+    color: #cbd5e1;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    line-height: 1.4;
+}
+.video-fallback-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.65rem 1.1rem;
+    background: var(--bg-input, #f7f6f2);
+    border-top: 1px solid var(--border-light, #eceae3);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+.video-fallback-link {
+    color: var(--accent-ochre);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.video-fallback-link:hover {
+    text-decoration: underline;
 }

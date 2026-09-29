@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lección 02: Minería de Datos, EDA, Preprocesamiento &amp; Evaluación de Modelos (KNN &amp; Titanic) — UNLP</title>
+<link href="../assets/lesson.css" rel="stylesheet"/>
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+    </script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+        /* Estilos complementarios Nordic Editorial */
+        .section-header {
+            margin-top: 3.2rem;
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 1px solid var(--border-default);
+            padding-bottom: 0.6rem;
+        }
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.55rem;
+            color: var(--text-title);
+        }
+        .section-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 9px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .tag-blue { background: #e0f2fe; color: #0369a1; }
+        .tag-green { background: #dcfce7; color: #15803d; }
+        .tag-amber { background: #fef3c7; color: #b45309; }
+        .tag-purple { background: #f3e8ff; color: #7e22ce; }
+        .tag-gray { background: #f3f4f6; color: #4b5563; }
+        .tag-rose { background: #ffe4e6; color: #be123c; }
+
+        .callout {
+            background: #fdfbf7;
+            border-left: 3px solid var(--accent-ochre);
+            padding: 1.2rem 1.4rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.4rem 0;
+            font-size: 1.02rem;
+        }
+        .callout strong {
+            color: var(--text-title);
+        }
+
+        .formula-box {
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1.4rem;
+            margin: 1.4rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .formula-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-ochre);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .formula-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 1rem;
+            text-align: center;
+            margin: 0.8rem 0;
+            overflow-x: auto;
+        }
+        .formula-steps {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-body);
+        }
+        .formula-steps ol {
+            padding-left: 1.3rem;
+            margin-top: 0.5rem;
+        }
+        .formula-steps li {
+            margin-bottom: 0.5rem;
+        }
+
+        .analogy-box {
+            background: #f0fdf4;
+            border-left: 3px solid #16a34a;
+            padding: 1.1rem 1.3rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.2rem 0;
+            font-size: 0.98rem;
+        }
+        .analogy-box strong {
+            color: #166534;
+        }
+
+        .warning-box {
+            background: #fff1f2;
+            border-left: 3px solid #e11d48;
+            padding: 1.1rem 1.3rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.2rem 0;
+            font-size: 0.98rem;
+        }
+        .warning-box strong {
+            color: #9f1239;
+        }
+
+        /* Video Embed Container */
+        .video-container {
+            margin: 1.8rem 0;
+            background: #000000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+            border: 1px solid var(--border-default);
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #000000;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Interactive Widgets */
+        .interactive-widget {
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1.6rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .widget-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: var(--text-title);
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .widget-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            line-height: 1.45;
+        }
+        .widget-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+            padding: 1rem;
+            background: #fbfbf9;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            align-items: center;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+        }
+        .control-group label {
+            font-weight: 600;
+            color: var(--text-title);
+        }
+        .control-group input[type="range"] {
+            cursor: pointer;
+            accent-color: var(--accent-ochre);
+        }
+        .btn-group {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .widget-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-strong);
+            padding: 0.45rem 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--text-body);
+            transition: all 0.15s ease;
+        }
+        .widget-btn:hover {
+            background: #f3f4f6;
+            border-color: var(--accent-ink);
+        }
+        .widget-btn.active {
+            background: var(--accent-ink);
+            color: #ffffff;
+            border-color: var(--accent-ink);
+        }
+
+        .canvas-container {
+            position: relative;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+        canvas {
+            display: block;
+            background: #ffffff;
+            cursor: crosshair;
+        }
+        .widget-readout {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.85rem 1.1rem;
+            border-radius: 4px;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Tabla de comparación */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.4rem 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+        }
+        .styled-table th, .styled-table td {
+            border: 1px solid var(--border-default);
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        .styled-table th {
+            background: #f8f8f6;
+            color: var(--text-title);
+            font-weight: 600;
+        }
+        .styled-table tr:nth-child(even) {
+            background: #fdfdfc;
+        }
+
+        /* Code Blocks */
+        .code-container {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1.4rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.86rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        .code-container .code-header {
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-size: 0.76rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0.4rem;
+        }
+
+        .action-banner {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 1.2rem 1.4rem;
+            margin: 2.2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .action-banner-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            color: #1e293b;
+        }
+        .action-btn {
+            background: #0f172a;
+            color: #ffffff;
+            padding: 0.6rem 1.1rem;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.84rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.15s ease;
+        }
+        .action-btn:hover {
+            background: #334155;
+        }
+    
+/* --- Interactive Reading & Annotation Styles --- */
+.autoscroll-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #94a3b8;
+  margin-right: 4px;
+}
+.autoscroll-dot.on {
+  background: #15803d;
+  box-shadow: 0 0 6px rgba(21, 128, 61, 0.4);
+}
+.autoscroll-dot.paused {
+  background: #b58900;
+  box-shadow: 0 0 6px rgba(181, 137, 0, 0.4);
+}
+
+.notes-count-badge {
+  background: var(--tag-bg, #efece4);
+  color: var(--accent-ochre, #b58900);
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 1px 5px;
+  border-radius: 9999px;
+  margin-left: 2px;
+}
+
+/* Resaltado del bloque activo de lectura */
+.reading-active-block {
+  border-left: 4px solid var(--accent-ochre, #b58900) !important;
+  background-color: rgba(181, 137, 0, 0.07) !important;
+  border-radius: 0 6px 6px 0 !important;
+  box-shadow: 0 0 0 2px rgba(181, 137, 0, 0.12) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Resaltados hechos por el usuario */
+mark.user-highlight {
+  background: #fef08a;
+  color: #1e293b;
+  border-bottom: 2px solid #eab308;
+  padding: 1px 3px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+mark.user-highlight:hover {
+  background: #fde047;
+}
+
+mark.user-highlight-note {
+  background: #fed7aa;
+  border-bottom: 2px solid #f97316;
+  position: relative;
+  cursor: pointer;
+}
+mark.user-highlight-note::after {
+  content: ' 💬';
+  font-size: 0.75rem;
+}
+
+/* Tooltip flotante de selección */
+.selection-tooltip {
+  position: absolute;
+  z-index: 1050;
+  display: flex;
+  gap: 4px;
+  background: #1e2328;
+  border: 1px solid #33383f;
+  border-radius: 6px;
+  padding: 4px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  transform: translate(-50%, -115%);
+}
+.tooltip-btn {
+  background: transparent;
+  border: none;
+  color: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s;
+}
+.tooltip-btn:hover {
+  background: #33383f;
+}
+
+/* Modales y Overlays */
+.note-modal-overlay, .notes-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.note-modal-card {
+  background: #ffffff;
+  border: 1px solid var(--border-default, #e6e4dc);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 520px;
+  padding: 1.6rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  font-family: 'Inter', sans-serif;
+}
+.note-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+.note-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.note-selected-quote {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text-title);
+  background: #fbfbf9;
+  border-left: 3px solid var(--accent-ochre);
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 1rem;
+  border-radius: 0 4px 4px 0;
+}
+.note-modal-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-title);
+  margin-bottom: 0.4rem;
+}
+.note-type-chips {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.note-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.note-chip.active {
+  background: #fef3c7;
+  border-color: #b45309;
+  color: #b45309;
+  font-weight: 600;
+}
+.note-modal-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.8rem;
+  border: 1px solid var(--border-default);
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  resize: vertical;
+  outline: none;
+  margin-bottom: 1.2rem;
+}
+.note-modal-textarea:focus {
+  border-color: var(--accent-ochre);
+}
+.note-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+.btn-save {
+  background: var(--accent-ink, #1f2328);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--border-default);
+  color: var(--text-body);
+  padding: 0.5rem 0.9rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+/* Scrollbar refinada para el panel */
+.notes-list-container::-webkit-scrollbar {
+  width: 5px;
+}
+.notes-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.notes-list-container::-webkit-scrollbar-thumb {
+  background: rgba(181, 137, 0, 0.2);
+  border-radius: 9999px;
+}
+.notes-list-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(181, 137, 0, 0.4);
+}
+
+/* Hover Card */
+.note-hover-card {
+  position: absolute;
+  z-index: 1060;
+  background: #ffffff;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  max-width: 320px;
+  box-shadow: 0 12px 28px rgba(26, 25, 23, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+  font-family: 'Inter', sans-serif;
+  animation: fadeIn 0.15s ease-out;
+}
+.note-hover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.note-hover-time {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: 'Fira Code', monospace;
+}
+.note-hover-body {
+  font-size: 0.88rem;
+  color: var(--text-title);
+  margin-bottom: 0.6rem;
+  line-height: 1.45;
+}
+.note-hover-del {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+  transition: opacity 0.15s;
+}
+.note-hover-del:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Drawer lateral Nordic Editorial */
+.notes-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(26, 25, 23, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 2000;
+  transition: opacity 0.25s ease;
+}
+.notes-drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 92%;
+  max-width: 420px;
+  height: 100vh;
+  background: var(--bg-card, #ffffff);
+  border-left: 1px solid var(--border-default, #e6e4dc);
+  box-shadow: -12px 0 35px rgba(26, 25, 23, 0.08);
+  padding: 1.8rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  z-index: 2001;
+  font-family: 'Inter', sans-serif;
+  animation: slideDrawer 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideDrawer {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.notes-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light, #eceae3);
+  padding-bottom: 0.9rem;
+  margin-bottom: 0.7rem;
+}
+.drawer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #854d0e;
+  background: #fef9c3;
+  border: 1px solid #fef08a;
+  padding: 2px 7px;
+  border-radius: 9999px;
+}
+.notes-drawer-title {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 600;
+  color: var(--text-title, #1a1917);
+  letter-spacing: -0.01em;
+}
+.drawer-close-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+.drawer-close-btn:hover {
+  background: var(--bg-input, #f7f6f2);
+  border-color: var(--border-default);
+  color: var(--text-title);
+}
+.drawer-desc {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin-bottom: 1.1rem;
+  line-height: 1.5;
+}
+.notes-list-container {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1.1rem;
+  padding-right: 4px;
+}
+.notes-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1.2rem;
+  background: var(--bg-page, #fbfbf9);
+  border: 1px dashed var(--border-strong, #d2cfc4);
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+.notes-empty-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--accent-ochre, #b58900);
+  background: rgba(181, 137, 0, 0.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+}
+.notes-empty-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-title);
+  margin-bottom: 0.35rem;
+}
+.notes-empty-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  max-width: 280px;
+}
+.note-item-card {
+  background: var(--bg-page, #fbfbf9);
+  border: 1px solid var(--border-default, #e6e4dc);
+  border-radius: 6px;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.note-item-card:hover {
+  border-color: var(--border-strong, #d2cfc4);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+.note-item-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #854d0e;
+  background: #fef9c3;
+  border: 1px solid #fef08a;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+.note-item-quote {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--text-body);
+  border-left: 2px solid var(--accent-ochre);
+  padding-left: 0.6rem;
+  margin: 0.4rem 0 0.5rem 0;
+  line-height: 1.45;
+}
+.note-item-comment {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-title);
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+.notes-drawer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-light, #eceae3);
+  padding-top: 1rem;
+  gap: 0.8rem;
+}
+.btn-export-notes {
+  background: #18181b;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #27272a;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.btn-export-notes:hover {
+  background: #27272a;
+}
+.btn-clear-notes {
+  background: transparent;
+  border: none;
+  color: #b91c1c;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+.btn-clear-notes:hover {
+  background: #fee2e2;
+}
+
+</style>
+</head>
+<body>
+<header class="reading-trackable reading-trackable" id="rb-00">
+<div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap;">
+<span class="badge" style="margin-bottom:0;">Minería de Datos y Aprendizaje Automático</span>
+<span class="section-tag tag-blue">UNLP Informática · 2026</span>
+<span class="section-tag tag-green">Lección 03</span>
+</div>
+<h1>Clase 3: Árboles de Decisión, Criterios de Desorden (Gini vs. Entropía), Poda Preventiva &amp; Fuga de Datos</h1>
+<p>Desglose analítico paso a paso de la cátedra Ronchetti-Hasperué: de la partición ortogonal recursiva del hiperespacio al cálculo riguroso de la Ganancia de Información, control de sobreajuste y resolución guiada de las 8 actividades prácticas de la cátedra.</p>
+</header>
+<!-- ========================================== -->
+<!-- 🎧 REPRODUCTOR FLOTANTE COMPACTO (NORDIC EDITORIAL THEME) -->
+<!-- ========================================== -->
+<div class="asp-sticky-card" id="audio-studio-player">
+<div class="asp-inner">
+<div class="asp-meta">
+<div class="asp-tag-row">
+<span class="asp-track-label" id="asp-current-track-name">Clase 03 · Árboles de Decisión &amp; Gini</span>
+</div>
+<div class="asp-timeline">
+<span class="asp-time" id="asp-current-time">0:00</span>
+<input class="asp-slider" id="asp-seek-bar" max="100" min="0" type="range" value="0"/>
+<span class="asp-time" id="asp-duration">--:--</span>
+</div>
+</div>
+<div class="asp-controls">
+<button class="asp-circle-btn" onclick="aspSkip(-15)" title="Retroceder 15s">
+<svg class="asp-svg" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><text fill="currentColor" font-size="7" font-weight="bold" stroke="none" text-anchor="middle" x="12" y="15">15</text></svg>
+</button>
+<button class="asp-play-main" id="asp-play-btn" onclick="aspTogglePlay()" title="Reproducir / Pausa">
+<svg class="asp-svg-lg" fill="currentColor" id="asp-play-icon" viewbox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+<svg class="asp-svg-lg" fill="currentColor" id="asp-pause-icon" style="display:none;" viewbox="0 0 24 24"><rect height="16" width="4" x="6" y="4"></rect><rect height="16" width="4" x="14" y="4"></rect></svg>
+</button>
+<button class="asp-circle-btn" onclick="aspSkip(15)" title="Adelantar 15s">
+<svg class="asp-svg" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><text fill="currentColor" font-size="7" font-weight="bold" stroke="none" text-anchor="middle" x="12" y="15">15</text></svg>
+</button>
+<div class="asp-speed-pills">
+<button class="asp-pill" id="asp-speed-btn" onclick="aspCycleSpeed()" title="Velocidad">1x</button>
+</div>
+<button class="asp-pill" id="asp-autoscroll-btn" onclick="toggleAutoScroll()" title="Seguir lectura automáticamente">
+<span class="autoscroll-dot on" id="asp-autoscroll-dot"></span>
+<span id="asp-autoscroll-text">Auto-scroll ON</span>
+</button>
+<button class="asp-pill" onclick="toggleNotesDrawer()" title="Ver y Exportar Dudas">
+<svg class="asp-svg-sm" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+<span class="notes-count-badge" id="asp-notes-count">0</span>
+</button>
+<a class="asp-pill" download="" href="../../Audio/clase_03_arboles_decision_lectura.mp3" id="asp-download-link" title="Descargar MP3">
+<svg class="asp-svg-sm" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+</a>
+</div>
+</div>
+<audio id="asp-audio-core" preload="metadata" src="../../Audio/clase_03_arboles_decision_lectura.mp3"></audio>
+</div>
+<style>
+/* Reproductor flotante adaptado al tema Nordic Editorial (ultra compacto) */
+.asp-sticky-card {
+  position: sticky;
+  top: 0.5rem;
+  z-index: 1000;
+  margin: 0.5rem 0 1.5rem 0;
+  padding: 0.32rem 0.9rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-strong, #d2cfc4);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(26, 25, 23, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--text-body, #3c3a36);
+  transition: all 0.2s ease;
+}
+
+.asp-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.asp-meta {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.asp-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.asp-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #b58900;
+  background: #fbf7ee;
+  border: 1px solid #ebdcb2;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.asp-track-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-title, #1a1917);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.asp-timeline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.asp-time {
+  font-size: 0.7rem;
+  font-family: 'Fira Code', monospace;
+  color: var(--text-muted, #7d7a72);
+  min-width: 30px;
+  line-height: 1;
+}
+
+.asp-slider {
+  flex: 1;
+  height: 3px;
+  background: var(--border-default, #e6e4dc);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  accent-color: var(--accent-ochre, #b58900);
+}
+
+.asp-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.asp-circle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-default, #e6e4dc);
+  color: var(--text-body, #3c3a36);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.asp-circle-btn:hover {
+  background: var(--bg-input, #f7f6f2);
+  border-color: var(--border-strong, #d2cfc4);
+  color: var(--text-title, #1a1917);
+}
+
+.asp-play-main {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-ink, #1f2328);
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.asp-play-main:hover {
+  background: #33383f;
+  transform: scale(1.05);
+}
+
+.asp-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-default, #e6e4dc);
+  color: var(--text-body, #3c3a36);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+
+.asp-pill:hover {
+  background: var(--bg-input, #f7f6f2);
+  border-color: var(--border-strong, #d2cfc4);
+}
+
+.asp-svg { width: 12px; height: 12px; }
+.asp-svg-sm { width: 11px; height: 11px; }
+.asp-svg-lg { width: 13px; height: 13px; }
+
+@media (max-width: 680px) {
+  .asp-sticky-card { top: 0.5rem; padding: 0.35rem 0.6rem; }
+  .asp-inner { gap: 0.5rem; }
+}
+</style>
+<script>
+(function() {
+  const audio = document.getElementById("asp-audio-core");
+  const playBtn = document.getElementById("asp-play-btn");
+  const playIcon = document.getElementById("asp-play-icon");
+  const pauseIcon = document.getElementById("asp-pause-icon");
+  const seekBar = document.getElementById("asp-seek-bar");
+  const currentTimeEl = document.getElementById("asp-current-time");
+  const durationEl = document.getElementById("asp-duration");
+  const speedBtn = document.getElementById("asp-speed-btn");
+
+  const speeds = [1.0, 1.25, 1.5, 1.75, 2.0];
+  let curSpeedIdx = 0;
+
+  function formatTime(s) {
+    if (isNaN(s)) return "0:00";
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec < 10 ? "0" : ""}${sec}`;
+  }
+
+  window.aspTogglePlay = function() {
+    if (!audio.src) return;
+    if (audio.paused) {
+      audio.play();
+      playIcon.style.display = "none";
+      pauseIcon.style.display = "block";
+    } else {
+      audio.pause();
+      playIcon.style.display = "block";
+      pauseIcon.style.display = "none";
+    }
+  };
+
+  window.aspSkip = function(delta) {
+    audio.currentTime = Math.min(Math.max(audio.currentTime + delta, 0), audio.duration || 0);
+    if (window.syncPlayerSeek) window.syncPlayerSeek();
+  };
+
+  window.aspCycleSpeed = function() {
+    curSpeedIdx = (curSpeedIdx + 1) % speeds.length;
+    const spd = speeds[curSpeedIdx];
+    audio.playbackRate = spd;
+    if (speedBtn) speedBtn.textContent = spd + "x";
+  };
+
+  audio.addEventListener("timeupdate", () => {
+    if (!isNaN(audio.duration) && audio.duration > 0) {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      seekBar.value = pct;
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      durationEl.textContent = formatTime(audio.duration);
+    }
+  });
+
+  seekBar.addEventListener("input", () => {
+    if (!isNaN(audio.duration)) {
+      audio.currentTime = (seekBar.value / 100) * audio.duration;
+      if (window.syncPlayerSeek) window.syncPlayerSeek();
+    }
+  });
+
+  audio.addEventListener("ended", () => {
+    playIcon.style.display = "block";
+    pauseIcon.style.display = "none";
+  });
+})();
+</script>
+<main>
+<!-- NAVEGACIÓN RÁPIDA -->
+<div style="background: #f8f8f6; border: 1px solid var(--border-default); border-radius: 8px; padding: 1.1rem 1.4rem; margin-bottom: 2.2rem; font-family: 'Inter', sans-serif; font-size: 0.86rem;">
+<strong style="color: var(--text-title); display: block; margin-bottom: 0.5rem;">Índice Temático de la Lección:</strong>
+<div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
+<a href="#modulo1" style="color: var(--accent-ochre); text-decoration: none;">1. Fundamentos &amp; Partición Ortogonal</a> ·
+            <a href="#modulo2" style="color: var(--accent-ochre); text-decoration: none;">2. Entropía de Shannon vs. Índice Gini</a> ·
+            <a href="#modulo3" style="color: var(--accent-ochre); text-decoration: none;">3. Sobreajuste &amp; Poda Preventiva</a> ·
+            <a href="#modulo4" style="color: var(--accent-ochre); text-decoration: none;">4. Fuga de Datos (Data Leakage)</a> ·
+            <a href="#modulo5" style="color: var(--accent-ochre); text-decoration: none;">5. Resolución Actividades 1 a 8</a> ·
+            <a href="#modulo6" style="color: var(--accent-ochre); text-decoration: none;">6. Control Conceptual &amp; Autoevaluación</a>
+</div>
+</div>
+<!-- MÓDULO 1 -->
+<section id="modulo1">
+<div class="reading-trackable section-header" id="rb-01">
+<span class="section-tag tag-purple">Módulo 1</span>
+<h2>Fundamentos de los Árboles de Decisión y Partición Ortogonal</h2>
+</div>
+<p class="reading-trackable" id="rb-02">
+            A diferencia de los clasificadores lineales como la Regresión Logística o las Redes Neuronales Profundas (que optimizan combinaciones ponderadas de variables creando modelos de <em>caja negra</em>), los <strong>Árboles de Decisión</strong> son modelos paradigmáticos de <strong>caja blanca</strong>: cada predicción puede desglosarse en una secuencia explícita y transparente de reglas <code>SI... ENTONCES...</code>.
+        </p>
+<div class="reading-trackable callout" id="rb-03">
+<strong>Mecanismo Geométrico:</strong> Un árbol de decisión clasifica dividiendo recursivamente el espacio $d$-dimensional de características mediante <em>hiperplanos perpendiculares (ortogonales) a los ejes de las variables</em>. Cada partición divide una región en dos sub-rectángulos (en 2D) o hiper-cajas (en $\mathbb{R}^d$).
+        </div>
+<p class="reading-trackable" id="rb-04">
+            Esta propiedad geométrica confiere al árbol ventajas computacionales y metodológicas únicas:
+        </p>
+<ul class="reading-trackable" id="rb-05" style="padding-left: 1.3rem; margin-bottom: 1.2rem;">
+<li><strong>Invariancia a transformaciones monótonas:</strong> A diferencia de KNN o SVM, los árboles <strong>no requieren estandarización ni normalización ($z$-score o min-max)</strong>. Si multiplicamos una columna por 1000 o le aplicamos un logaritmo monótono, el árbol elegirá exactamente el mismo punto de corte correspondiente.</li>
+<li><strong>Interpretabilidad natural:</strong> Permiten extraer reglas de negocio legibles para humanos y calcular de forma determinista la <em>Importancia de Características (Feature Importance)</em> según la reducción total de impureza acumulada.</li>
+<li><strong>Manejo directo de interacciones no lineales:</strong> Si la condición $X_1 &gt; 5$ depende críticamente de que $X_2 &lt; 10$, el árbol captura esta interacción en niveles sucesivos de ramificación de forma nativa.</li>
+</ul>
+<!-- Video 1: StatQuest Decision Trees (Card HD Anti-Error 153) -->
+<div class="video-container">
+    <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/7VeUPuFGJHk" title="StatQuest: Decision Trees" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+    </div>
+</div>
+    </div>
+</div>
+</section>
+<!-- MÓDULO 2 -->
+<section id="modulo2">
+<div class="reading-trackable section-header" id="rb-06">
+<span class="section-tag tag-amber">Módulo 2</span>
+<h2>Criterios Matemáticos de Pureza: Entropía de Shannon vs. Índice de Gini</h2>
+</div>
+<p class="reading-trackable" id="rb-07">
+            En cada nodo candidato, el algoritmo evaluará todos los atributos disponibles $A$ y todos sus posibles umbrales de corte $\theta$. Para elegir la partición óptima, se calcula cuál opción reduce en mayor medida el <strong>desorden o impureza</strong> de las muestras resultantes.
+        </p>
+<div class="reading-trackable formula-box" id="rb-08">
+<div class="formula-title">
+<svg fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;" viewbox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                1. Entropía de Shannon (Algoritmos ID3 y C4.5)
+            </div>
+<p>Proveniente de la Teoría Matemática de la Información (Claude Shannon, 1948), mide la cantidad media de incertidumbre en bits contenida en una distribución de clases:</p>
+<div class="formula-display">
+                $$H(S) = - \sum_{i=1}^{C} p_i \log_2(p_i)$$
+            </div>
+<p style="font-size:0.88rem; color:var(--text-muted);">Donde $C$ es el número de clases y $p_i$ es la proporción de muestras pertenecientes a la clase $i$ en el nodo $S$. (Por convención, si $p_i = 0$, entonces $0 \log_2(0) = 0$).</p>
+<p style="margin-top:0.8rem;">La <strong>Ganancia de Información (Information Gain)</strong> producida al particionar el nodo $S$ con el atributo $A$ es:</p>
+<div class="formula-display">
+                $$\text{Gain}(S, A) = H(S) - \sum_{v \in \text{Valores}(A)} \frac{|S_v|}{|S|} H(S_v)$$
+            </div>
+</div>
+<div class="reading-trackable formula-box" id="rb-09">
+<div class="formula-title">
+<svg fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;" viewbox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                2. Índice de Impureza de Gini (Algoritmo CART &amp; Scikit-Learn)
+            </div>
+<p>CART (Classification and Regression Trees, Breiman et al.) define la impureza de Gini como la probabilidad de asignar una etiqueta incorrecta a una muestra seleccionada aleatoriamente si se etiquetara al azar siguiendo la distribución del nodo:</p>
+<div class="formula-display">
+                $$\text{Gini}(S) = 1 - \sum_{i=1}^{C} p_i^2 = \sum_{i \neq j} p_i p_j$$
+            </div>
+<p>La impureza ponderada tras el split es:</p>
+<div class="formula-display">
+                $$\text{Gini}_{\text{split}}(S, A) = \sum_{v \in \text{Valores}(A)} \frac{|S_v|}{|S|} \text{Gini}(S_v)$$
+            </div>
+</div>
+<div class="reading-trackable callout" id="rb-10">
+<strong>¿Por qué Scikit-Learn usa Gini por defecto?</strong> Computacionalmente, $\text{Gini}$ requiere únicamente sumas y productos de potencias cuadradas ($p_i^2$), prescindiendo del costoso cálculo de logaritmos en base 2 ($\log_2$). En la práctica clasificatoria de la UNLP, Gini y Entropía producen árboles estructuralmente indistinguibles en más del $97\%$ de los problemas.
+        </div>
+<!-- SIMULADOR INTERACTIVO DE PUREZA -->
+<div class="interactive-widget" id="widget-purity">
+<div class="widget-title">
+<svg fill="none" stroke="currentColor" stroke-width="2" style="width:20px; height:20px; color:var(--accent-ochre);" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                Simulador Dinámico: Comparador Gini vs. Entropía en Clasificación Binaria
+            </div>
+<p class="widget-subtitle">
+                Ajusta la proporción de la Clase Positiva ($p_1$) para observar cómo varían simultáneamente la Entropía $H(S)$ y el Índice de Gini en un nodo.
+            </p>
+<div class="widget-controls">
+<div class="control-group" style="flex:1; min-width:240px;">
+<label>Proporción Clase Positiva ($p_1$): <span id="val-p1" style="color:var(--accent-ochre); font-weight:700;">0.50</span></label>
+<input id="slider-p1" max="1.00" min="0.00" oninput="updatePuritySim()" step="0.01" type="range" value="0.50"/>
+</div>
+</div>
+<div class="canvas-container">
+<canvas height="240" id="canvas-purity" width="720"></canvas>
+</div>
+<div class="widget-readout" id="purity-readout">
+                Calculando métricas...
+            </div>
+</div>
+</section>
+<!-- MÓDULO 3 -->
+<section id="modulo3">
+<div class="reading-trackable section-header" id="rb-11">
+<span class="section-tag tag-rose">Módulo 3</span>
+<h2>Control del Sobreajuste (Overfitting) y Estrategias de Poda Preventiva</h2>
+</div>
+<p class="reading-trackable" id="rb-12">
+            Un árbol que crece sin restricciones (<code>max_depth=None</code>) continuará particionando hasta que cada hoja contenga exactamente muestras de una única clase o una única observación. Esto conduce al fenómeno patológico de <strong>Overfitting (Memorización)</strong>:
+        </p>
+<div class="reading-trackable warning-box" id="rb-13">
+<strong>Síntoma del Sobreajuste Extremo:</strong>
+            $$\text{Accuracy}_{\text{train}} \to 1.0 \ (100\%), \quad \text{pero} \quad \text{Accuracy}_{\text{test}} \ll \text{Accuracy}_{\text{train}}$$
+            El árbol traza fronteras de decisión hiper-complejas con pequeñas "islas" que aíslan outliers ruidosos, perdiendo por completo la capacidad de generalizar a nuevas muestras.
+        </div>
+<p class="reading-trackable" id="rb-14">
+            Para remediarlo, la cátedra enseña y evalúa la <strong>Poda Preventiva (Pre-pruning)</strong> mediante el ajuste fino de hiperparámetros antes del ajuste:
+        </p>
+<table class="styled-table reading-trackable" id="rb-15">
+<thead>
+<tr>
+<th>Hiperparámetro</th>
+<th>Efecto en el Modelo</th>
+<th>Impacto en Varianza vs Sesgo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_depth</code></td>
+<td>Fija la altura máxima del árbol (número máximo de divisiones desde la raíz a las hojas).</td>
+<td>Reduce radicalmente la varianza, combatiendo el overfitting.</td>
+</tr>
+<tr>
+<td><code>min_samples_split</code></td>
+<td>Número mínimo de observaciones requeridas en un nodo interno para habilitar una división.</td>
+<td>Evita generar ramificaciones sostenidas por muestras escasas o ruidosas.</td>
+</tr>
+<tr>
+<td><code>min_samples_leaf</code></td>
+<td>Número mínimo de muestras que obligatoriamente deben quedar en cada nodo terminal.</td>
+<td>Suaviza las decisiones en los extremos de la distribución.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<!-- MÓDULO 4 -->
+<section id="modulo4">
+<div class="reading-trackable section-header" id="rb-16">
+<span class="section-tag tag-blue">Módulo 4</span>
+<h2>Fuga de Datos (Data Leakage) en Árboles de Decisión</h2>
+</div>
+<p class="reading-trackable" id="rb-17">
+            En la Actividad 2 de la cátedra se ilustra un error común en proyectos reales de ciencia de datos: dejar por descuido la variable target (o una derivada determinista de ella) dentro de la matriz explicativa $X$.
+        </p>
+<div class="reading-trackable analogy-box" id="rb-18">
+<strong>¿Qué ocurre matemáticamente?</strong> Como el target correlaciona perfectamente consigo mismo, el algoritmo computa que dividir por esa columna reduce la impureza a $0$ de un solo golpe. Por ende, la coloca en el <strong>nodo raíz</strong>.
+        </div>
+<p class="reading-trackable" id="rb-19">
+            El modelo reportará un ficticio $100\%$ de exactitud en los tests que contengan esa columna, pero al desplegarse en producción donde el target es justamente lo que se desconoce, el clasificador colapsa. La cátedra exige siempre verificar la lógica de negocio del atributo raíz.
+        </p>
+</section>
+<!-- MÓDULO 5 -->
+<section id="modulo5">
+<div class="reading-trackable section-header" id="rb-20">
+<span class="section-tag tag-green">Módulo 5</span>
+<h2>Resolución y Análisis Analítico de las Actividades 1 a 8</h2>
+</div>
+<p class="reading-trackable" id="rb-21">
+            A continuación se detallan las conclusiones empíricas extraídas de los tres datasets oficiales de la cátedra (<code>diabetes.csv</code>, <code>glass.csv</code> y <code>Campus.csv</code>):
+        </p>
+<div class="card reading-trackable" id="rb-22">
+<span class="card-badge tag-amber">Actividades 1 a 6 · Diabetes Pima Indians</span>
+<h2 style="margin-top:0.8rem;">Análisis de Biomarcadores y Poda Preventiva</h2>
+<ul style="padding-left: 1.3rem; margin-bottom: 1rem;">
+<li><strong>Raíz del Árbol:</strong> Tanto con <code>criterion='entropy'</code> como con <code>criterion='gini'</code> (con <code>max_depth=4</code>), el árbol selecciona como predictor raíz la concentración de <strong>Glucosa</strong> (umbral $\approx 127.5$ mg/dL), confirmando su rol como biomarcador clínico principal.</li>
+<li><strong>Overfitting en Split 90/10:</strong> Sin poda (parámetros por defecto), el modelo alcanza un $100\%$ en Train pero cae a $\approx 68.8\%$ en Test. Al fijar <code>max_depth=4</code>, el Train baja a $\approx 81.3\%$ pero el Test sube a $\approx 77.9\%$, demostrando una generalización muy superior.</li>
+<li><strong>Variación de Splits (80/20, 70/30, 60/40):</strong> En datasets medianos (768 filas), particiones con 30% a 40% de test permiten estimaciones de error con menor varianza muestral.</li>
+</ul>
+</div>
+<div class="card reading-trackable" id="rb-23">
+<span class="card-badge tag-blue">Actividad 7 · Glass Identification (Multiclase)</span>
+<h2 style="margin-top:0.8rem;">Clasificación de Vidrios Forenses sin Columnas Espurias</h2>
+<p>El dataset contiene 6 tipos de vidrio con 9 atributos químicos. Es fundamental <strong>eliminar la columna <code>Id</code></strong> antes de entrenar; de lo contrario, el árbol memorizará el identificador secuencial. Con <code>max_depth=4</code>, los modelos logran precisiones estables entre $63\%$ y $72\%$ en Test.</p>
+</div>
+<div class="card reading-trackable" id="rb-24">
+<span class="card-badge tag-green">Actividad 8 · Campus Placement (Preprocesamiento &amp; Feature Importance)</span>
+<h2 style="margin-top:0.8rem;">Inserción Laboral y Tratamiento Categórico</h2>
+<p>Se realiza la preparación rigurosa:</p>
+<ol style="padding-left:1.3rem; margin-bottom:1rem;">
+<li>Eliminar <code>sl_no</code> (ID) y descartar <code>salary</code> (evita Data Leakage, ya que solo los empleados tienen salario registrado).</li>
+<li>Mapear <code>gender</code> y <code>workex</code> a variables binarias ($0/1$).</li>
+<li>Aplicar <code>pd.get_dummies</code> (One-Hot Encoding con <code>drop_first=True</code>) sobre el tipo de secundaria, bachillerato y especialidad del MBA.</li>
+</ol>
+<div class="callout" style="margin-bottom:0;">
+<strong>Conclusión de la Cátedra (Feature Importance):</strong> El rendimiento académico en la carrera universitaria (<code>degree_p</code>) y el examen de secundaria (<code>ssc_p</code>) representan más del $65\%$ de la importancia acumulada para conseguir empleo.
+            </div>
+</div>
+</section>
+<!-- MÓDULO 6 -->
+<section id="modulo6">
+<div class="reading-trackable section-header" id="rb-25">
+<span class="section-tag tag-amber">Módulo 6</span>
+<h2>Control Conceptual &amp; Autoevaluación</h2>
+</div>
+<div class="card reading-trackable" id="rb-26">
+<div class="card-top">
+<span class="card-badge tag-amber">Pregunta 01 / 02</span>
+<span style="color:var(--text-muted); font-size:0.8rem;">Criterios de Pureza</span>
+</div>
+<h2>Un nodo contiene 10 observaciones: 5 de clase positiva (+) y 5 de clase negativa (-). ¿Cuáles son su impureza de Gini y su Entropía?</h2>
+<div class="quiz-option" onclick="selectQuizOption(this, true)">
+<span class="opt-letter">A</span>
+<span>$\text{Gini} = 0.5$, $\text{Entropía} = 1.0$ (máxima incertidumbre binaria).</span>
+</div>
+<div class="quiz-option" onclick="selectQuizOption(this, false)">
+<span class="opt-letter">B</span>
+<span>$\text{Gini} = 0.0$, $\text{Entropía} = 0.0$ (nodo perfectamente puro).</span>
+</div>
+<div class="quiz-option" onclick="selectQuizOption(this, false)">
+<span class="opt-letter">C</span>
+<span>$\text{Gini} = 1.0$, $\text{Entropía} = 0.5$.</span>
+</div>
+<div id="quiz-feedback-1" style="display:none; margin-top:0.8rem; font-size:0.92rem; padding:0.8rem; border-radius:6px;"></div>
+</div>
+<div class="card reading-trackable" id="rb-27">
+<div class="card-top">
+<span class="card-badge tag-amber">Pregunta 02 / 02</span>
+<span style="color:var(--text-muted); font-size:0.8rem;">Preprocesamiento</span>
+</div>
+<h2>¿Por qué los árboles de decisión no requieren estandarizar variables con `StandardScaler` a diferencia de KNN?</h2>
+<div class="quiz-option" onclick="selectQuizOption2(this, false)">
+<span class="opt-letter">A</span>
+<span>Porque Scikit-Learn normaliza los datos internamente antes de cada partición.</span>
+</div>
+<div class="quiz-option" onclick="selectQuizOption2(this, true)">
+<span class="opt-letter">B</span>
+<span>Porque las decisiones de corte son univariadas y se basan en el orden relativo de los valores; cualquier transformación estrictamente monótona conserva exactamente el mismo ranking de división.</span>
+</div>
+<div class="quiz-option" onclick="selectQuizOption2(this, false)">
+<span class="opt-letter">C</span>
+<span>Porque los árboles calculan distancias euclidianas relativas en lugar de absolutas.</span>
+</div>
+<div id="quiz-feedback-2" style="display:none; margin-top:0.8rem; font-size:0.92rem; padding:0.8rem; border-radius:6px;"></div>
+</div>
+</section>
+</main>
+<!-- ========================================================================= -->
+<!-- COMPONENTES DE INTERACTIVIDAD DE ESTUDIO: ANOTACIONES & DUDAS -->
+<!-- ========================================================================= -->
+<div class="selection-tooltip" id="selection-tooltip" style="display:none;">
+<button class="tooltip-btn" onclick="handleHighlightSelection()">
+<svg class="asp-svg-sm" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="m9 11-6 6v3h3l6-6m-3-3 7-7a2 2 0 0 1 3 3l-7 7m-3-3 3 3"></path></svg> Resaltar
+  </button>
+<button class="tooltip-btn" onclick="handleNoteSelection()">
+<svg class="asp-svg-sm" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> Preguntar / Anotar
+  </button>
+</div>
+<div class="note-modal-overlay" id="note-modal" style="display:none;">
+<div class="note-modal-card">
+<div class="note-modal-header">
+<span class="asp-badge">CONSULTA / NOTA DE ESTUDIO</span>
+<button class="note-modal-close" onclick="closeNoteModal()">×</button>
+</div>
+<div class="note-selected-quote" id="modal-selected-quote"></div>
+<label class="note-modal-label">Tipo de Anotación:</label>
+<div class="note-type-chips">
+<button class="note-chip active" data-type="pregunta" onclick="selectNoteType(this, 'pregunta')" type="button">❓ Pregunta conceptual</button>
+<button class="note-chip" data-type="duda" onclick="selectNoteType(this, 'duda')" type="button">⚠️ Duda para el tutor</button>
+<button class="note-chip" data-type="apunte" onclick="selectNoteType(this, 'apunte')" type="button">📝 Nota personal</button>
+</div>
+<label class="note-modal-label" for="note-modal-textarea">Tu consulta o reflexión:</label>
+<textarea class="note-modal-textarea" id="note-modal-textarea" placeholder="Escribe aquí tu duda específica para recibir devolución..." rows="3"></textarea>
+<div class="note-modal-actions">
+<button class="btn-cancel" onclick="closeNoteModal()">Cancelar</button>
+<button class="btn-save" onclick="saveCurrentNote()">Guardar Nota</button>
+</div>
+</div>
+</div>
+<div class="note-hover-card" id="note-hover-card" style="display:none;">
+<div class="note-hover-header">
+<span class="asp-badge" id="note-hover-badge">PREGUNTA</span>
+<span class="note-hover-time" id="note-hover-time"></span>
+</div>
+<p class="note-hover-body" id="note-hover-text"></p>
+<div class="note-hover-actions">
+<button class="note-hover-del" onclick="deleteActiveNote()">Eliminar nota</button>
+</div>
+</div>
+<div class="notes-drawer-overlay" id="notes-drawer" onclick="if(event.target===this) toggleNotesDrawer()" style="display:none;">
+<div class="notes-drawer-panel">
+<div class="notes-drawer-header">
+<div style="display:flex; align-items:center; gap:0.6rem;">
+<span class="drawer-badge">
+<svg fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px; height:12px;" viewbox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          TUTORÍA IA
+        </span>
+<h3 class="notes-drawer-title">Mis Dudas y Anotaciones</h3>
+</div>
+<button class="drawer-close-btn" onclick="toggleNotesDrawer()" title="Cerrar panel">×</button>
+</div>
+<p class="drawer-desc">
+      Preguntas y pasajes conceptuales marcados en la lectura. Puedes exportarlas en JSON para recibir una devolución del tutor.
+    </p>
+<div class="notes-list-container" id="notes-list-container"></div>
+<div class="notes-drawer-footer">
+<button class="btn-export-notes" onclick="exportUserNotesJSON()">
+<svg fill="none" stroke="currentColor" stroke-width="2" style="width:14px; height:14px;" viewbox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg>
+        Exportar Dudas (JSON)
+      </button>
+<button class="btn-clear-notes" onclick="clearAllNotes()">Borrar todas</button>
+</div>
+</div>
+</div>
+<script>
+// =========================================================================
+// LÓGICA DE AUTOEVALUACIÓN (QUIZZES)
+// =========================================================================
+function checkQuiz(btn, isCorrect, explanation) {
+    const card = btn.closest(".quiz-card") || btn.parentElement;
+    const options = card.querySelectorAll(".quiz-opt-btn");
+    options.forEach(b => {
+        b.style.pointerEvents = "none";
+        b.style.opacity = "0.7";
+    });
+    
+    let fb = card.querySelector(".quiz-feedback-box");
+    if (!fb) {
+        fb = document.createElement("div");
+        fb.className = "quiz-feedback-box";
+        card.appendChild(fb);
+    }
+    
+    fb.style.display = "block";
+    fb.style.marginTop = "1rem";
+    fb.style.padding = "0.85rem 1.15rem";
+    fb.style.borderRadius = "8px";
+    fb.style.fontSize = "0.92rem";
+    fb.style.lineHeight = "1.5";
+    
+    if (isCorrect) {
+        btn.style.background = "#dcfce7";
+        btn.style.borderColor = "#16a34a";
+        btn.style.color = "#15803d";
+        btn.style.fontWeight = "600";
+        fb.style.background = "#f0fdf4";
+        fb.style.border = "1px solid #bbf7d0";
+        fb.style.color = "#166534";
+        fb.innerHTML = "<strong>✓ ¡Respuesta Correcta!</strong> " + explanation;
+    } else {
+        btn.style.background = "#fee2e2";
+        btn.style.borderColor = "#dc2626";
+        btn.style.color = "#991b1b";
+        fb.style.background = "#fef2f2";
+        fb.style.border = "1px solid #fecaca";
+        fb.style.color = "#991b1b";
+        fb.innerHTML = "<strong>✗ Incorrecto.</strong> " + explanation;
+    }
+}
+
+// =========================================================================
+// SIMULADOR INTERACTIVO DE PUREZA (GINI VS ENTROPÍA)
+// =========================================================================
+function updatePuritySim() {
+    const slider = document.getElementById("sim-p-slider");
+    if (!slider) return;
+    const p1 = parseFloat(slider.value);
+    const p2 = 1.0 - p1;
+    
+    const pDisp = document.getElementById("p-val-display");
+    const p2Disp = document.getElementById("p2-val-display");
+    if (pDisp) pDisp.textContent = p1.toFixed(2);
+    if (p2Disp) p2Disp.textContent = p2.toFixed(2);
+
+    const gini = 1.0 - (p1 * p1 + p2 * p2);
+    let entropy = 0;
+    if (p1 > 0 && p1 < 1) {
+        entropy = - (p1 * Math.log2(p1) + p2 * Math.log2(p2));
+    }
+
+    const giniVal = document.getElementById("gini-metric-val");
+    const entVal = document.getElementById("entropy-metric-val");
+    if (giniVal) giniVal.textContent = gini.toFixed(3);
+    if (entVal) entVal.textContent = entropy.toFixed(3);
+
+    const meter = document.getElementById("purity-meter-bar");
+    if (meter) {
+        meter.style.width = (entropy * 100).toFixed(1) + "%";
+        if (entropy > 0.8) {
+            meter.style.background = "var(--nord-error)";
+        } else if (entropy > 0.3) {
+            meter.style.background = "var(--nord-accent)";
+        } else {
+            meter.style.background = "var(--nord-success)";
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    updatePuritySim();
+});
+
+// =========================================================================
+// SISTEMA DE SEGUIMIENTO DE LECTURA (AUTO-SCROLL) Y ANOTACIONES
+// =========================================================================
+
+let autoScrollEnabled = true;
+let isUserScrolling = false;
+let userScrollTimeout = null;
+let currentHighlightedBlock = null;
+
+const readingMilestones = [
+  {
+    "id": "rb-00",
+    "time": 0.0,
+    "label": "Introducción y Encabezado General"
+  },
+  {
+    "id": "rb-01",
+    "time": 28.07,
+    "label": "Fundamentos de los Árboles de Decisión y Part"
+  },
+  {
+    "id": "rb-02",
+    "time": 33.29,
+    "label": "Árboles de Decisión"
+  },
+  {
+    "id": "rb-03",
+    "time": 55.03,
+    "label": "Mecanismo Geométrico:"
+  },
+  {
+    "id": "rb-04",
+    "time": 75.22,
+    "label": "Esta propiedad geométrica confiere al ár"
+  },
+  {
+    "id": "rb-05",
+    "time": 81.65,
+    "label": "Invariancia a transformaciones monótonas:"
+  },
+  {
+    "id": "rb-06",
+    "time": 128.87,
+    "label": "Criterios Matemáticos de Pureza: Entropía de "
+  },
+  {
+    "id": "rb-07",
+    "time": 135.53,
+    "label": "desorden o impureza"
+  },
+  {
+    "id": "rb-08",
+    "time": 151.58,
+    "label": "Ganancia de Información (Information Gain)"
+  },
+  {
+    "id": "rb-09",
+    "time": 203.45,
+    "label": "2. Índice de Impureza de Gini (Algoritmo"
+  },
+  {
+    "id": "rb-10",
+    "time": 238.77,
+    "label": "¿Por qué Scikit-Learn usa Gini por defecto?"
+  },
+  {
+    "id": "rb-11",
+    "time": 264.73,
+    "label": "Control del Sobreajuste (Overfitting) y Estra"
+  },
+  {
+    "id": "rb-12",
+    "time": 271.1,
+    "label": "Overfitting (Memorización)"
+  },
+  {
+    "id": "rb-13",
+    "time": 287.56,
+    "label": "Síntoma del Sobreajuste Extremo:"
+  },
+  {
+    "id": "rb-14",
+    "time": 308.5,
+    "label": "Poda Preventiva (Pre-pruning)"
+  },
+  {
+    "id": "rb-15",
+    "time": 317.87,
+    "label": "HiperparámetroEfecto en el ModeloImpacto"
+  },
+  {
+    "id": "rb-16",
+    "time": 354.27,
+    "label": "Fuga de Datos (Data Leakage) en Árboles de De"
+  },
+  {
+    "id": "rb-17",
+    "time": 359.88,
+    "label": "En la Actividad 2 de la cátedra se ilust"
+  },
+  {
+    "id": "rb-18",
+    "time": 373.16,
+    "label": "¿Qué ocurre matemáticamente?"
+  },
+  {
+    "id": "rb-19",
+    "time": 388.42,
+    "label": "El modelo reportará un ficticio $100\%$"
+  },
+  {
+    "id": "rb-20",
+    "time": 405.69,
+    "label": "Resolución y Análisis Analítico de las Activi"
+  },
+  {
+    "id": "rb-21",
+    "time": 411.49,
+    "label": "A continuación se detallan las conclusio"
+  },
+  {
+    "id": "rb-22",
+    "time": 422.52,
+    "label": "Análisis de Biomarcadores y Poda Preventiva"
+  },
+  {
+    "id": "rb-23",
+    "time": 488.63,
+    "label": "Clasificación de Vidrios Forenses sin Columna"
+  },
+  {
+    "id": "rb-24",
+    "time": 516.36,
+    "label": "Inserción Laboral y Tratamiento Categórico"
+  },
+  {
+    "id": "rb-25",
+    "time": 563.03,
+    "label": "Control Conceptual & Autoevaluación"
+  },
+  {
+    "id": "rb-26",
+    "time": 567.12,
+    "label": "Un nodo contiene 10 observaciones: 5 de clase"
+  },
+  {
+    "id": "rb-27",
+    "time": 600.26,
+    "label": "¿Por qué los árboles de decisión no requieren"
+  }
+];
+
+
+function updateReadingFollow(currentTime) {
+  let activeMilestone = readingMilestones[0];
+  for (let i = 0; i < readingMilestones.length; i++) {
+    if (currentTime >= readingMilestones[i].time) {
+      activeMilestone = readingMilestones[i];
+    } else {
+      break;
+    }
+  }
+
+  if (!activeMilestone) return;
+  const activeEl = document.getElementById(activeMilestone.id);
+  if (!activeEl) return;
+
+  const trackLabel = document.getElementById('asp-current-track-name');
+  if (trackLabel && activeMilestone.label) {
+    trackLabel.textContent = activeMilestone.label;
+  }
+
+  if (currentHighlightedBlock !== activeEl) {
+    if (currentHighlightedBlock) {
+      currentHighlightedBlock.classList.remove('reading-active-block');
+    }
+    activeEl.classList.add('reading-active-block');
+    currentHighlightedBlock = activeEl;
+
+    if (autoScrollEnabled && !isUserScrolling) {
+      scrollToActiveBlock(activeEl);
+    }
+  }
+}
+
+function scrollToActiveBlock(targetEl) {
+  if (!targetEl) return;
+  const rect = targetEl.getBoundingClientRect();
+  const player = document.getElementById('audio-studio-player');
+  const playerHeight = player ? player.offsetHeight : 80;
+  const targetY = window.pageYOffset + rect.top - playerHeight - 24;
+
+  window.scrollTo({
+    top: Math.max(0, targetY),
+    behavior: 'smooth'
+  });
+}
+
+function handleUserScrollInteraction() {
+  if (!isUserScrolling) {
+    isUserScrolling = true;
+    if (autoScrollEnabled) {
+      updateAutoScrollButtonUI(true, true);
+    }
+  }
+}
+
+window.addEventListener('wheel', handleUserScrollInteraction, { passive: true });
+window.addEventListener('touchmove', handleUserScrollInteraction, { passive: true });
+window.addEventListener('keydown', (e) => {
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Space'].includes(e.code)) {
+    handleUserScrollInteraction();
+  }
+});
+
+function toggleAutoScroll() {
+  if (isUserScrolling) {
+    isUserScrolling = false;
+    autoScrollEnabled = true;
+    updateAutoScrollButtonUI(true, false);
+    if (currentHighlightedBlock) {
+      scrollToActiveBlock(currentHighlightedBlock);
+    }
+  } else {
+    autoScrollEnabled = !autoScrollEnabled;
+    updateAutoScrollButtonUI(autoScrollEnabled, false);
+    if (autoScrollEnabled && currentHighlightedBlock) {
+      scrollToActiveBlock(currentHighlightedBlock);
+    }
+  }
+}
+
+function updateAutoScrollButtonUI(on, pausedByScroll) {
+  const dot = document.getElementById('asp-autoscroll-dot');
+  const txt = document.getElementById('asp-autoscroll-text');
+  if (!dot || !txt) return;
+
+  if (pausedByScroll) {
+    dot.className = 'autoscroll-dot paused';
+    txt.textContent = 'Reanudar lectura';
+  } else if (on) {
+    dot.className = 'autoscroll-dot on';
+    txt.textContent = 'Auto-scroll ON';
+  } else {
+    dot.className = 'autoscroll-dot';
+    txt.textContent = 'Auto-scroll OFF';
+  }
+}
+
+window.syncPlayerSeek = function() {
+  isUserScrolling = false;
+  if (autoScrollEnabled) {
+    updateAutoScrollButtonUI(true, false);
+  }
+  const audio = document.getElementById('asp-audio-core');
+  if (audio && !isNaN(audio.currentTime)) {
+    updateReadingFollow(audio.currentTime);
+    if (autoScrollEnabled && currentHighlightedBlock) {
+      scrollToActiveBlock(currentHighlightedBlock);
+    }
+  }
+};
+
+// 2. SISTEMA DE RESALTADO Y NOTAS EN TEXTO SELECCIONADO
+let pendingSelection = null;
+let currentNoteType = 'pregunta';
+const STORAGE_KEY = 'dm_clase3_user_notes_v1';
+let userNotes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+function getAudioTimestampStr() {
+  const audio = document.getElementById('asp-audio-core');
+  if (!audio || isNaN(audio.currentTime)) return '0:00';
+  const m = Math.floor(audio.currentTime / 60);
+  const s = Math.floor(audio.currentTime % 60);
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
+}
+
+document.addEventListener('mouseup', (e) => {
+  if (e.target.closest('#selection-tooltip') || e.target.closest('#note-modal') || e.target.closest('#notes-drawer')) {
+    return;
+  }
+
+  const selection = window.getSelection();
+  const text = selection ? selection.toString().trim() : '';
+
+  const tooltip = document.getElementById('selection-tooltip');
+  if (text.length >= 3 && selection.anchorNode && selection.anchorNode.parentElement.closest('main')) {
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    pendingSelection = {
+      text: text,
+      range: range.cloneRange(),
+      timestamp: getAudioTimestampStr(),
+      section: selection.anchorNode.parentElement.closest('section')?.id || 'general'
+    };
+
+    tooltip.style.left = `${rect.left + rect.width / 2 + window.scrollX}px`;
+    tooltip.style.top = `${rect.top + window.scrollY - 8}px`;
+    tooltip.style.display = 'flex';
+  } else {
+    if (tooltip) tooltip.style.display = 'none';
+  }
+});
+
+function handleHighlightSelection() {
+  const tooltip = document.getElementById('selection-tooltip');
+  if (tooltip) tooltip.style.display = 'none';
+  if (!pendingSelection) return;
+
+  const noteObj = {
+    id: 'n_' + Date.now(),
+    tipo: 'resaltado',
+    texto_seleccionado: pendingSelection.text,
+    seccion: pendingSelection.section,
+    comentario_usuario: '',
+    timestamp_leccion_audio: pendingSelection.timestamp,
+    fecha: new Date().toISOString()
+  };
+
+  wrapRangeWithMark(pendingSelection.range, noteObj.id, 'user-highlight');
+  userNotes.push(noteObj);
+  saveNotesToStorage();
+  window.getSelection()?.removeAllRanges();
+}
+
+function handleNoteSelection() {
+  const tooltip = document.getElementById('selection-tooltip');
+  if (tooltip) tooltip.style.display = 'none';
+  if (!pendingSelection) return;
+
+  const quoteEl = document.getElementById('modal-selected-quote');
+  if (quoteEl) quoteEl.textContent = `“${pendingSelection.text}”`;
+  
+  const textarea = document.getElementById('note-modal-textarea');
+  if (textarea) textarea.value = '';
+
+  const modal = document.getElementById('note-modal');
+  if (modal) modal.style.display = 'flex';
+  textarea?.focus();
+}
+
+function selectNoteType(btn, type) {
+  document.querySelectorAll('.note-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  currentNoteType = type;
+}
+
+function closeNoteModal() {
+  const modal = document.getElementById('note-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function saveCurrentNote() {
+  if (!pendingSelection) return;
+  const textarea = document.getElementById('note-modal-textarea');
+  const comment = textarea ? textarea.value.trim() : '';
+
+  const noteObj = {
+    id: 'n_' + Date.now(),
+    tipo: currentNoteType,
+    texto_seleccionado: pendingSelection.text,
+    seccion: pendingSelection.section,
+    comentario_usuario: comment,
+    timestamp_leccion_audio: pendingSelection.timestamp,
+    fecha: new Date().toISOString()
+  };
+
+  wrapRangeWithMark(pendingSelection.range, noteObj.id, 'user-highlight user-highlight-note');
+  userNotes.push(noteObj);
+  saveNotesToStorage();
+
+  closeNoteModal();
+  window.getSelection()?.removeAllRanges();
+}
+
+function wrapRangeWithMark(range, noteId, className) {
+  try {
+    const mark = document.createElement('mark');
+    mark.className = className;
+    mark.dataset.noteId = noteId;
+    mark.title = 'Click para ver tu nota';
+    mark.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showNoteHoverCard(noteId, mark);
+    });
+    range.surroundContents(mark);
+  } catch (err) {
+    console.warn('Could not surround range directly; stored in notes list:', err);
+  }
+}
+
+function showNoteHoverCard(noteId, element) {
+  const note = userNotes.find(n => n.id === noteId);
+  if (!note) return;
+
+  const card = document.getElementById('note-hover-card');
+  const badge = document.getElementById('note-hover-badge');
+  const time = document.getElementById('note-hover-time');
+  const body = document.getElementById('note-hover-text');
+  if (!card) return;
+
+  badge.textContent = note.tipo.toUpperCase();
+  time.textContent = `⏱️ ${note.timestamp_leccion_audio}`;
+  body.textContent = note.comentario_usuario || '(Texto resaltado para estudio)';
+
+  const rect = element.getBoundingClientRect();
+  card.style.left = `${rect.left + window.scrollX}px`;
+  card.style.top = `${rect.bottom + window.scrollY + 6}px`;
+  card.style.display = 'block';
+
+  card.dataset.activeNoteId = noteId;
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#note-hover-card') && !e.target.closest('mark.user-highlight')) {
+    const card = document.getElementById('note-hover-card');
+    if (card) card.style.display = 'none';
+  }
+});
+
+function deleteActiveNote() {
+  const card = document.getElementById('note-hover-card');
+  const noteId = card?.dataset.activeNoteId;
+  if (!noteId) return;
+
+  userNotes = userNotes.filter(n => n.id !== noteId);
+  saveNotesToStorage();
+
+  const mark = document.querySelector(`mark[data-note-id="${noteId}"]`);
+  if (mark) {
+    const parent = mark.parentNode;
+    while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+    parent.removeChild(mark);
+  }
+  card.style.display = 'none';
+}
+
+function saveNotesToStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(userNotes));
+  updateNotesCountBadge();
+  renderNotesList();
+}
+
+function updateNotesCountBadge() {
+  const badge = document.getElementById('asp-notes-count');
+  if (badge) badge.textContent = userNotes.length;
+}
+
+function toggleNotesDrawer() {
+  const drawer = document.getElementById('notes-drawer');
+  if (!drawer) return;
+  if (drawer.style.display === 'flex') {
+    drawer.style.display = 'none';
+  } else {
+    renderNotesList();
+    drawer.style.display = 'flex';
+  }
+}
+
+function renderNotesList() {
+  const container = document.getElementById('notes-list-container');
+  if (!container) return;
+
+  if (userNotes.length === 0) {
+    container.innerHTML = `
+      <div class="notes-empty-state">
+        <div class="notes-empty-icon">
+          <svg style="width:20px; height:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11-6 6v3h3l6-6m-3-3 7-7a2 2 0 0 1 3 3l-7 7m-3-3 3 3"/></svg>
+        </div>
+        <h4 class="notes-empty-title">Sin anotaciones todavía</h4>
+        <p class="notes-empty-desc">
+          Selecciona cualquier frase de la lección para resaltar conceptos o redactar preguntas para el tutor.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = userNotes.map(n => `
+    <div class="note-item-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+        <span class="note-item-badge">${n.tipo.toUpperCase()}</span>
+        <span style="font-size:0.72rem; font-family:'Fira Code',monospace; color:var(--text-muted); display:inline-flex; align-items:center; gap:3px;">
+          <svg style="width:11px; height:11px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          ${n.timestamp_leccion_audio}
+        </span>
+      </div>
+      <div class="note-item-quote">“${n.texto_seleccionado}”</div>
+      ${n.comentario_usuario ? `<div class="note-item-comment">${n.comentario_usuario}</div>` : ''}
+      <div style="display:flex; justify-content:flex-end; margin-top:0.3rem;">
+        <button style="background:none; border:none; color:#dc2626; font-size:0.75rem; cursor:pointer; font-weight:500; padding:2px 4px;" onclick="deleteNoteById('${n.id}')">Eliminar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteNoteById(id) {
+  userNotes = userNotes.filter(n => n.id !== id);
+  saveNotesToStorage();
+  const mark = document.querySelector(`mark[data-note-id="${id}"]`);
+  if (mark) {
+    const parent = mark.parentNode;
+    while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+    parent.removeChild(mark);
+  }
+}
+
+function clearAllNotes() {
+  if (!confirm('¿Deseas borrar todas las dudas y resaltados guardados?')) return;
+  userNotes = [];
+  saveNotesToStorage();
+  document.querySelectorAll('mark.user-highlight').forEach(mark => {
+    const parent = mark.parentNode;
+    while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+    parent.removeChild(mark);
+  });
+}
+
+function exportUserNotesJSON() {
+  const payload = {
+    materia: "Minería de Datos y Aprendizaje Automático",
+    leccion: "Clase 2: Metodología CRISP-DM, EDA, Preprocesamiento & KNN",
+    fecha: new Date().toISOString(),
+    total_anotaciones: userNotes.length,
+    notas: userNotes
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `dudas-clase2-dm-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// 3. VINCULAR CON EL AUDIO CORE
+window.addEventListener('DOMContentLoaded', () => {
+  const audio = document.getElementById('asp-audio-core');
+  if (audio) {
+    audio.addEventListener('timeupdate', () => {
+      if (!audio.paused && !isNaN(audio.currentTime)) {
+        updateReadingFollow(audio.currentTime);
+      }
+    });
+  }
+  updateNotesCountBadge();
+});
+
+
+// Inicialización al cargar la página
+window.addEventListener('DOMContentLoaded', () => {
+    initTitanicPoints();
+    updateKNNSimulation();
+    updateLeakSimulation();
+
+    if (window.location.protocol === 'file:') {
+        document.querySelectorAll('.file-protocol-notice').forEach(el => el.style.display = 'flex');
+    }
+});
+</script>
+</body>
+</html>

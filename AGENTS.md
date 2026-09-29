@@ -50,24 +50,42 @@ Para optimizar el uso de tokens, contexto y mantener la pulcritud del vault:
 
 ---
 
-## 🖥️ 4. Ejecución de Lecciones y Exámenes HTML
-1. Todo entregable interactivo de lección o examen se genera en la subcarpeta `lessons/` de la materia en formato HTML autocontenido (con `assets/lesson.css`).
-2. **Soporte TeX / Matemático Obligatorio**: Toda fórmula matemática debe escribirse en LaTeX (`$...$` o `$$...$$`) e incluir el script de renderizado MathJax en el `<head>` para garantizar tipografía matemática impecable:
+## 🖥️ 4. Ejecución de Lecciones, Exámenes HTML y Detección de Entorno
+1. **Detección Dinámica de Entorno (Hardware y Display)**:
+   - **Nunca asumir flags de display a ciegas**: Verificar el servidor gráfico actual (`$XDG_SESSION_TYPE`, `$WAYLAND_DISPLAY`, `$DISPLAY`).
+   - Si estás en la laptop **Dell con Intel Celeron** bajo **X11 / Qtile** (`DISPLAY=:0`), usar el ejecutable disponible (`/usr/bin/thorium-browser` o `xdg-open`) sin forzar `--ozone-platform=wayland`.
+   - **Protocolo Web Local Obligatorio para Embeds**: Para que los reproductores embebidos de YouTube no sean bloqueados con el *Error 153* (causado por la ausencia de cabecera Referer en `file://`), las lecciones se sirven mediante el servicio local `vault-server` (`systemctl --user status vault-server.service`). Abrir siempre como:
+     `DISPLAY=:0 xdg-open "http://localhost:8088/<ruta_relativa_desde_vault>"` (ej: `http://localhost:8088/10%20Asignaturas/DM%20y%20ML/Sesiones/lessons/...`).
+2. Todo entregable interactivo de lección o examen se genera en la subcarpeta `lessons/` de la materia en formato HTML autocontenido (con `assets/lesson.css`).
+3. **Soporte TeX / Matemático Obligatorio**: Toda fórmula matemática debe escribirse en LaTeX (`$...$` o `$$...$$`) e incluir el script de renderizado MathJax en el `<head>` para garantizar tipografía matemática impecable:
    ```html
    <script>
    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
    </script>
    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
    ```
-3. **Apertura automática**: Apenas se genera el archivo HTML, ejecuta automáticamente el navegador en background con las flags nativas de Wayland y verifica que la ventana esté mapeada:
-   ```bash
-   /usr/bin/thorium-browser-avx2 --ozone-platform=wayland "<ruta_absoluta_al_archivo_html>" &
-   ```
 4. Al recibir el JSON exportado por el alumno tras completar el examen, califícalo, clasifica los errores y genera la devolución detallada en HTML.
+5. **Embeds de YouTube Limpios y Minimalistas**: Nunca incluir cabeceras superiores (`.video-header`), barras de título, badges o botones externos sobre el reproductor. Embeber directamente el reproductor limpio (`.video-container` que contiene únicamente `.video-wrapper` en relación de aspecto 16:9 con bordes redondeados y sombra sutil).
 
 ---
 
-## 🔄 5. Bidireccionalidad con Obsidian (Notas de Repaso)
+## 🎙️ 5. Síntesis de Audio y Lectura en Voz Alta (Estándar Obligatorio)
+1. **Regla de Entrega para Toda Lección**:
+   - **Toda nueva lección interactiva HTML debe incluir su audio de lectura en voz alta con voz femenina** generado automáticamente e inyectado mediante el reproductor embebido (`#audio-studio-player`).
+   - **Formato**: Lectura en voz alta continua de los apuntes y explicaciones (sin formato de podcast, a menos que el usuario lo solicite explícitamente).
+2. **Generación en la Dell Celeron (Hardware & Motor)**:
+   - **Voz neural cloud (Edge TTS)**: Voz femenina argentina `es-AR-ElenaNeural` (o `es-MX-DaliaNeural`) ejecutada en `/home/spogus/.local/share/audio_env/bin/python3` o con `python3 /home/spogus/brain/scripts/audio_studio.py read -i <apunte> -o <mp3>`.
+   - **Voz local offline (Piper TTS)**: Modelo femenino local (`es_AR-daniela-high.onnx` o `es_MX-laura-high.onnx` en `~/.local/share/piper/`).
+3. **Persistencia e Integración**:
+   - Los archivos de audio se guardan en `10 Asignaturas/<Materia>/Audio/` (ej: `<clase_o_tema>_lectura.mp3`).
+   - El HTML de la lección debe tener el reproductor inyectado debajo de `</header>` con **comportamiento flotante (`position: sticky; top: 1rem; z-index: 1000;`)**, formato compacto horizontal de baja altura, estética que coincida con la paleta de la página (**Nordic Editorial**: fondos claros con blur/glassmorphism, bordes sutiles, acento ocre `#b58900` y tipografía Inter/Fira Code), botón play/pausa, saltos $\pm 15\text{s}$, selector cíclico de velocidad ($1\times, 1.25\times, 1.5\times, 1.75\times, 2\times$) y enlace de descarga.
+4. **Interactividad Avanzada de Estudio**:
+   - **Auto-Scroll con Seguimiento de Lectura**: Mapeo temporal proporcional o por módulos del audio; resalta sutilmente el párrafo activo y hace scroll suave. Si el usuario mueve el mouse o hace scroll manual, se pausa el seguimiento y el reproductor muestra un botón para reanudar el auto-scroll hacia el punto exacto de la locución.
+   - **Resaltado y Notas en Selección de Texto**: Al seleccionar texto en la lección, aparece un tooltip para marcar o añadir notas/dudas con persistencia en `localStorage`.
+   - **Exportación de Dudas para Tutoría**: Botón accesible 'Exportar Dudas (JSON)' para que el estudiante descargue sus consultas estructuradas y el tutor IA brinde devolución personalizada.
+---
+
+## 🔄 6. Bidireccionalidad con Obsidian (Notas de Repaso)
 Tras procesar un examen o simulacro con `evaluator-loop`:
 1. Además del reporte en `learning-records/` y la devolución en HTML, crea una nota de repaso en la materia (ej: `10 Asignaturas/<Materia>/Repaso - Examen <tema>.md`).
 2. Utiliza la estructura definida en `30 Plantillas/Plantilla de Repaso y Evaluacion.md`:
