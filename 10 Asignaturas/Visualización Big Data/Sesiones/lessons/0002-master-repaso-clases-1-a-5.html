@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Repaso: Clases 1 a 5 — Visualización de Grandes Volúmenes de Datos (UNLP)</title>
+    <link rel="stylesheet" href="../assets/lesson.css">
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        .section-header {
+            margin-top: 2.8rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 2px solid var(--border-default);
+            padding-bottom: 0.5rem;
+        }
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-title);
+        }
+        .section-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .tag-blue { background: #e0f2fe; color: #0369a1; }
+        .tag-green { background: #dcfce7; color: #15803d; }
+        .tag-amber { background: #fef3c7; color: #b45309; }
+        .tag-purple { background: #f3e8ff; color: #7e22ce; }
+        .tag-red { background: #fee2e2; color: #b91c1c; }
+
+        .callout {
+            background: #fdfbf7;
+            border-left: 3px solid var(--accent-ochre);
+            padding: 1.1rem 1.3rem;
+            border-radius: 0 4px 4px 0;
+            margin: 1.2rem 0;
+            font-size: 1rem;
+        }
+        .concept-pill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.2rem 0;
+        }
+        .concept-pill {
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .concept-pill h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            color: var(--accent-ochre);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .concept-pill p {
+            font-size: 0.92rem;
+            margin-bottom: 0;
+            color: var(--text-body);
+            line-height: 1.45;
+        }
+
+        .formula-box {
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1.2rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .formula-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 0.9rem;
+            text-align: center;
+            margin: 0.6rem 0;
+            overflow-x: auto;
+        }
+
+        .nose-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.9rem;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+        .action-bar {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: #ffffff;
+            border: 1px solid var(--border-default);
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            z-index: 100;
+        }
+        .answer-reveal {
+            display: none;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1rem 1.2rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            color: #166534;
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+        .duda-input {
+            width: 100%;
+            margin-top: 0.6rem;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--border-default);
+            border-radius: 4px;
+            background: var(--bg-input);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            resize: vertical;
+            min-height: 55px;
+        }
+
+        /* Reproductor de Audio Flotante Nordic */
+        #audio-studio-player {
+            position: sticky;
+            top: 1rem;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-strong);
+            border-radius: 8px;
+            padding: 0.75rem 1.2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        .audio-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .audio-info span.title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-title);
+        }
+        .audio-info span.subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            color: var(--accent-ochre);
+        }
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .audio-btn {
+            background: #f3f4f6;
+            border: 1px solid var(--border-default);
+            padding: 0.35rem 0.65rem;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .audio-btn:hover {
+            background: #e5e7eb;
+        }
+        .audio-btn.primary {
+            background: var(--accent-ochre);
+            color: white;
+            border-color: var(--accent-ochre);
+        }
+        .audio-btn.primary:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <span class="badge">Visualización de Grandes Volúmenes de Datos — Cátedra César Estrebou</span>
+    <h1>Master Repaso: Clases 1 a 5</h1>
+    <p>Consolidación teórica y simulacro evaluativo interactivo de las primeras 5 semanas (Fundamentos, Percepción & Gestalt, Pipeline & Atributos, Técnicas Tabulares y Multidimensionalidad). Preparación previa a la clase de Datos Temporales.</p>
+</header>
+
+<!-- 🎧 REPRODUCTOR DE AUDIO ESTUDIO -->
+<div id="audio-studio-player">
+    <div class="audio-info">
+        <span class="title">🎧 Lectura Magistral Neural: Repaso Clases 1 a 5</span>
+        <span class="subtitle">Voz Elena (es-AR-ElenaNeural) — Síntesis Conceptual Integrada</span>
+    </div>
+    <div class="audio-controls">
+        <audio id="main-audio" src="../../Audio/repaso_clases_1_a_5_lectura.mp3" preload="metadata"></audio>
+        <button class="audio-btn" onclick="seekAudio(-15)">⏪ -15s</button>
+        <button class="audio-btn primary" id="play-btn" onclick="togglePlayAudio()">▶ Reproducir</button>
+        <button class="audio-btn" onclick="seekAudio(15)">⏩ +15s</button>
+        <button class="audio-btn" id="speed-btn" onclick="cycleSpeed()">1.0x</button>
+    </div>
+</div>
+
+<main id="quiz-container">
+
+    <!-- ========================================== -->
+    <!-- BLOQUE 1: CLASE 1 - FUNDAMENTOS & ANSCOMBE -->
+    <!-- ========================================== -->
+    <div class="section-header">
+        <span class="section-tag tag-blue">Clase 1 (26-Ago)</span>
+        <h2>Fundamentos, Cognición & Propósitos de Munzner</h2>
+    </div>
+
+    <div class="callout">
+        <strong>Principio Arquitectónico Fundamental:</strong> La visualización no es adorno estético; es un <em>sistema computacional-cognitivo</em> diseñado para descargar memoria de trabajo y amplificar la cognición humana (Munzner, Tufte).
+    </div>
+
+    <div class="concept-pill-grid">
+        <div class="concept-pill">
+            <h4>Cuarteto de Anscombe</h4>
+            <p>4 datasets con idéntica media ($\bar{x}=9, \bar{y}=7.5$), varianza ($s_x^2=11, s_y^2=4.125$), correlación ($r=0.816$) y regresión lineal ($y = 3 + 0.5x$). Al graficarlos revelan patrones diametralmente opuestos: lineal, cuadrático, outlier influyente y agrupamiento vertical con un outlier lejano.</p>
+        </div>
+        <div class="concept-pill">
+            <h4>Triada de Munzner</h4>
+            <p><strong>1. Exploración:</strong> Búsqueda abierta sin hipótesis predefinida (generar preguntas).<br>
+               <strong>2. Análisis / Confirmación:</strong> Validar o refutar hipótesis existentes.<br>
+               <strong>3. Comunicación:</strong> Transmitir un hallazgo específico a una audiencia externa.</p>
+        </div>
+    </div>
+
+    <div class="card" data-qid="q1" data-tema="Cuarteto de Anscombe y Cognición">
+        <div class="card-top">
+            <span class="card-badge">Pregunta 1 · Fundamentos</span>
+            <span class="badge tag-red">Alta Criticidad</span>
+        </div>
+        <h2>El Cuarteto de Anscombe y la Estadística Descriptiva</h2>
+        <p>¿Cuál es la lección epistemológica y metodológica fundamental que demuestra el Cuarteto de Anscombe frente al análisis numérico tradicional?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q1', 'A')">A. Que los métodos estadísticos paramétricos son matemáticamente erróneos y deben reemplazarse por árboles de decisión.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q1', 'B')">B. Que la estadística descriptiva resume propiedades agregadas pero es completamente ciega a la estructura geométrica, curvaturas y outliers de la distribución real.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q1', 'C')">C. Que una visualización efectiva sólo es posible si los coeficientes de correlación de Pearson son idénticos a 1.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q1', 'D')">D. Que el tamaño muestral siempre debe ser superior a $N=1000$ para poder trazar un gráfico de dispersión sin sesgos.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem; margin-top:0.8rem;" onclick="toggleAnswer('ans_q1')">Ver justificación técnica</button>
+        <div id="ans_q1" class="answer-reveal">
+            <strong>Respuesta Correcta: B.</strong> La estadística descriptiva (media, desvío, covarianza) comprime la información en escalares idénticos que ocultan realidades físicas incompatibles entre sí. La visión humana procesa la geometría bidimensional en paralelo, exponiendo instantáneamente anomalías y relaciones no lineales que el resumen analítico enmascara.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q1" class="nose-checkbox">
+            <label for="nose-q1">Necesito repasar el propósito de la visualización según Munzner</label>
+        </div>
+        <textarea class="duda-input" id="duda-q1" placeholder="Dudas sobre Clase 1..."></textarea>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- BLOQUE 2: CLASE 2 - PERCEPCIÓN & GESTALT  -->
+    <!-- ========================================== -->
+    <div class="section-header">
+        <span class="section-tag tag-purple">Clase 2 (02-Sep)</span>
+        <h2>Percepción Visual, Gestalt & Jerarquía de Canales</h2>
+    </div>
+
+    <div class="callout">
+        <strong>Arquitectura del Sistema Visual Humano:</strong> El procesamiento <em>preatencional</em> ocurre en menos de $250\text{ ms}$ de forma masivamente paralela en la corteza visual primaria (V1), reconociendo rasgos primitivos (color, orientación, tamaño) antes del esfuerzo atencional consciente y secuencial.
+    </div>
+
+    <div class="concept-pill-grid">
+        <div class="concept-pill">
+            <h4>Cleveland & McGill (Cuantitativo)</h4>
+            <p><strong>Jerarquía de Precisión:</strong><br>
+            1. Posición sobre escala común alineada (máxima exactitud)<br>
+            2. Posición en escalas no alineadas<br>
+            3. Longitud<br>
+            4. Dirección / Ángulo / Pendiente<br>
+            5. Área (estimación de potencia con sesgo)<br>
+            6. Volumen<br>
+            7. Saturación / Luminancia de color</p>
+        </div>
+        <div class="concept-pill">
+            <h4>Tipología de Paletas de Color</h4>
+            <p><strong>Cualitativa / Categórica:</strong> Diferentes matices cromáticos (hue) para clases sin orden.<br>
+            <strong>Secuencial:</strong> Gradiente monotónico de luminosidad para magnitud (de claro a oscuro).<br>
+            <strong>Divergente:</strong> Dos extremos polares contrastantes convergiendo en un valor neutro/cero central.</p>
+        </div>
+    </div>
+
+    <div class="card" data-qid="q2" data-tema="Jerarquía de Canales y Leyes de Gestalt">
+        <div class="card-top">
+            <span class="card-badge">Pregunta 2 · Percepción & Canales</span>
+            <span class="badge tag-red">Alta Criticidad</span>
+        </div>
+        <h2>Efectividad de Canales y Codificación Cuantitativa</h2>
+        <p>Si debes presentar a un comité directivo la comparación exacta de los ingresos trimestrales entre 8 unidades de negocio, ¿cuál decisión de diseño minimiza el error perceptual y optimiza la decodificación según Cleveland & McGill y Jacques Bertin?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q2', 'A')">A. Un gráfico de burbujas donde el ingreso se mapea al radio o área circular de cada burbuja flotante.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q2', 'B')">B. Un gráfico de torta (pie chart) usando ángulos de 360 grados y paleta cualitativa para cada unidad.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q2', 'C')">C. Un gráfico de barras ordenado por valor sobre una escala de posición común y alineada con eje de referencia en cero.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q2', 'D')">D. Un mapa coroplético donde el ingreso se codifica variando únicamente la saturación cromática de las 8 unidades.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem; margin-top:0.8rem;" onclick="toggleAnswer('ans_q2')">Ver justificación técnica</button>
+        <div id="ans_q2" class="answer-reveal">
+            <strong>Respuesta Correcta: C.</strong> La posición sobre una escala común alineada (barras con base común) es el canal perceptual cuantitativo de mayor resolución y exactitud según Cleveland & McGill. El área (burbujas) sufre de compresión no lineal (ley de Stevens: subestimamos áreas relativas), y el ángulo (pie chart) induce errores de juicio trigonométrico severos.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q2" class="nose-checkbox">
+            <label for="nose-q2">Necesito repasar la jerarquía de Cleveland & McGill o paletas de color</label>
+        </div>
+        <textarea class="duda-input" id="duda-q2" placeholder="Dudas sobre Clase 2..."></textarea>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- BLOQUE 3: CLASE 3 - PIPELINE & ATRIBUTOS   -->
+    <!-- ========================================== -->
+    <div class="section-header">
+        <span class="section-tag tag-green">Clase 3 (09-Sep)</span>
+        <h2>Pipeline de Visualización & Tipología de Atributos</h2>
+    </div>
+
+    <div class="callout">
+        <strong>Pipeline de Card, Mackinlay & Shneiderman:</strong><br>
+        $$\text{Raw Data (Crudos)} \xrightarrow{\text{Data Transformations}} \text{Data Tables} \xrightarrow{\text{Visual Mappings}} \text{Visual Structures} \xrightarrow{\text{View Transformations}} \text{Views (Pantalla)}$$
+    </div>
+
+    <div class="concept-pill-grid">
+        <div class="concept-pill">
+            <h4>Taxonomía de Atributos</h4>
+            <p><strong>Categórico / Nominal:</strong> Sin orden natural (ej: Tipo de vehículo: auto, colectivo, tren). Operaciones: $=, \neq$.<br>
+            <strong>Ordinal:</strong> Con orden intrínseco pero distancia métrica desconocida (ej: Talle S, M, L; 1°, 2°, 3°). Operaciones: $=, \neq, <, >$.<br>
+            <strong>Cuantitativo:</strong> Magnitudes continuas o discretas (ej: Salario, temperatura, km). Operaciones aritméticas completas ($+, -, \times, \div$).</p>
+        </div>
+        <div class="concept-pill">
+            <h4>Operaciones de Transformación</h4>
+            <p><strong>Limpieza:</strong> Imputación de nulos, descarte de anomalías.<br>
+            <strong>Filtrado:</strong> Selección focalizada de registros.<br>
+            <strong>Agregación / Derivación:</strong> Sumas, promedios, ratios.<br>
+            <strong>Ordenamiento:</strong> Organización deliberada para facilitar búsquedas.</p>
+        </div>
+    </div>
+
+    <div class="card" data-qid="q3" data-tema="Pipeline y Atributos de Datos">
+        <div class="card-top">
+            <span class="card-badge">Pregunta 3 · Pipeline de Datos</span>
+            <span class="badge tag-amber">Media-Alta</span>
+        </div>
+        <h2>Tipos de Atributos y Transformación en el Pipeline</h2>
+        <p>En un dataset hospitalario disponemos de: <em>ID de Paciente</em>, <em>Nivel de Triaje (Leve, Moderado, Crítico)</em> y <em>Presión Arterial Sistólica (mmHg)</em>. ¿Cómo se clasifican formalmente estos tres atributos?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q3', 'A')">A. Nominal, Ordinal y Cuantitativo Continuo respectivamente.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q3', 'B')">B. Todos son atributos cuantitativos continuos porque se registran en una computadora.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q3', 'C')">C. Cuantitativo Discreto, Nominal y Ordinal respectivamente.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q3', 'D')">D. Ordinal, Nominal y Cuantitativo de Intervalo respectivamente.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem; margin-top:0.8rem;" onclick="toggleAnswer('ans_q3')">Ver justificación técnica</button>
+        <div id="ans_q3" class="answer-reveal">
+            <strong>Respuesta Correcta: A.</strong> El ID es un identificador nominal (clave categórica sin magnitud ni orden); el nivel de triaje posee orden intrínseco (Leve < Moderado < Crítico) pero sin escala numérica fija entre estados (Ordinal); la presión arterial es una medida física con unidad y valor numérico continuo (Cuantitativo).
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q3" class="nose-checkbox">
+            <label for="nose-q3">Necesito repasar la clasificación de atributos o las fases del pipeline</label>
+        </div>
+        <textarea class="duda-input" id="duda-q3" placeholder="Dudas sobre Clase 3..."></textarea>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- BLOQUE 4: CLASE 4 - TÉCNICAS TABULARES    -->
+    <!-- ========================================== -->
+    <div class="section-header">
+        <span class="section-tag tag-amber">Clase 4 (16-Sep)</span>
+        <h2>Técnicas para Datos Tabulares: Comparación, Distribución & Correlación</h2>
+    </div>
+
+    <div class="formula-box">
+        <div class="formula-title">📐 Anatomía Formal del Boxplot de Tukey</div>
+        <p style="font-size:0.95rem; margin-bottom:0.4rem;">El Boxplot resume la distribución sin asumir normalidad mediante los 5 números de resumen:</p>
+        <div class="formula-display">
+            $$\text{IQR} = Q_3 - Q_1$$
+            $$\text{Límite Inferior (Bigote)} = \max(\min(X), Q_1 - 1.5 \times \text{IQR})$$
+            $$\text{Límite Superior (Bigote)} = \min(\max(X), Q_3 + 1.5 \times \text{IQR})$$
+            $$\text{Outliers} = \{ x \in X \mid x < Q_1 - 1.5 \times \text{IQR} \quad \lor \quad x > Q_3 + 1.5 \times \text{IQR} \}$$
+        </div>
+    </div>
+
+    <div class="concept-pill-grid">
+        <div class="concept-pill">
+            <h4>Histograma vs Boxplot</h4>
+            <p>El <strong>Histograma</strong> muestra la forma y multimodalidad de la distribución, pero es altamente sensible a la elección del número y ancho de bins. El <strong>Boxplot</strong> es robusto para comparar decenas de distribuciones en paralelo y detectar asimetrías y outliers estandarizados.</p>
+        </div>
+        <div class="concept-pill">
+            <h4>El Principio del Ordenamiento</h4>
+            <p>En comparaciones categóricas (bar charts), ordenar alfabéticamente obliga a la corteza visual a hacer escaneos secuenciales agotadores. Ordenar por la variable cuantitativa permite comparaciones preatencionales instantáneas de ranking y magnitud.</p>
+        </div>
+    </div>
+
+    <div class="card" data-qid="q4" data-tema="Boxplots, Outliers e Histogramas">
+        <div class="card-top">
+            <span class="card-badge">Pregunta 4 · Datos Tabulares</span>
+            <span class="badge tag-red">Alta Criticidad</span>
+        </div>
+        <h2>Cálculo de Bigotes y Detección de Outliers en Boxplot</h2>
+        <p>En una distribución de tiempos de respuesta, los cuartiles calculados son $Q_1 = 20\text{ ms}$ y $Q_3 = 60\text{ ms}$. ¿A partir de qué valor superior un dato se considera formalmente un outlier extremo según la regla de Tukey?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q4', 'A')">A. Todo valor mayor a $80\text{ ms}$ (porque supera el doble de la mediana).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q4', 'B')">B. Todo valor mayor a $120\text{ ms}$ ($\text{IQR} = 40$, luego $Q_3 + 1.5 \times 40 = 60 + 60 = 120\text{ ms}$).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q4', 'C')">C. Todo valor mayor a $150\text{ ms}$ (calculado como $3 \times Q_1$).</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q4', 'D')">D. Los boxplots no detectan outliers cuantitativamente, solo grafican la media y la varianza muestral.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem; margin-top:0.8rem;" onclick="toggleAnswer('ans_q4')">Ver justificación técnica</button>
+        <div id="ans_q4" class="answer-reveal">
+            <strong>Respuesta Correcta: B.</strong> El Rango Intercuartil es $\text{IQR} = Q_3 - Q_1 = 60 - 20 = 40$. El bigote superior se extiende hasta un máximo de $Q_3 + 1.5 \times \text{IQR} = 60 + 1.5(40) = 60 + 60 = 120\text{ ms}$. Cualquier observación estrictamente superior a $120\text{ ms}$ se dibuja como un punto aislado clasificado como outlier.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q4" class="nose-checkbox">
+            <label for="nose-q4">Necesito repasar la formulación matemática de los bigotes del Boxplot</label>
+        </div>
+        <textarea class="duda-input" id="duda-q4" placeholder="Dudas sobre Clase 4..."></textarea>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- BLOQUE 5: CLASE 5 - MULTIDIMENSIONALIDAD   -->
+    <!-- ========================================== -->
+    <div class="section-header">
+        <span class="section-tag tag-rose">Clase 5 (23-Sep)</span>
+        <h2>Visualización Multidimensional & Reglas de Mapeo</h2>
+    </div>
+
+    <div class="callout">
+        <strong>Regla de Expresividad de Mackinlay:</strong> Una visualización debe expresar <em>toda</em> la información contenida en los datos, y <em>nada más que</em> la información contenida.<br>
+        <strong>⚠️ Peligro de Violación:</strong> Mapear una variable categórica sin orden (ej: tipos de clientes) al canal de tamaño o luminosidad induce en el usuario la percepción espuria de que existe una jerarquía o ranking intrínseco.
+    </div>
+
+    <div class="concept-pill-grid">
+        <div class="concept-pill">
+            <h4>Heatmaps & Reordenamiento</h4>
+            <p>Codifican valores matriciales mediante color. Un heatmap con orden aleatorio parece ruido estático. Al aplicar <strong>clustering jerárquico</strong> en filas y columnas, emergen bloques coherentes de covarianza y patrones grupales.</p>
+        </div>
+        <div class="concept-pill">
+            <h4>Coordenadas Paralelas</h4>
+            <p>Permiten visualizar observaciones en $D$ dimensiones proyectando cada dimensión como un eje vertical paralelo y cada registro como una polilínea continua. <strong>Limitación crucial:</strong> Sólo revela correlaciones directas entre ejes físicamente adyacentes; el orden de los ejes es determinante.</p>
+        </div>
+    </div>
+
+    <div class="card" data-qid="q5" data-tema="Multidimensionalidad y Expresividad">
+        <div class="card-top">
+            <span class="card-badge">Pregunta 5 · Multidimensionalidad</span>
+            <span class="badge tag-red">Alta Criticidad</span>
+        </div>
+        <h2>Limitaciones en Coordenadas Paralelas y Expresividad</h2>
+        <p>Al diseñar un gráfico de Coordenadas Paralelas para analizar 6 variables operativas de producción, ¿cuál es su principal compromiso arquitectónico y limitación cognitiva?</p>
+        
+        <div class="options-grid">
+            <div class="quiz-option" onclick="selectOption(this, 'q5', 'A')">A. No soporta variables numéricas continuas, únicamente variables booleanas.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q5', 'B')">B. La detección visual de correlaciones está restringida casi exclusivamente a ejes inmediatamente adyacentes; pares de variables lejanas requieren reordenar o rotar dinámicamente los ejes.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q5', 'C')">C. Requiere obligatoriamente que todos los ejes compartan la misma escala y unidad métrica.</div>
+            <div class="quiz-option" onclick="selectOption(this, 'q5', 'D')">D. Elimina completamente el problema de oclusión y cruce de líneas cuando hay más de 50.000 observaciones.</div>
+        </div>
+
+        <button class="btn" style="background:#e5e7eb; color:#374151; font-size:0.85rem; padding:0.4rem 0.8rem; margin-top:0.8rem;" onclick="toggleAnswer('ans_q5')">Ver justificación técnica</button>
+        <div id="ans_q5" class="answer-reveal">
+            <strong>Respuesta Correcta: B.</strong> En coordenadas paralelas, el cerebro percibe correlaciones positivas (líneas paralelas) o negativas (líneas cruzadas en tijera) únicamente entre ejes contiguos. Para analizar relaciones entre dimensiones no contiguas, el usuario está ciego a menos que la herramienta permita la reordenación interactiva de los ejes.
+        </div>
+
+        <div class="nose-box">
+            <input type="checkbox" id="nose-q5" class="nose-checkbox">
+            <label for="nose-q5">Necesito repasar Coordenadas Paralelas y orden de ejes</label>
+        </div>
+        <textarea class="duda-input" id="duda-q5" placeholder="Dudas sobre Clase 5..."></textarea>
+    </div>
+
+</main>
+
+<div class="action-bar">
+    <div>
+        <p style="margin:0; font-family:'Inter', sans-serif; font-size:0.95rem; font-weight:600; color:var(--text-title);">¿Completaste tu autoevaluación?</p>
+        <p style="margin:0; font-size:0.82rem; color:var(--text-muted);">Exporta tu diagnóstico JSON para seguimiento y feedback cualitativo en /teach.</p>
+    </div>
+    <button class="btn" style="background:var(--accent-ochre); color:white; font-family:'Inter', sans-serif; font-weight:600; padding:0.65rem 1.3rem; border-radius:4px; border:none; cursor:pointer;" onclick="exportarResultados()">📥 Exportar Diagnóstico (JSON)</button>
+</div>
+
+<script>
+const userAnswers = {};
+
+function selectOption(element, qid, choice) {
+    const parent = element.parentElement;
+    parent.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    userAnswers[qid] = choice;
+}
+
+function toggleAnswer(id) {
+    const el = document.getElementById(id);
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+}
+
+function exportarResultados() {
+    const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
+    const dudas = {};
+    const repasar = {};
+
+    questions.forEach(q => {
+        const dudaEl = document.getElementById('duda-' + q);
+        const noseEl = document.getElementById('nose-' + q);
+        if (dudaEl && dudaEl.value.trim() !== '') dudas[q] = dudaEl.value.trim();
+        if (noseEl && noseEl.checked) repasar[q] = true;
+    });
+
+    const payload = {
+        materia: "Visualización de Grandes Volúmenes de Datos",
+        modulo: "Master Repaso Clases 1 a 5",
+        fecha: new Date().toISOString(),
+        respuestas: userAnswers,
+        dudas: dudas,
+        necesita_repaso: repasar
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eval-vis-repaso-clases1a5-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// Lógica de Audio Flotante
+const audio = document.getElementById('main-audio');
+const playBtn = document.getElementById('play-btn');
+const speedBtn = document.getElementById('speed-btn');
+const speeds = [1.0, 1.25, 1.5, 1.75, 2.0];
+let speedIdx = 0;
+
+function togglePlayAudio() {
+    if (audio.paused) {
+        audio.play();
+        playBtn.innerText = '⏸ Pausar';
+    } else {
+        audio.pause();
+        playBtn.innerText = '▶ Reproducir';
+    }
+}
+
+function seekAudio(seconds) {
+    audio.currentTime = Math.max(0, Math.min(audio.duration || Infinity, audio.currentTime + seconds));
+}
+
+function cycleSpeed() {
+    speedIdx = (speedIdx + 1) % speeds.length;
+    const speed = speeds[speedIdx];
+    audio.playbackRate = speed;
+    speedBtn.innerText = speed.toFixed(2) + 'x';
+}
+
+audio.addEventListener('ended', () => {
+    playBtn.innerText = '▶ Reproducir';
+});
+</script>
+
+</body>
+</html>
